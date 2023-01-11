@@ -4,8 +4,10 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Table(name = "place")
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Place extends BaseTime{
 
@@ -24,9 +26,10 @@ public class Place extends BaseTime{
  //   private double longitude;
     @Column(nullable = false)
     private String adress;
+
     @Column(nullable = true)
     private Long plant;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String placeImgUrl;
 
     @Builder
