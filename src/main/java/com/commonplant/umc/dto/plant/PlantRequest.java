@@ -9,4 +9,13 @@ public class PlantRequest {
         private String name;
         private String place;
     }
+
+    @Data
+    public static class updatePlant {
+        private String name;
+
+        private String place;
+
+        private String imgUrl;
+    }
 }

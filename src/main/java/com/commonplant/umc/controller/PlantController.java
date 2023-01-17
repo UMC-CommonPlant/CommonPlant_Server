@@ -7,10 +7,7 @@ import com.commonplant.umc.service.PlantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -29,19 +26,25 @@ public class PlantController {
     @PostMapping("/plant/add")
     public ResponseEntity<JsonResponse> addPlant(@RequestBody PlantRequest.addPlant req){
 
-        System.out.println("=============TEST.NAME===============" + req.getName());
+        System.out.println("=============ADD PLANT TEST.NAME===============" + req.getName());
 
         String test = plantService.addPlant(req);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "addPlant", test));
     }
-//    public String createPlant(Plant plant) {
-//        plantService.createPlant(plant);
-//
-//        return " ";
-//    }
 
-    // 식물 조회
+    // 식물 수정 (PATCH)
+    @PatchMapping("/plant/update/{plantIdx}")
+    public ResponseEntity<JsonResponse> updatePlant(@PathVariable Long plantIdx, @RequestBody PlantRequest.updatePlant req){
+
+        System.out.println("=============UPDATE PLANT TEST.NAME===============" + req.getName());
+
+        String updatePlantTest = plantService.updatePlant(plantIdx, req);
+
+        return ResponseEntity.ok(new JsonResponse(true, 200, "updatePlant", updatePlantTest));
+    }
+
+//    식물 조회 (GET)
 //    @GetMapping("/plant/card/{plantIdx}")
 //    public String plantCard() {
 //
