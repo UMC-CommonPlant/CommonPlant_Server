@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @SpringBootApplication
-//@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 public class UmcApplication {
 
 	public static void main(String[] args) {
