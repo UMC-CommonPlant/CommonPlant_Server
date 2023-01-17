@@ -49,21 +49,4 @@ public class PlantService {
         return updatePlantTest;
     }
 
-//    public Plant readPlant(Plant plant){
-//        Plant entity = plantRepository.findById(plant.getPlantIdx()).orElseThrow(
-//                () -> new IllegalArgumentException("식물이 존재하지 않습니다.")
-//        );
-//
-//        return new Plant(entity);
-//    }
-
-//
-//    public void deletePlant(Long plantIdx){
-//        Plant plant = plantRepository.findById(plantIdx).orElseThrow(
-//                () -> new IllegalArgumentException("등록된 식물이 없어 삭제할 수 없습니다.")
-//        );
-//
-//        plantRepository.delete(plant);
-//    }
-
 }
