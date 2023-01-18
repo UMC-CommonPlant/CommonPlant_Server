@@ -13,4 +13,11 @@ public class PlaceRequest {
         }
 
 
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    public class updatePlace {
+        private String name;
+        private String address;
+    }
 }
