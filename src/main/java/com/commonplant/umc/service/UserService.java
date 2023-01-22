@@ -1,5 +1,6 @@
 package com.commonplant.umc.service;
 
+import com.commonplant.umc.domain.User;
 import com.commonplant.umc.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
