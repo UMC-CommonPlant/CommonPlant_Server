@@ -21,6 +21,8 @@ public class Plant extends BaseTime{
     private Long plantIdx;
 
     // 식물 애칭
+    // Postman에서 메모 등록할 때 10자 이상 넣으면 500 발생!!!
+    // 잘 매핑된 것으로 보임!!!
     @Column(nullable = false, length = 10)
     private String name;
 
