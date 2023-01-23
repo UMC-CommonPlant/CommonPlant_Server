@@ -2,6 +2,7 @@ package com.commonplant.umc.service;
 
 import com.commonplant.umc.domain.Plant;
 import com.commonplant.umc.dto.plant.PlantRequest;
+import com.commonplant.umc.dto.plant.PlantResponse;
 import com.commonplant.umc.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,22 @@ public class PlantService {
         return test;
     }
 
+    // getplantCard(): 식물 1개의 정보를 얻어옴
+    @Transactional
+    public PlantResponse.plantCardRes getPlantCard(Long plantIdx){
+
+        Plant plant = plantRepository.findByPlantIdx(plantIdx);
+
+        PlantResponse.plantCardRes testRes = new PlantResponse.plantCardRes(
+                plant.getPlantIdx(),
+                plant.getName(),
+                plant.getPlace(),
+                plant.getImgUrl()
+        );
+
+        return testRes;
+    }
+
     @Transactional
     public String updatePlant(Long plantIdx, PlantRequest.updatePlant req){
 
@@ -48,5 +65,4 @@ public class PlantService {
 
         return updatePlantTest;
     }
-
 }

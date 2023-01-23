@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Plant {
+public class Plant extends BaseTime{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +21,8 @@ public class Plant {
     private Long plantIdx;
 
     // 식물 애칭
+    // Postman에서 메모 등록할 때 10자 이상 넣으면 500 발생!!!
+    // 잘 매핑된 것으로 보임!!!
     @Column(nullable = false, length = 10)
     private String name;
 
@@ -31,17 +33,21 @@ public class Plant {
     @Column(nullable = true, name = "img_url")
     private String imgUrl;
 
-    private LocalDateTime wateredDate;
+//    @Column(nullable = false, name = "watered_date")
+//    private LocalDateTime wateredDate;
 
-    @OneToMany(mappedBy = "plant")
-    private List<Memo> memoList = new ArrayList<>();
+//    @Column(nullable = false, name = "created_at")
+//    private LocalDateTime createdAt;
+
+//    @OneToMany(mappedBy = "plant")
+//    private List<Memo> memoList = new ArrayList<>();
 
     @Builder
-    public Plant(String name, String place, String imgUrl, LocalDateTime wateredDate) {
+    public Plant(String name, String place, String imgUrl) {
         this.name = name;
         this.place = place;
         this.imgUrl = imgUrl;
-        this.wateredDate = wateredDate;
+        // this.wateredDate = wateredDate;
     }
 
     public void updatePlant(String name, String place, String imgUrl){

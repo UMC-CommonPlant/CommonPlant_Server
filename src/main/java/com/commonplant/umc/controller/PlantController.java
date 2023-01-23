@@ -3,6 +3,7 @@ package com.commonplant.umc.controller;
 import com.commonplant.umc.domain.Plant;
 import com.commonplant.umc.dto.JsonResponse;
 import com.commonplant.umc.dto.plant.PlantRequest;
+import com.commonplant.umc.dto.plant.PlantResponse;
 import com.commonplant.umc.service.PlantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,10 +45,14 @@ public class PlantController {
         return ResponseEntity.ok(new JsonResponse(true, 200, "updatePlant", updatePlantTest));
     }
 
-//    식물 조회 (GET)
-//    @GetMapping("/plant/card/{plantIdx}")
-//    public String plantCard() {
-//
-//    }
+    // 식물 조회 (GET)
+    @GetMapping("/plant/card/{plantIdx}")
+    public ResponseEntity<JsonResponse> getPlantCard(@PathVariable Long plantIdx) {
 
+        System.out.println("=============GET PLANT TEST.NAME===============");
+
+        PlantResponse.plantCardRes res = plantService.getPlantCard(plantIdx);
+
+        return ResponseEntity.ok(new JsonResponse(true,200, "getPlantCard", res));
+    }
 }

@@ -2,6 +2,7 @@ package com.commonplant.umc.service;
 
 import com.commonplant.umc.domain.Memo;
 import com.commonplant.umc.dto.memo.MemoRequest;
+import com.commonplant.umc.dto.memo.MemoResponse;
 import com.commonplant.umc.repository.MemoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,22 @@ public class MemoService {
                 " 메모 작성자: " + memo.getUser() + " 메모 내용: " + memo.getContent();
 
         return memoTest;
+    }
+
+    @Transactional
+    public MemoResponse.memoCardRes getMemoCard(Long memoIdx){
+
+        Memo memo = memoRepository.findByMemoIdx(memoIdx);
+
+        MemoResponse.memoCardRes testRes = new MemoResponse.memoCardRes(
+            memo.getMemoIdx(),
+            memo.getPlant(),
+            memo.getUser(),
+            memo.getContent(),
+            memo.getImgUrl()
+        );
+
+        return testRes;
     }
 
     @Transactional
