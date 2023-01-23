@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -25,22 +26,26 @@ public class PlantController {
 
     // 식물 등록 (POST)
     @PostMapping("/plant/add")
-    public ResponseEntity<JsonResponse> addPlant(@RequestBody PlantRequest.addPlant req){
+    public ResponseEntity<JsonResponse> addPlant(@RequestPart("plant") PlantRequest.addPlant req, @RequestPart("image") MultipartFile file){
 
         System.out.println("=============ADD PLANT TEST.NAME===============" + req.getName());
+        System.out.println("=============ADD PLANT TEST.NAME===============" + file);
 
-        String test = plantService.addPlant(req);
+        String test = plantService.addPlant(req, file);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "addPlant", test));
     }
 
     // 식물 수정 (PATCH)
     @PatchMapping("/plant/update/{plantIdx}")
-    public ResponseEntity<JsonResponse> updatePlant(@PathVariable Long plantIdx, @RequestBody PlantRequest.updatePlant req){
+    public ResponseEntity<JsonResponse> updatePlant(@PathVariable Long plantIdx,
+                                                    @RequestPart("plant") PlantRequest.updatePlant req,
+                                                    @RequestPart("image") MultipartFile file){
 
         System.out.println("=============UPDATE PLANT TEST.NAME===============" + req.getName());
+        System.out.println("=============UPDATE PLANT TEST.NAME===============" + file);
 
-        String updatePlantTest = plantService.updatePlant(plantIdx, req);
+        String updatePlantTest = plantService.updatePlant(plantIdx, req, file);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "updatePlant", updatePlantTest));
     }

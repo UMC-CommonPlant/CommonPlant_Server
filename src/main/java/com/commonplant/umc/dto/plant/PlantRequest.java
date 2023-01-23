@@ -15,7 +15,5 @@ public class PlantRequest {
         private String name;
 
         private String place;
-
-        private String imgUrl;
     }
 }

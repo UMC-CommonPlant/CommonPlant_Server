@@ -53,7 +53,7 @@ public class Plant extends BaseTime{
     public void updatePlant(String name, String place, String imgUrl){
         this.name = name;
         this.place = place;
-        this.imgUrl = imgUrl; // 아직 ...
+        this.imgUrl = imgUrl;
     }
 
     public void setImgUrl(String imgUrl) {

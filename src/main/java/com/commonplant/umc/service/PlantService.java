@@ -7,17 +7,26 @@ import com.commonplant.umc.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
 public class PlantService {
 
+    private final FirebaseService firebaseService;
+
     private final PlantRepository plantRepository;
 
     @Transactional
-    public String addPlant(PlantRequest.addPlant req){
+    public String addPlant(PlantRequest.addPlant req, MultipartFile file){
 
-        String imgUrl = " ";
+        String name = req.getName();
+
+        String imgUrl = null;
+
+        if(file.getSize()>0){
+            imgUrl = firebaseService.uploadFiles("commonPlant_" + name,file);
+        }
 
         Plant plant = Plant.builder()
                 .name(req.getName())
@@ -49,17 +58,26 @@ public class PlantService {
     }
 
     @Transactional
-    public String updatePlant(Long plantIdx, PlantRequest.updatePlant req){
+    public String updatePlant(Long plantIdx, PlantRequest.updatePlant req, MultipartFile file){
+
+        String name = req.getName();
+
+        String imgUrl = null;
+
+        if(file.getSize()>0){
+            imgUrl = firebaseService.uploadFiles("commonPlant_" + name,file);
+        }
 
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
 
         plant.updatePlant(
                 req.getName(),
                 req.getPlace(),
-                req.getImgUrl()
+                imgUrl
         );
 
-        String updatePlantTest = " 식물 애칭: " + req.getName() + " 수정된 장소: " + req.getPlace();
+        String updatePlantTest = " 식물 애칭: " + req.getName() + " 수정된 장소: " + req.getPlace()
+                + " 수정된 이미지 url: " + plant.getImgUrl();
 
         System.out.println(updatePlantTest);
 
