@@ -26,5 +26,6 @@ public class Info {
     private String water_spring;
     private String water_autumn;
     private String water_winter;
+    private String water_summer;
     private Timestamp created_at;
 }
