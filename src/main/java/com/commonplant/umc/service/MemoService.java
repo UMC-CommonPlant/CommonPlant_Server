@@ -7,22 +7,32 @@ import com.commonplant.umc.repository.MemoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
 public class MemoService {
 
+    private final FirebaseService firebaseService;
+
     private final MemoRepository memoRepository;
 
     @Transactional
-    public String addMemo(MemoRequest.addMemo req){
+    public String addMemo(MemoRequest.addMemo req, MultipartFile file){
 
-        String imgUrl = " ";
+        String name = req.getUser();
+
+        String imgUrl = null;
+
+        if(file.getSize()>0){
+            imgUrl = firebaseService.uploadFiles("commonPlant_" + name,file);
+        }
 
         Memo memo = Memo.builder()
                 .plant(req.getPlant())
                 .user(req.getUser())
                 .content(req.getContent())
+                .imgUrl(imgUrl)
                 .build();
 
         memoRepository.save(memo);
@@ -50,7 +60,15 @@ public class MemoService {
     }
 
     @Transactional
-    public String updateMemo(Long memoIdx, MemoRequest.updateMemo req){
+    public String updateMemo(Long memoIdx, MemoRequest.updateMemo req, MultipartFile file){
+
+        String name = req.getUser();
+
+        String imgUrl = null;
+
+        if(file.getSize()>0){
+            imgUrl = firebaseService.uploadFiles("commonPlant_" + name,file);
+        }
 
         Memo memo = memoRepository.findByMemoIdx(memoIdx);
 
@@ -58,11 +76,14 @@ public class MemoService {
                 req.getPlant(),
                 req.getUser(),
                 req.getContent(),
-                req.getImgUrl()
+                imgUrl
         );
 
         String updateMemoTest = " 식물 이름: " + memo.getPlant() +
-                " 메모 수정자: " + memo.getUser() + " 수정 내용: " + memo.getContent();
+                " 메모 수정자: " + memo.getUser() + " 수정 내용: " + memo.getContent()
+                + " 수정된 이미지 url: " + memo.getImgUrl();;
+
+        System.out.println(updateMemoTest);
 
         return updateMemoTest;
     }
