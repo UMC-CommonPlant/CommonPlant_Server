@@ -1,6 +1,8 @@
 package com.commonplant.umc.domain;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -16,14 +18,22 @@ public class Place extends BaseTime{
     @Column(name = "place_idx")
     private Long placeIdx;
 
-    @Column(nullable = false)
+    @Column(nullable = false)     // 장소 이름
     private String name;
 
- //   @Column(nullable = false)
- //   private double latitude;
+    @ManyToOne
+    @JoinColumn(name = "user_idx")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User owner;
 
- //    @Column(nullable = false)
- //   private double longitude;
+
+    @Column(nullable = false)
+    private double longitude;    // 경도 (x)
+
+    @Column(nullable = false)
+    private double latitude;     // 위도 (y)
+
+
     @Column(nullable = false)
     private String address;
 
