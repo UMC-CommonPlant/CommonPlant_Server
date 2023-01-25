@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+
 @RequiredArgsConstructor
 @Service
 public class PlantService {
@@ -36,7 +38,8 @@ public class PlantService {
 
         plantRepository.save(plant);
 
-        String test = " 식물 애칭: " + plant.getName() + " 이미지 url: " + plant.getImgUrl();
+        String test = " 식물 애칭: " + plant.getName() + " 이미지 url: " + plant.getImgUrl()
+                    + " 식물과 함께하기 시작한 날: " + plant.getCreatedAt();
 
         return test;
     }
@@ -51,7 +54,8 @@ public class PlantService {
                 plant.getPlantIdx(),
                 plant.getName(),
                 plant.getPlace(),
-                plant.getImgUrl()
+                plant.getImgUrl(),
+                plant.getCreatedAt()
         );
 
         return testRes;
@@ -77,7 +81,8 @@ public class PlantService {
         );
 
         String updatePlantTest = " 식물 애칭: " + req.getName() + " 수정된 장소: " + req.getPlace()
-                + " 수정된 이미지 url: " + plant.getImgUrl();
+                + " 수정된 이미지 url: " + plant.getImgUrl()
+                + " 식물과 함께하기 시작한 날: " + plant.getCreatedAt();
 
         System.out.println(updatePlantTest);
 

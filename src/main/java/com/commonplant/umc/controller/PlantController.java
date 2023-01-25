@@ -1,6 +1,5 @@
 package com.commonplant.umc.controller;
 
-import com.commonplant.umc.domain.Plant;
 import com.commonplant.umc.dto.JsonResponse;
 import com.commonplant.umc.dto.plant.PlantRequest;
 import com.commonplant.umc.dto.plant.PlantResponse;
@@ -30,6 +29,7 @@ public class PlantController {
 
         System.out.println("=============ADD PLANT TEST.NAME===============" + req.getName());
         System.out.println("=============ADD PLANT TEST.NAME===============" + file);
+        System.out.println("=============ADD PLANT TEST.NAME===============" + req.getCreatedAt());
 
         String test = plantService.addPlant(req, file);
 
@@ -44,6 +44,7 @@ public class PlantController {
 
         System.out.println("=============UPDATE PLANT TEST.NAME===============" + req.getName());
         System.out.println("=============UPDATE PLANT TEST.NAME===============" + file);
+        // System.out.println("=============UPDATE PLANT TEST.NAME===============" + req.getCreatedAt());
 
         String updatePlantTest = plantService.updatePlant(plantIdx, req, file);
 

@@ -3,7 +3,6 @@ package com.commonplant.umc.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,9 +35,13 @@ public class Plant extends BaseTime{
 //    @Column(nullable = false, name = "watered_date")
 //    private LocalDateTime wateredDate;
 
-//    @Column(nullable = false, name = "created_at")
-//    private LocalDateTime createdAt;
+    // LocalDate: 2023-01-24
+    // LocalDateTime: 2023-01-24T...
+    // PlantRequest와 PlantResponse의 내용을 수정해서 구현
+//    @Column(nullable = false, name = "created_at", updatable = false)
+//    private LocalDate createdAt;
 
+    // JPA에서 List 조회하는 법
 //    @OneToMany(mappedBy = "plant")
 //    private List<Memo> memoList = new ArrayList<>();
 
