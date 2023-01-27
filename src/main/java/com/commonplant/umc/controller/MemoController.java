@@ -26,6 +26,7 @@ public class MemoController {
 
         System.out.println("=============ADD MEMO TEST.NAME===============" + req.getUser() + req.getContent());
         System.out.println("=============ADD MEMO TEST.NAME===============" + file);
+        System.out.println("=============ADD MEMO TEST.NAME===============" + req.getCreatedAt());
 
         String memoTest = memoService.addMemo(req, file);
 
@@ -63,6 +64,7 @@ public class MemoController {
 
         System.out.println("=============UPDATE MEMO TEST.NAME==============" + req.getContent());
         System.out.println("=============UPDATE MEMO TEST.NAME==============" + file);
+        // System.out.println("=============UPDATE PLANT TEST.NAME===============" + req.getCreatedAt());
 
         String updateMemoTest = memoService.updateMemo(memoIdx, req, file);
 

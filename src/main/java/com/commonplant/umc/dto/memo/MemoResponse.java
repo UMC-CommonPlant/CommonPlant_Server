@@ -1,10 +1,13 @@
 package com.commonplant.umc.dto.memo;
 
 import com.commonplant.umc.domain.Plant;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 public class MemoResponse {
 
@@ -19,5 +22,8 @@ public class MemoResponse {
         private String user;
         private String content;
         private String imgUrl;
+
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDateTime createdAt;
     }
 }

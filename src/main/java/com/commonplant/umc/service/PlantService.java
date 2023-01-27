@@ -45,6 +45,7 @@ public class PlantService {
     }
 
     // getplantCard(): 식물 1개의 정보를 얻어옴
+    // 함께한지 1일이 지났어요!: getCreatedAt() 활용
     @Transactional
     public PlantResponse.plantCardRes getPlantCard(Long plantIdx){
 
