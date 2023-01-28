@@ -38,7 +38,8 @@ public class MemoService {
         memoRepository.save(memo);
 
         String memoTest = " 식물 이름: " + memo.getPlant() +
-                " 메모 작성자: " + memo.getUser() + " 메모 내용: " + memo.getContent();
+                " 메모 작성자: " + memo.getUser() + " 메모 내용: " + memo.getContent() +
+                " 메모 작성일: " + memo.getCreatedAt();
 
         return memoTest;
     }
@@ -53,7 +54,8 @@ public class MemoService {
             memo.getPlant(),
             memo.getUser(),
             memo.getContent(),
-            memo.getImgUrl()
+            memo.getImgUrl(),
+            memo.getCreatedAt()
         );
 
         return testRes;
@@ -81,7 +83,8 @@ public class MemoService {
 
         String updateMemoTest = " 식물 이름: " + memo.getPlant() +
                 " 메모 수정자: " + memo.getUser() + " 수정 내용: " + memo.getContent()
-                + " 수정된 이미지 url: " + memo.getImgUrl();;
+                + " 수정된 이미지 url: " + memo.getImgUrl()
+                + " 메모가 수정된 날짜: " + memo.getCreatedAt();
 
         System.out.println(updateMemoTest);
 
