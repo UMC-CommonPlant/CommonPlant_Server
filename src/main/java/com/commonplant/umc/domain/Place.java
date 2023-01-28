@@ -24,7 +24,7 @@ public class Place extends BaseTime{
     @ManyToOne
     @JoinColumn(name = "user_idx")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private User owner;
+    private User owner;          // 소유자 (리더)
 
 
     @Column(nullable = false)
@@ -46,8 +46,9 @@ public class Place extends BaseTime{
     private String code;
 
     @Builder
-    public Place(String name, String address, String placeImgUrl, String code) {
+    public Place(String name, User owner, String address, String placeImgUrl, String code) {
         this.name = name;
+        this.owner = owner;
         this.address = address;
         this.placeImgUrl = placeImgUrl;
         this.code = code;
