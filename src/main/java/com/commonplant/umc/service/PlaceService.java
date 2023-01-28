@@ -31,17 +31,16 @@ public class PlaceService {
 
 
     @Transactional
-    public String addPlace(User user, PlaceRequest.addPlace req, MultipartFile file)
-    {
+    public String addPlace(User user, PlaceRequest.addPlace req, MultipartFile file) {
         String newCode = randomCode();
 
         String imgUrl = null;
 
         if(file.getSize()>0){
             imgUrl = firebaseService.uploadFiles("commonPlant_"+newCode,file);
-        }
+              }
 
-        Place place = Place.builder().name(req.getName()).address(req.getAddress())
+        Place place = Place.builder().name(req.getName()).owner(user).address(req.getAddress())
                 .placeImgUrl(imgUrl).code(newCode).build();
         placeRepository.save(place);
 
@@ -50,7 +49,6 @@ public class PlaceService {
 
         return place.getCode();
     }
-
 
     public Place getPlace(String placeCode) {
         Place place = placeRepository.findByCode(placeCode).orElseThrow(()->new BadRequestException(PLACE_CODE_ERROR));

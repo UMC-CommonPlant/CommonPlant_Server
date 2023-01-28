@@ -16,7 +16,6 @@ public class PlantRequest {
     @Data
     public static class updatePlant {
         private String name;
-
         private String place;
     }
 }
