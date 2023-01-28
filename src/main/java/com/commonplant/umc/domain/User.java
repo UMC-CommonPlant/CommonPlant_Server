@@ -36,6 +36,7 @@ public class User extends BaseTime{
     @Column(nullable = true)
     private String userImgUrl;
 
+
     @Builder
     public void User(String name, String email, String password, Long status, Long AccessToken, Long platform, String userImgUrl){
         this.name = name;
