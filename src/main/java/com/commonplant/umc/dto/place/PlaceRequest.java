@@ -32,7 +32,7 @@ public class PlaceRequest {
     @NoArgsConstructor
     @AllArgsConstructor
     @Data
-    public static class adress{
-        private String adress;
+    public static class address{
+        private String address;
     }
 }

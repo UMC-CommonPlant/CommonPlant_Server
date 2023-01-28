@@ -10,4 +10,8 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByNameContains(String name);
+
+    Boolean existsByName(String name);
+
+    List<User> findByNameAndPassword(String name, String password);
 }
