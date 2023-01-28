@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,11 +22,12 @@ public class MemoController {
 
     // 메모 등록 (POST)
     @PostMapping("/memo/add")
-    public ResponseEntity<JsonResponse> addMemo(@RequestBody MemoRequest.addMemo req){
+    public ResponseEntity<JsonResponse> addMemo(@RequestPart("memo") MemoRequest.addMemo req, @RequestPart("image") MultipartFile file){
 
         System.out.println("=============ADD MEMO TEST.NAME===============" + req.getUser() + req.getContent());
+        System.out.println("=============ADD MEMO TEST.NAME===============" + file);
 
-        String memoTest = memoService.addMemo(req);
+        String memoTest = memoService.addMemo(req, file);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "addMemo", memoTest));
     }
@@ -55,11 +57,14 @@ public class MemoController {
 
     // 메모 수정 (PATCH: plant랑 user는 업데이트 되지 않음)
     @PatchMapping("/memo/update/{memoIdx}")
-    public ResponseEntity<JsonResponse> updateMemo(@PathVariable Long memoIdx, @RequestBody MemoRequest.updateMemo req){
+    public ResponseEntity<JsonResponse> updateMemo(@PathVariable Long memoIdx,
+                                                   @RequestPart("memo") MemoRequest.updateMemo req,
+                                                   @RequestPart("image") MultipartFile file){
 
         System.out.println("=============UPDATE MEMO TEST.NAME==============" + req.getContent());
+        System.out.println("=============UPDATE MEMO TEST.NAME==============" + file);
 
-        String updateMemoTest = memoService.updateMemo(memoIdx,req);
+        String updateMemoTest = memoService.updateMemo(memoIdx, req, file);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "updateMemo", updateMemoTest));
     }

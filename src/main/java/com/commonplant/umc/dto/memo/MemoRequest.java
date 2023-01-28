@@ -17,6 +17,5 @@ public class MemoRequest {
         private Plant plant;
         private String user;
         private String content;
-        private String imgUrl;
     }
 }

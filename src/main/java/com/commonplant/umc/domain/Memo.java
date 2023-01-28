@@ -19,7 +19,7 @@ public class Memo extends BaseTime{
     @Column(name = "memo_idx")
     private Long memoIdx;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plant_idx", nullable = false)
     private Plant plant;
 
@@ -33,10 +33,11 @@ public class Memo extends BaseTime{
     private String imgUrl;
 
     @Builder
-    public Memo(Plant plant, String user, String content){
+    public Memo(Plant plant, String user, String content, String imgUrl){
         this.plant = plant;
         this.user = user;
         this.content = content;
+        this.imgUrl = imgUrl;
     }
 
     // Memo 테이블의 plant 칼럼은 plant_idx!!!
@@ -44,7 +45,7 @@ public class Memo extends BaseTime{
         this.plant = plant;
         this.user = user;
         this.content = content;
-        this.imgUrl = imgUrl; // 아직...
+        this.imgUrl = imgUrl;
     }
 
     public void setImgUrl(String imgUrl) {
