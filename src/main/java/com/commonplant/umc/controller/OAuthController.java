@@ -16,7 +16,7 @@ public class OAuthController{
 
     //front : code -> accessToken
     //back : accessToken -> userDetail
-    @PostMapping("/users/login/{loginType}")
+    @PostMapping("/test/login/{loginType}")
     public ResponseEntity<JsonResponse> login(@RequestParam("accessToken") String accessToken, @PathVariable String loginType){
         System.out.println("accessToken" + accessToken);
         Object userInfo = oAuthService.getUserInfo(accessToken);
