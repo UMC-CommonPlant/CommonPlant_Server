@@ -1,5 +1,6 @@
 package com.commonplant.umc.dto.plant;
 
+import com.commonplant.umc.domain.Place;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +17,7 @@ public class PlantResponse {
         private Long plantIdx;
 
         private String name;
-        private String place;
+        private Place place;
         private String imgUrl;
 
         @JsonFormat(pattern = "yyyy-MM-dd")

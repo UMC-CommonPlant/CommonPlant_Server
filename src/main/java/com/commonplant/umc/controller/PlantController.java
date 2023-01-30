@@ -1,5 +1,6 @@
 package com.commonplant.umc.controller;
 
+import com.commonplant.umc.domain.Plant;
 import com.commonplant.umc.dto.JsonResponse;
 import com.commonplant.umc.dto.plant.PlantRequest;
 import com.commonplant.umc.dto.plant.PlantResponse;
@@ -28,6 +29,7 @@ public class PlantController {
     public ResponseEntity<JsonResponse> addPlant(@RequestPart("plant") PlantRequest.addPlant req, @RequestPart("image") MultipartFile file){
 
         System.out.println("=============ADD PLANT TEST.NAME===============" + req.getName());
+        System.out.println("=============ADD PLANT TEST.NAME===============" + req.getPlace());
         System.out.println("=============ADD PLANT TEST.NAME===============" + file);
         System.out.println("=============ADD PLANT TEST.NAME===============" + req.getCreatedAt());
 
@@ -60,5 +62,17 @@ public class PlantController {
         PlantResponse.plantCardRes res = plantService.getPlantCard(plantIdx);
 
         return ResponseEntity.ok(new JsonResponse(true,200, "getPlantCard", res));
+    }
+
+    // 테스트 (GET)
+    @GetMapping("/plant/test/plantIdx")
+    public ResponseEntity<JsonResponse> getPlant() {
+
+        System.out.println("=============GET PLANT TEST.NAME===============");
+
+        Plant res = plantService.getPlant(1L);
+        System.out.println(res.getPlantIdx());
+
+        return ResponseEntity.ok(new JsonResponse(true,200, "getPlant", res));
     }
 }
