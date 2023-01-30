@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -68,8 +69,12 @@ public class PlaceController {
         Place place = placeService.getPlace(placeCode);
 
         String address = "대전광역시 유성구 궁동";
-        Float coords[] = openApiService.findGeoPoint(address);
-        System.out.println(address + ": " + coords[0] + ", " + coords[1]);
+        String json = openApiService.getKakaoApiFromAddress(address);
+        HashMap<String, String> xy = openApiService.getXYMapfromJson(json);
+
+        System.out.println(xy.get("x"));
+        System.out.println(xy.get("y"));
+
         return ResponseEntity.ok(new JsonResponse(true, 200,"getPlace", place));
     }
 

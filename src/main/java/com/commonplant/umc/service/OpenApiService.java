@@ -1,27 +1,35 @@
 package com.commonplant.umc.service;
 
 
-import com.google.code.geocoder.Geocoder;
-import com.google.code.geocoder.GeocoderRequestBuilder;
-import com.google.code.geocoder.model.*;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class OpenApiService {
 
-    public class weather {
         private final String BASE_URL = "http://api.visitkorea.or.kr/openapi/service/rest/KorService";
         private final String apiUri = "/areaBasedList";
         private final String serviceKey = "?ServiceKey=EZjOvqj85o7yR0aFgwTuDi/ZkFZLW/yvKTiEHt7vVhu8SkJh1Nv3sqE7WnLBe1GZZO37bstjM3W//QSoNSBpnw==";
@@ -57,35 +65,73 @@ public class OpenApiService {
             return resultMap;
 
         }
-    }
+
     // 주소 위도 경도 변환
 
-        @Transactional
-        public Float[] findGeoPoint(String location) {
+    public String getKakaoApiFromAddress(String roadFullAddr) {
+        String apiKey = "a2810be90f591c5686c3d095d19e6461";
+        String apiUrl = "https://dapi.kakao.com/v2/local/search/address.json";
+        String jsonString = null;
 
-            if (location == null)
-                return null;
+        try {
+            roadFullAddr = URLEncoder.encode(roadFullAddr, "UTF-8");
 
-            // setAddress : 변환하려는 주소 (경기도 성남시 분당구 등)
-            // setLanguate : 인코딩 설정
-            GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(location).setLanguage("ko").getGeocoderRequest();
+            String addr = apiUrl + "?query=" + roadFullAddr;
 
-            Geocoder geocoder = new Geocoder();
-            GeocodeResponse geocoderResponse = geocoder.geocode(geocoderRequest);
+            URL url = new URL(addr);
+            URLConnection conn = url.openConnection();
+            conn.setRequestProperty("Authorization", "KakaoAK " + apiKey);
 
-            if (geocoderResponse.getStatus() == GeocoderStatus.OK & !geocoderResponse.getResults().isEmpty()) {
-                GeocoderResult geocoderResult = geocoderResponse.getResults().iterator().next();
-                LatLng latitudeLongitude = geocoderResult.getGeometry().getLocation();
+            BufferedReader rd = null;
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            StringBuffer docJson = new StringBuffer();
 
-                Float[] coords = new Float[2];
-                coords[0] = latitudeLongitude.getLat().floatValue();
-                coords[1] = latitudeLongitude.getLng().floatValue();
+            String line;
 
-                return coords;
+            while ((line=rd.readLine()) != null) {
+                docJson.append(line);
             }
 
-            return null;
+            jsonString = docJson.toString();
+            rd.close();
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return jsonString;
+    }
+
+    public HashMap<String, String> getXYMapfromJson(String jsonString) {
+        ObjectMapper mapper = new ObjectMapper();
+        HashMap<String, String> XYMap = new HashMap<String, String>();
+
+        try {
+            TypeReference<Map<String, Object>> typeRef
+                    = new TypeReference<Map<String, Object>>(){};
+            Map<String, Object> jsonMap = mapper.readValue(jsonString, typeRef);
+
+            @SuppressWarnings("unchecked")
+            List<Map<String, String>> docList
+                    =  (List<Map<String, String>>) jsonMap.get("documents");
+
+            Map<String, String> adList = (Map<String, String>) docList.get(0);
+            XYMap.put("x",adList.get("x"));
+            XYMap.put("y", adList.get("y"));
+
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return XYMap;
+    }
+
 
 
 }
