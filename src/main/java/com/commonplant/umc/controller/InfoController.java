@@ -40,5 +40,4 @@ public class InfoController {
         Info plantInfo = infoService.addPlantInfo(info);
         return ResponseEntity.ok(new JsonResponse(true, 200, "addPlantInfo", plantInfo));
     }
-
 }

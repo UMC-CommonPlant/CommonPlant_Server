@@ -12,6 +12,6 @@ public interface WordRepository extends JpaRepository<Word, Long> {
     Word findByWord(String word);
 
     @Modifying
-    @Query("update Word p set p.searched_number = p.searched_number + 1 where p.wordIdx = ?1")
+    @Query("update Word p set p.searchedNumber = p.searchedNumber + 1 where p.wordIdx = ?1")
     int updateSearchedNumber(Long wordIdx);
 }
