@@ -25,10 +25,10 @@ public class Word extends BaseTime{
     private String word;
 
     @Column
-    private Long searched_number;
+    private Long searchedNumber;
 
     @PrePersist
     public void prePersist(){
-        this.searched_number = this.searched_number==null? 1L : this.searched_number;
+        this.searchedNumber = this.searchedNumber==null? 1L : this.searchedNumber;
     }
 }

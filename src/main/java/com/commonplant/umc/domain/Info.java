@@ -13,6 +13,10 @@ public class Info {
         this.created_at = created_at;
     }
 
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
     private String name;
     private String humidity;
     private String management;
@@ -27,5 +31,6 @@ public class Info {
     private String water_autumn;
     private String water_winter;
     private String water_summer;
+    private String imgUrl;
     private Timestamp created_at;
 }
