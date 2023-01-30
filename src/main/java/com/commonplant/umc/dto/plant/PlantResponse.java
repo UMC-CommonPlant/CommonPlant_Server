@@ -21,5 +21,8 @@ public class PlantResponse {
 
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime createdAt;
+
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDateTime wateredDate;
     }
 }

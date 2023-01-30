@@ -34,12 +34,14 @@ public class PlantService {
                 .name(req.getName())
                 .place(req.getPlace())
                 .imgUrl(imgUrl)
+                .wateredDate(req.getWateredDate())
                 .build();
 
         plantRepository.save(plant);
 
         String test = " 식물 애칭: " + plant.getName() + " 이미지 url: " + plant.getImgUrl()
-                    + " 식물과 함께하기 시작한 날: " + plant.getCreatedAt();
+                    + " 식물과 함께하기 시작한 날: " + plant.getCreatedAt()
+                    + " 식물에 마지막으로 물을 준 날: " + plant.getWateredDate();
 
         return test;
     }
@@ -56,7 +58,8 @@ public class PlantService {
                 plant.getName(),
                 plant.getPlace(),
                 plant.getImgUrl(),
-                plant.getCreatedAt()
+                plant.getCreatedAt(),
+                plant.getWateredDate()
         );
 
         return testRes;
@@ -78,7 +81,8 @@ public class PlantService {
         plant.updatePlant(
                 req.getName(),
                 req.getPlace(),
-                imgUrl
+                imgUrl,
+                req.getWateredDate()
         );
 
         String updatePlantTest = " 식물 애칭: " + req.getName() + " 수정된 장소: " + req.getPlace()
