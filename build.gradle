@@ -28,12 +28,12 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'com.h2database:h2'
-	implementation group: 'com.google.code.geocoder-java', name: 'geocoder-java', version: '0.15'
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
 	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:2.3.2'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 	implementation 'com.google.code.gson:gson:2.8.7'
+
 }
 
 tasks.named('test') {

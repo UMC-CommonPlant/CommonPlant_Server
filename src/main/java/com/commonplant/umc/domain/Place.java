@@ -26,14 +26,11 @@ public class Place extends BaseTime{
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User owner;          // 소유자 (리더)
 
-
     @Column(nullable = false)
     private double longitude;    // 경도 (x)
 
     @Column(nullable = false)
     private double latitude;     // 위도 (y)
-
-
     @Column(nullable = false)
     private String address;
 
@@ -41,7 +38,6 @@ public class Place extends BaseTime{
     private Long plant;
     @Column(nullable = true)
     private String placeImgUrl;
-
     @Column(nullable = false)
     private String code;
 
