@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static com.commonplant.umc.config.exception.ErrorResponseStatus.PLACE_CODE_ERROR;
@@ -29,6 +30,8 @@ public class PlaceService {
     private final UserRepository userRepository;
     private final FirebaseService firebaseService;
 
+    private final OpenApiService openApiService;
+
 
     @Transactional
     public String addPlace(User user, PlaceRequest.addPlace req, MultipartFile file) {
@@ -39,9 +42,16 @@ public class PlaceService {
         if(file.getSize()>0){
             imgUrl = firebaseService.uploadFiles("commonPlant_"+newCode,file);
               }
+        // 주소 좌표 변환
+        String json = openApiService.getKakaoApiFromAddress(req.getAddress());
+        HashMap<String, String> xy = openApiService.getXYMapfromJson(json);
+
+        String x = xy.get("x");
+        String y = xy.get("y");
+
 
         Place place = Place.builder().name(req.getName()).owner(user).address(req.getAddress())
-                .placeImgUrl(imgUrl).code(newCode).build();
+                .longitude(x).latitude(y).placeImgUrl(imgUrl).code(newCode).build();
         placeRepository.save(place);
 
         Belong belong = Belong.builder().user(user).place(place).build();
