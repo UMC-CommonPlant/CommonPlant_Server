@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -35,9 +36,9 @@ public class InfoController {
     }
 
     @PostMapping("info/addPlantInfo")
-    public ResponseEntity<JsonResponse> addPlantInfo(@RequestBody Info info){
+    public ResponseEntity<JsonResponse> addPlantInfo(@RequestPart("info") Info info, @RequestPart("image") MultipartFile file){
 
-        Info plantInfo = infoService.addPlantInfo(info);
+        Info plantInfo = infoService.addPlantInfo(info, file);
         return ResponseEntity.ok(new JsonResponse(true, 200, "addPlantInfo", plantInfo));
     }
 }
