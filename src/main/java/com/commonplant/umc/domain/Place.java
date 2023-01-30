@@ -26,27 +26,26 @@ public class Place extends BaseTime{
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User owner;          // 소유자 (리더)
 
-    @Column(nullable = false)
-    private double longitude;    // 경도 (x)
-
-    @Column(nullable = false)
-    private double latitude;     // 위도 (y)
-    @Column(nullable = false)
-    private String address;
+    @Column(nullable = true)
+    private String longitude;    // 경도 (x)
 
     @Column(nullable = true)
-    private Long plant;
+    private String latitude;     // 위도 (y)
+    @Column(nullable = false)
+    private String address;
     @Column(nullable = true)
     private String placeImgUrl;
     @Column(nullable = false)
     private String code;
 
     @Builder
-    public Place(String name, User owner, String address, String placeImgUrl, String code) {
+    public Place(String name, User owner, String address, String placeImgUrl,String longitude, String latitude,  String code) {
         this.name = name;
         this.owner = owner;
         this.address = address;
         this.placeImgUrl = placeImgUrl;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.code = code;
     }
 
@@ -54,5 +53,11 @@ public class Place extends BaseTime{
         this.placeImgUrl = placeImgUrl;
     }
 
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
 
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
 }

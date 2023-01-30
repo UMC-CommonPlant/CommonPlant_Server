@@ -40,7 +40,6 @@ public class PlaceController {
         return ResponseEntity.ok(new JsonResponse(true, 200,"addPlace", placeCode));
     }
 
-
     // 장소 정보 조회
     @GetMapping("/place/{placeCode}")
     public ResponseEntity<JsonResponse> getPlaceInfo(@PathVariable String placeCode) {
@@ -72,8 +71,14 @@ public class PlaceController {
         String json = openApiService.getKakaoApiFromAddress(address);
         HashMap<String, String> xy = openApiService.getXYMapfromJson(json);
 
-        System.out.println(xy.get("x"));
-        System.out.println(xy.get("y"));
+        String x = xy.get("x");
+        String y = xy.get("y");
+
+        System.out.println(x);
+        System.out.println(y);
+
+        place.setLongitude(x);
+        place.setLatitude(y);
 
         return ResponseEntity.ok(new JsonResponse(true, 200,"getPlace", place));
     }

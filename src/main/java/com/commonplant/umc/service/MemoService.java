@@ -54,12 +54,12 @@ public class MemoService {
         Memo memo = memoRepository.findByMemoIdx(memoIdx);
 
         MemoResponse.memoCardRes testRes = new MemoResponse.memoCardRes(
-            memo.getMemoIdx(),
-            memo.getPlant(),
-            memo.getUser(),
-            memo.getContent(),
-            memo.getImgUrl(),
-            memo.getCreatedAt()
+                memo.getMemoIdx(),
+                memo.getPlant(),
+                memo.getUser(),
+                memo.getContent(),
+                memo.getImgUrl(),
+                memo.getCreatedAt()
         );
 
         return testRes;
@@ -73,14 +73,14 @@ public class MemoService {
 
         List<MemoResponse.memoCardRes> memoCardListDto = memoList.stream().
                 map(memo -> new MemoResponse.memoCardRes(
-                        memo.getMemoIdx(),
-                        memo.getPlant(),
-                        memo.getUser(),
-                        memo.getContent(),
-                        memo.getImgUrl(),
-                        memo.getCreatedAt()
-                )
-        ).collect(Collectors.toList());
+                                memo.getMemoIdx(),
+                                memo.getPlant(),
+                                memo.getUser(),
+                                memo.getContent(),
+                                memo.getImgUrl(),
+                                memo.getCreatedAt()
+                        )
+                ).collect(Collectors.toList());
 
         // Setter
         List<List> plantAllMemoList = new ArrayList<>();
