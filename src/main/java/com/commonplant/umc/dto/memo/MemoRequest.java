@@ -3,6 +3,8 @@ package com.commonplant.umc.dto.memo;
 import com.commonplant.umc.domain.Plant;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 public class MemoRequest {
 
     @Data
@@ -10,6 +12,7 @@ public class MemoRequest {
         private Plant plant;
         private String user;
         private String content;
+        private LocalDate createdAt;
     }
 
     @Data
@@ -19,3 +22,4 @@ public class MemoRequest {
         private String content;
     }
 }
+
