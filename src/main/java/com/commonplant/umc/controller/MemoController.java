@@ -47,14 +47,15 @@ public class MemoController {
     // 메모 리스트 조회 (GET)
     // 식물 페이지/캘린더 뷰: 식물 페이지 기준으로 구성!
     // 식물 별로 조회해야 하는데... plant 테이블의 plant_idx 사용?
+    @GetMapping("/plant/{plantIdx}/memoList")
+    public ResponseEntity<JsonResponse> getMemoList(@PathVariable Long plantIdx){
 
-//    @GetMapping("/plant/{plantIdx}/memoList")
-//    public ResponseEntity<JsonResponse> getMemoList(@PathVariable Long plantIdx){
-//
-//        System.out.println("=============GET MEMO LIST TEST.NAME===============" + req.getUser() + req.getContent());
-//
-//        return ResponseEntity.ok(new JsonResponse(true, 200, "getMemoList", res));
-//    }
+        System.out.println("=============GET MEMO LIST TEST.NAME===============");
+
+        MemoResponse.memoListRes res = memoService.getMemoList(plantIdx);
+
+        return ResponseEntity.ok(new JsonResponse(true, 200, "getMemoList", res));
+    }
 
     // 메모 수정 (PATCH: plant랑 user는 업데이트 되지 않음)
     @PatchMapping("/memo/update/{memoIdx}")
