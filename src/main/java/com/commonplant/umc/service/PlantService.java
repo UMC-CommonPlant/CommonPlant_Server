@@ -1,5 +1,6 @@
 package com.commonplant.umc.service;
 
+import com.commonplant.umc.domain.Place;
 import com.commonplant.umc.domain.Plant;
 import com.commonplant.umc.dto.plant.PlantRequest;
 import com.commonplant.umc.dto.plant.PlantResponse;
@@ -17,6 +18,8 @@ public class PlantService {
 
     private final FirebaseService firebaseService;
 
+    private final PlaceService placeService;
+
     private final PlantRepository plantRepository;
 
     @Transactional
@@ -30,9 +33,11 @@ public class PlantService {
             imgUrl = firebaseService.uploadFiles("commonPlant_" + name,file);
         }
 
+        Place place = placeService.getPlace(req.getPlace());
+
         Plant plant = Plant.builder()
                 .name(req.getName())
-                .place(req.getPlace())
+                .place(place)
                 .imgUrl(imgUrl)
                 .wateredDate(req.getWateredDate())
                 .build();
@@ -66,6 +71,12 @@ public class PlantService {
     }
 
     @Transactional
+    public Plant getPlant(Long plantIdx){
+        return plantRepository.findByPlantIdx(plantIdx);
+    }
+
+
+    @Transactional
     public String updatePlant(Long plantIdx, PlantRequest.updatePlant req, MultipartFile file){
 
         String name = req.getName();
@@ -80,7 +91,6 @@ public class PlantService {
 
         plant.updatePlant(
                 req.getName(),
-                req.getPlace(),
                 imgUrl,
                 req.getWateredDate()
         );

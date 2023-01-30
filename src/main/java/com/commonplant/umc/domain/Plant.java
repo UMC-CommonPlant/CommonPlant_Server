@@ -25,8 +25,9 @@ public class Plant extends BaseTime{
     private String name;
 
     // 장소 입력: 필수 (Garden 6-2)
-    @Column(nullable = false)
-    private String place;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "place_idx", nullable = false)
+    private Place place;
 
     @Column(nullable = true, name = "img_url")
     private String imgUrl;
@@ -41,16 +42,16 @@ public class Plant extends BaseTime{
 //    private LocalDate createdAt;
 
     @Builder
-    public Plant(String name, String place, String imgUrl, LocalDateTime wateredDate) {
+    public Plant(String name, Place place, String imgUrl, LocalDateTime wateredDate) {
         this.name = name;
         this.place = place;
         this.imgUrl = imgUrl;
         this.wateredDate = wateredDate;
     }
 
-    public void updatePlant(String name, String place, String imgUrl, LocalDateTime wateredDate){
+    public void updatePlant(String name, String imgUrl, LocalDateTime wateredDate){
         this.name = name;
-        this.place = place;
+        // this.place = place;
         this.imgUrl = imgUrl;
         this.wateredDate = wateredDate;
     }
