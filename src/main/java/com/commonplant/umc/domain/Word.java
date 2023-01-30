@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -20,9 +21,14 @@ public class Word extends BaseTime{
     @Column(name = "word_idx")
     private Long wordIdx;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String word;
 
     @Column
-    private Long searched_number;
+    private Long searchedNumber;
+
+    @PrePersist
+    public void prePersist(){
+        this.searchedNumber = this.searchedNumber==null? 1L : this.searchedNumber;
+    }
 }

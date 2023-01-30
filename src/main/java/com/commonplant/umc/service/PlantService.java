@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+
 @RequiredArgsConstructor
 @Service
 public class PlantService {
@@ -32,16 +34,20 @@ public class PlantService {
                 .name(req.getName())
                 .place(req.getPlace())
                 .imgUrl(imgUrl)
+                .wateredDate(req.getWateredDate())
                 .build();
 
         plantRepository.save(plant);
 
-        String test = " 식물 애칭: " + plant.getName() + " 이미지 url: " + plant.getImgUrl();
+        String test = " 식물 애칭: " + plant.getName() + " 이미지 url: " + plant.getImgUrl()
+                    + " 식물과 함께하기 시작한 날: " + plant.getCreatedAt()
+                    + " 식물에 마지막으로 물을 준 날: " + plant.getWateredDate();
 
         return test;
     }
 
     // getplantCard(): 식물 1개의 정보를 얻어옴
+    // 함께한지 1일이 지났어요!: getCreatedAt() 활용
     @Transactional
     public PlantResponse.plantCardRes getPlantCard(Long plantIdx){
 
@@ -51,7 +57,9 @@ public class PlantService {
                 plant.getPlantIdx(),
                 plant.getName(),
                 plant.getPlace(),
-                plant.getImgUrl()
+                plant.getImgUrl(),
+                plant.getCreatedAt(),
+                plant.getWateredDate()
         );
 
         return testRes;
@@ -73,11 +81,13 @@ public class PlantService {
         plant.updatePlant(
                 req.getName(),
                 req.getPlace(),
-                imgUrl
+                imgUrl,
+                req.getWateredDate()
         );
 
         String updatePlantTest = " 식물 애칭: " + req.getName() + " 수정된 장소: " + req.getPlace()
-                + " 수정된 이미지 url: " + plant.getImgUrl();
+                + " 수정된 이미지 url: " + plant.getImgUrl()
+                + " 식물과 함께하기 시작한 날: " + plant.getCreatedAt();
 
         System.out.println(updatePlantTest);
 

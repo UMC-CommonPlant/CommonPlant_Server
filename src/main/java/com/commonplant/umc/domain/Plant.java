@@ -4,8 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 //@Data -> @Getter + @Setter
 @Getter
@@ -33,27 +31,33 @@ public class Plant extends BaseTime{
     @Column(nullable = true, name = "img_url")
     private String imgUrl;
 
-//    @Column(nullable = false, name = "watered_date")
-//    private LocalDateTime wateredDate;
+    @Column(nullable = false, name = "watered_date")
+    private LocalDateTime wateredDate;
 
-//    @Column(nullable = false, name = "created_at")
-//    private LocalDateTime createdAt;
-
-//    @OneToMany(mappedBy = "plant")
-//    private List<Memo> memoList = new ArrayList<>();
+    // LocalDate: 2023-01-24
+    // LocalDateTime: 2023-01-24T...
+    // PlantRequest와 PlantResponse의 내용을 수정해서 구현
+//    @Column(nullable = false, name = "created_at", updatable = false)
+//    private LocalDate createdAt;
 
     @Builder
-    public Plant(String name, String place, String imgUrl) {
+    public Plant(String name, String place, String imgUrl, LocalDateTime wateredDate) {
         this.name = name;
         this.place = place;
         this.imgUrl = imgUrl;
-        // this.wateredDate = wateredDate;
+        this.wateredDate = wateredDate;
     }
 
-    public void updatePlant(String name, String place, String imgUrl){
+    public void updatePlant(String name, String place, String imgUrl, LocalDateTime wateredDate){
         this.name = name;
         this.place = place;
         this.imgUrl = imgUrl;
+        this.wateredDate = wateredDate;
+    }
+
+    // updatePlant()/setWateredDate(): wateredDate 수정은 어디서?
+    public void setWateredDate(LocalDateTime wateredDate) {
+        this.wateredDate = wateredDate;
     }
 
     public void setImgUrl(String imgUrl) {

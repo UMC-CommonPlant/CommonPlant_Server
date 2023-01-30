@@ -1,8 +1,11 @@
 package com.commonplant.umc.dto.plant;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 public class PlantResponse {
 
@@ -15,5 +18,11 @@ public class PlantResponse {
         private String name;
         private String place;
         private String imgUrl;
+
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDateTime createdAt;
+
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDateTime wateredDate;
     }
 }
