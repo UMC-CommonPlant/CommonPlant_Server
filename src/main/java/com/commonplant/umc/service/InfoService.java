@@ -21,7 +21,6 @@ public class InfoService{
         ArrayList<String> plantNames = new ArrayList<String>();
         Firestore firestore = FirestoreClient.getFirestore();
         CollectionReference collectionReference = firestore.collection(COLLECTION_NAME);
-        //Query query = collectionReference.whereEqualTo("humidi0ty", "70% 이상");
         Query query = collectionReference;
         ApiFuture<QuerySnapshot> querySnapshot = query.get();
 
