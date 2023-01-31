@@ -31,20 +31,27 @@ public class PlantService {
     private final PlantRepository plantRepository;
 
     @Transactional
-    public String addPlant(PlantRequest.addPlant req, MultipartFile file){
+    public String addPlant(PlantRequest.addPlant req, MultipartFile file) throws ExecutionException, InterruptedException {
 
-        String name = req.getNickname();
+        Info info = infoService.getPlantInfo(req.getName());
+
+        System.out.println("=============ADD PLANT INFO TO DATABASE===============");
+        System.out.println("============= req.getName(): ===============" + req.getName());
+        System.out.println("============= info.getName(): ===============" + info.getName());
+
+        String nickname = req.getNickname();
 
         String imgUrl = null;
 
-        if(file.getSize()>0){
-            imgUrl = firebaseService.uploadFiles("commonPlant_" + name,file);
+        if (file.getSize() > 0) {
+            imgUrl = firebaseService.uploadFiles("commonPlant_" + nickname, file);
         }
 
         Place place = placeService.getPlace(req.getPlace());
 
         Plant plant = Plant.builder()
                 .name(req.getName())
+                //.name(info.getName())
                 .nickname(req.getNickname())
                 .place(place)
                 .imgUrl(imgUrl)
@@ -53,9 +60,10 @@ public class PlantService {
 
         plantRepository.save(plant);
 
-        String test = " 식물 애칭: " + plant.getNickname() + " 이미지 url: " + plant.getImgUrl()
-                    + " 식물과 함께하기 시작한 날: " + plant.getCreatedAt()
-                    + " 식물에 마지막으로 물을 준 날: " + plant.getWateredDate();
+        String test = " 식물 이름: " + plant.getName()
+                + " 식물 애칭: " + plant.getNickname() + " 이미지 url: " + plant.getImgUrl()
+                + " 식물과 함께하기 시작한 날: " + plant.getCreatedAt()
+                + " 식물에 마지막으로 물을 준 날: " + plant.getWateredDate();
 
         return test;
     }
@@ -67,6 +75,26 @@ public class PlantService {
     public PlantResponse.plantCardRes getPlantCard(Long plantIdx) throws ExecutionException, InterruptedException {
 
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
+
+        System.out.println(plant.getName());
+
+        // getPlantInfo()의 인자는 식물 종 이름
+        // 실제로는 식물 조회할 때 식물 종류를 보내서 검색하면 됨
+        Info info = infoService.getPlantInfo(plant.getName());
+        // Info testInfo = infoService.getPlantInfo(info.getName());
+
+        System.out.println("=============GET PLANT INFO FROM FIREBASE===============");
+        // System.out.println(info.getName());
+
+        System.out.println(info.getImgUrl());
+        System.out.println(info.getScientific_name());
+        //water_day: Long
+        System.out.println(info.getWater_day());
+
+        System.out.println(info.getSunlight());
+        System.out.println(info.getTemp_min());
+        System.out.println(info.getTemp_max());
+        System.out.println(info.getHumidity());
 
         PlantResponse.plantCardRes testRes = new PlantResponse.plantCardRes(
                 plant.getPlantIdx(),
