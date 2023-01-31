@@ -17,12 +17,16 @@ public class Plant extends BaseTime{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "plant_idx")
     private Long plantIdx;
-
+    
+    // 식물 이름
+    @Column(nullable = false)
+    private String name;
+    
     // 식물 애칭
     // Postman에서 메모 등록할 때 10자 이상 넣으면 500 발생!!!
     // 잘 매핑된 것으로 보임!!!
     @Column(nullable = false, length = 10)
-    private String name;
+    private String nickname;
 
     // 장소 입력: 필수 (Garden 6-2)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,15 +46,16 @@ public class Plant extends BaseTime{
 //    private LocalDate createdAt;
 
     @Builder
-    public Plant(String name, Place place, String imgUrl, LocalDateTime wateredDate) {
+    public Plant(String name, String nickname, Place place, String imgUrl, LocalDateTime wateredDate) {
         this.name = name;
+        this.nickname = nickname;
         this.place = place;
         this.imgUrl = imgUrl;
         this.wateredDate = wateredDate;
     }
 
-    public void updatePlant(String name, String imgUrl, LocalDateTime wateredDate){
-        this.name = name;
+    public void updatePlant(String nickname, String imgUrl, LocalDateTime wateredDate){
+        this.nickname = nickname;
         // this.place = place;
         this.imgUrl = imgUrl;
         this.wateredDate = wateredDate;

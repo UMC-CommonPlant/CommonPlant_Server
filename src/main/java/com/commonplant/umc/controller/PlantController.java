@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.concurrent.ExecutionException;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +30,7 @@ public class PlantController {
     @PostMapping("/plant/add")
     public ResponseEntity<JsonResponse> addPlant(@RequestPart("plant") PlantRequest.addPlant req, @RequestPart("image") MultipartFile file){
 
-        System.out.println("=============ADD PLANT TEST.NAME===============" + req.getName());
+        System.out.println("=============ADD PLANT TEST.NAME===============" + req.getNickname());
         System.out.println("=============ADD PLANT TEST.NAME===============" + req.getPlace());
         System.out.println("=============ADD PLANT TEST.NAME===============" + file);
         System.out.println("=============ADD PLANT TEST.NAME===============" + req.getCreatedAt());
@@ -44,7 +46,7 @@ public class PlantController {
                                                     @RequestPart("plant") PlantRequest.updatePlant req,
                                                     @RequestPart("image") MultipartFile file){
 
-        System.out.println("=============UPDATE PLANT TEST.NAME===============" + req.getName());
+        System.out.println("=============UPDATE PLANT TEST.NAME===============" + req.getNickname());
         System.out.println("=============UPDATE PLANT TEST.NAME===============" + file);
         // System.out.println("=============UPDATE PLANT TEST.NAME===============" + req.getCreatedAt());
 
@@ -55,7 +57,7 @@ public class PlantController {
 
     // 식물 조회 (GET)
     @GetMapping("/plant/card/{plantIdx}")
-    public ResponseEntity<JsonResponse> getPlantCard(@PathVariable Long plantIdx) {
+    public ResponseEntity<JsonResponse> getPlantCard(@PathVariable Long plantIdx) throws ExecutionException, InterruptedException {
 
         System.out.println("=============GET PLANT TEST.NAME===============");
 

@@ -2,6 +2,7 @@ package com.commonplant.umc.dto.plant;
 
 import com.commonplant.umc.domain.Place;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,8 @@ public class PlantResponse {
         private Long plantIdx;
 
         private String name;
+        private String nickname;
+        @JsonIgnore
         private Place place;
         private String imgUrl;
 
