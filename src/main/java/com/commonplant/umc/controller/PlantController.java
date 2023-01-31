@@ -28,7 +28,8 @@ public class PlantController {
 
     // 식물 등록 (POST)
     @PostMapping("/plant/add")
-    public ResponseEntity<JsonResponse> addPlant(@RequestPart("plant") PlantRequest.addPlant req, @RequestPart("image") MultipartFile file){
+    public ResponseEntity<JsonResponse> addPlant(@RequestPart("plant") PlantRequest.addPlant req, @RequestPart("image") MultipartFile file)
+            throws ExecutionException, InterruptedException {
 
         System.out.println("=============ADD PLANT TEST.NAME===============" + req.getNickname());
         System.out.println("=============ADD PLANT TEST.NAME===============" + req.getPlace());
@@ -57,7 +58,8 @@ public class PlantController {
 
     // 식물 조회 (GET)
     @GetMapping("/plant/card/{plantIdx}")
-    public ResponseEntity<JsonResponse> getPlantCard(@PathVariable Long plantIdx) throws ExecutionException, InterruptedException {
+    public ResponseEntity<JsonResponse> getPlantCard(@PathVariable Long plantIdx)
+            throws ExecutionException, InterruptedException {
 
         System.out.println("=============GET PLANT TEST.NAME===============");
 
