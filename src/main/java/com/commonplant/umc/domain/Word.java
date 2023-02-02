@@ -27,6 +27,9 @@ public class Word extends BaseTime{
     @Column
     private Long searchedNumber;
 
+    @Column
+    private String imgUrl;
+
     @PrePersist
     public void prePersist(){
         this.searchedNumber = this.searchedNumber==null? 1L : this.searchedNumber;

@@ -15,6 +15,7 @@ import java.util.List;
 @Service
 public class WordService {
     private final WordRepository wordRepository;
+    private final FirebaseService firebaseService;
 
     @Transactional
     public void addWord(String name) {
@@ -22,6 +23,9 @@ public class WordService {
         if (word != null) {
             wordRepository.updateSearchedNumber(word.getWordIdx());
         } else {
+            //한국어일 경우, 영어일 경우 분리
+            //근데 그 한국어랑 영어랑 같은 데이터를 가리키고 있다면?
+
             word = Word.builder().word(name).build();
             wordRepository.save(word);
         }
