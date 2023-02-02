@@ -1,6 +1,7 @@
 package com.commonplant.umc.service;
 
 import com.commonplant.umc.domain.Info;
+import com.commonplant.umc.dto.info.InfoResponse;
 import com.commonplant.umc.repository.WordRepository;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @RequiredArgsConstructor
@@ -19,12 +21,13 @@ public class InfoService {
     public static final String COLLECTION_NAME = "plant_data";
     private final FirebaseService firebaseService;
 
-    public ArrayList<String> searchInfo(String name) {
-        ArrayList<String> plantNames = new ArrayList<String>();
+    public List<InfoResponse.getSearchList> searchInfo(String name) {
+        List<InfoResponse.getSearchList> plantNames = new ArrayList<>();
         Firestore firestore = FirestoreClient.getFirestore();
         CollectionReference collectionReference = firestore.collection(COLLECTION_NAME);
         Query query = collectionReference;
         ApiFuture<QuerySnapshot> querySnapshot = query.get();
+        Info info = null;
 
 //        if (name.matches()) { //만약 검색어에 영어가 포함되어 있다면
 //
@@ -32,18 +35,26 @@ public class InfoService {
 //
 //        }
 
-        String plantName = "";
         try {
             for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
-                plantName = document.getId();
+                String plantName = document.getId();
                 if (plantName.contains(name)) {
-                    plantNames.add(plantName);
+                    DocumentReference documentReference = collectionReference.document(plantName);
+                    ApiFuture<DocumentSnapshot> apiFuture = documentReference.get();
+                    DocumentSnapshot documentSnapshot = apiFuture.get();
+                    if (documentSnapshot.exists()) {
+                        info = documentSnapshot.toObject(Info.class);
+                        assert info != null;
+                        plantNames.add(new InfoResponse.getSearchList(info));
+                    }
                 }
             }
         } catch (ExecutionException e) {
             System.out.println("ExecutionException");
         } catch (InterruptedException e) {
             System.out.println("InterruptedException");
+        } catch (AssertionError e) {
+            System.out.println("AssertionError");
         }
 
         return plantNames;

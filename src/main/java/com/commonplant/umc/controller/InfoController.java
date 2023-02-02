@@ -3,6 +3,7 @@ package com.commonplant.umc.controller;
 
 import com.commonplant.umc.domain.Info;
 import com.commonplant.umc.dto.JsonResponse;
+import com.commonplant.umc.dto.info.InfoResponse;
 import com.commonplant.umc.service.InfoService;
 import com.commonplant.umc.service.WordService;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -24,7 +24,7 @@ public class InfoController {
 
     @GetMapping("/info/searchInfo/")
     public ResponseEntity<JsonResponse> searchInfo(@RequestParam String name) {
-        ArrayList<String> searchInfo = infoService.searchInfo(name);
+        List<InfoResponse.getSearchList> searchInfo = infoService.searchInfo(name);
         return ResponseEntity.ok(new JsonResponse(true, 200, "searchInfo", searchInfo));
     }
 

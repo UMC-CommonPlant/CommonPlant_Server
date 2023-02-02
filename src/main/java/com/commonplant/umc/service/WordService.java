@@ -42,6 +42,7 @@ public class WordService {
                 DocumentSnapshot documentSnapshot = apiFuture.get();
                 if (documentSnapshot.exists()) {
                     Info info = documentSnapshot.toObject(Info.class);
+                    assert info != null;
                     String imgUrl = info.getImgUrl();
                     String scientific_name = info.getScientific_name();
                     word = Word.builder().word(name).imgUrl(imgUrl).scientific_name(scientific_name).build();
@@ -51,6 +52,8 @@ public class WordService {
                 System.out.println("ExecutionException");
             } catch (InterruptedException e) {
                 System.out.println("InterruptedException");
+            } catch (AssertionError e) {
+                System.out.println("AssertionError");
             }
         }
     }
