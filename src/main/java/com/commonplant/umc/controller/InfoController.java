@@ -23,14 +23,14 @@ public class InfoController {
     private final WordService wordService;
 
     @GetMapping("/info/searchInfo/")
-    public ResponseEntity<JsonResponse> searchInfo(@RequestParam String name) throws ExecutionException, InterruptedException {
+    public ResponseEntity<JsonResponse> searchInfo(@RequestParam String name) {
         wordService.addWord(name);
         ArrayList<String> searchInfo = infoService.searchInfo(name);
         return ResponseEntity.ok(new JsonResponse(true, 200, "searchInfo", searchInfo));
     }
 
     @GetMapping("/info/getPlantInfo/")
-    public ResponseEntity<JsonResponse> getPlantInfo(@RequestParam String name) throws ExecutionException, InterruptedException {
+    public ResponseEntity<JsonResponse> getPlantInfo(@RequestParam String name) {
         Info plantInfo = infoService.getPlantInfo(name);
         return ResponseEntity.ok(new JsonResponse(true, 200, "addPlantInfo", plantInfo));
     }
