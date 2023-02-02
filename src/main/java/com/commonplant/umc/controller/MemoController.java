@@ -26,7 +26,7 @@ public class MemoController {
 
         System.out.println("=============ADD MEMO TEST.NAME===============" + req.getUser() + req.getContent());
         System.out.println("=============ADD MEMO TEST.NAME===============" + file);
-        System.out.println("=============ADD MEMO TEST.NAME===============" + req.getCreatedAt());
+        // System.out.println("=============ADD MEMO TEST.NAME===============" + req.getCreatedAt());
 
         String memoTest = memoService.addMemo(req, file);
 
