@@ -1,6 +1,7 @@
 package com.commonplant.umc.service;
 
 import com.commonplant.umc.domain.Memo;
+import com.commonplant.umc.domain.Plant;
 import com.commonplant.umc.dto.memo.MemoRequest;
 import com.commonplant.umc.dto.memo.MemoResponse;
 import com.commonplant.umc.repository.MemoRepository;
@@ -20,6 +21,7 @@ public class MemoService {
 
     private final FirebaseService firebaseService;
     private final MemoRepository memoRepository;
+    private final PlantService plantService;
 
     @Transactional
     public String addMemo(MemoRequest.addMemo req, MultipartFile file){
@@ -32,8 +34,11 @@ public class MemoService {
             imgUrl = firebaseService.uploadFiles("commonPlant_" + name,file);
         }
 
+        Plant plant = plantService.getPlant(req.getPlant());
+        //System.out.println(plant.getPlantIdx());
+
         Memo memo = Memo.builder()
-                .plant(req.getPlant())
+                .plant(plant)
                 .user(req.getUser())
                 .content(req.getContent())
                 .imgUrl(imgUrl)
@@ -112,10 +117,13 @@ public class MemoService {
             imgUrl = firebaseService.uploadFiles("commonPlant_" + name,file);
         }
 
+        Plant plant = plantService.getPlant(req.getPlant());
+        //System.out.println(plant.getPlantIdx());
+
         Memo memo = memoRepository.findByMemoIdx(memoIdx);
 
         memo.updateMemo(
-                req.getPlant(),
+                plant,
                 req.getUser(),
                 req.getContent(),
                 imgUrl
