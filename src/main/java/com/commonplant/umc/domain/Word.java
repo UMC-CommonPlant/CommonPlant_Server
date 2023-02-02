@@ -24,8 +24,14 @@ public class Word extends BaseTime{
     @Column(nullable = false, unique = true)
     private String word;
 
-    @Column
+    @Column(nullable = false)
     private Long searchedNumber;
+
+    @Column(nullable = false)
+    private String imgUrl;
+
+    @Column(nullable = false)
+    private String scientific_name;
 
     @PrePersist
     public void prePersist(){
