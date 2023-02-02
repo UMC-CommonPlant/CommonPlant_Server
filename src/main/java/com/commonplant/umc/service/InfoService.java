@@ -27,7 +27,10 @@ public class InfoService {
         ApiFuture<QuerySnapshot> querySnapshot = query.get();
 
         for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
-            plantNames.add(document.getId());
+            String plantName = document.getId();
+            if (plantName.contains(name)) {
+                plantNames.add(plantName);
+            }
         }
         return plantNames;
     }
@@ -54,7 +57,7 @@ public class InfoService {
         info.setCreated_at(Timestamp.now());
 
         if (file.getSize() > 0) {
-            imgUrl = firebaseService.uploadFiles("commonPlant_"+info.getName(), file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_" + info.getName(), file);
         }
         info.setImgUrl(imgUrl);
         firestore.collection(COLLECTION_NAME).document(info.getName()).set(info);
