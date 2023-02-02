@@ -71,11 +71,13 @@ public class InfoService {
 
     public Info addPlantInfo(Info info, MultipartFile file) {
         String imgUrl = null;
+        String fileName;
         Firestore firestore = FirestoreClient.getFirestore();
         info.setCreated_at(Timestamp.now());
+        fileName = info.getName().replaceAll(" ", "_");
 
         if (file.getSize() > 0) {
-            imgUrl = firebaseService.uploadFiles("commonPlant_" + info.getName(), file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_" + fileName, file);
         }
         info.setImgUrl(imgUrl);
         firestore.collection(COLLECTION_NAME).document(info.getName()).set(info);
