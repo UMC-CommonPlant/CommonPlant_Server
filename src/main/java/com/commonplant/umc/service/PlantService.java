@@ -6,16 +6,15 @@ import com.commonplant.umc.domain.Plant;
 import com.commonplant.umc.dto.plant.PlantRequest;
 import com.commonplant.umc.dto.plant.PlantResponse;
 import com.commonplant.umc.repository.PlantRepository;
-import com.google.cloud.Timestamp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.temporal.ChronoUnit;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutionException;
 
 @RequiredArgsConstructor
@@ -37,7 +36,7 @@ public class PlantService {
 
         System.out.println("=============ADD PLANT INFO TO DATABASE===============");
         System.out.println("============= req.getName(): ===============" + req.getName());
-        System.out.println("============= info.getName(): ===============" + info.getName());
+        // System.out.println("============= info.getName(): ===============" + info.getName());
 
         String nickname = req.getNickname();
 
@@ -78,13 +77,11 @@ public class PlantService {
 
         System.out.println(plant.getName());
 
-        // getPlantInfo()의 인자는 식물 종 이름
-        // 실제로는 식물 조회할 때 식물 종류를 보내서 검색하면 됨
+        // getPlantInfo()의 인자는 식물 종 이름: 식물 조회할 때 식물 종 이름을 보내서 검색하면 됨
         Info info = infoService.getPlantInfo(plant.getName());
-        // Info testInfo = infoService.getPlantInfo(info.getName());
 
         System.out.println("=============GET PLANT INFO FROM FIREBASE===============");
-        // System.out.println(info.getName());
+        System.out.println(info.getName());
 
         System.out.println(info.getImgUrl());
         System.out.println(info.getScientific_name());
@@ -95,6 +92,29 @@ public class PlantService {
         System.out.println(info.getTemp_min());
         System.out.println(info.getTemp_max());
         System.out.println(info.getHumidity());
+
+        // 물주기 구현: 남은 날짜 계산
+        // DateTimeFormatter
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // WateredDate: 마지막으로 물 준 날짜, CurrentDate: 오늘 날짜
+        String parsedWateredDate = plant.getWateredDate().format(dateTimeFormatter);
+        System.out.println("========parsedWateredDate======== " + parsedWateredDate);
+        String parsedCurrentDate = LocalDate.now().toString();
+        System.out.println("========parsedCurrentDate======== " + parsedCurrentDate);
+
+        // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate wateredDate = LocalDate.parse(parsedWateredDate, dateTimeFormatter);
+        LocalDate currentDate = LocalDate.parse(parsedCurrentDate, dateTimeFormatter);
+        LocalDateTime wateredDateTime = wateredDate.atStartOfDay();
+        LocalDateTime currentDateTime = currentDate.atStartOfDay();
+
+        // remainderDate: 물주기까지 남은 날짜
+        Long remainderDate = (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
+
+        System.out.println(currentDate);
+        System.out.println(wateredDate);
+        System.out.println(remainderDate);
 
         PlantResponse.plantCardRes testRes = new PlantResponse.plantCardRes(
                 plant.getPlantIdx(),
