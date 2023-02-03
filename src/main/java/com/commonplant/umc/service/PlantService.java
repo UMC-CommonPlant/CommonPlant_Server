@@ -113,7 +113,7 @@ public class PlantService {
         LocalDateTime currentDateTime = currentDate.atStartOfDay();
 
         // remainderDate: 물주기까지 남은 날짜
-        Long remainderDate = (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
+        Long remainderDate = (Long) info.getWater_day() - (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
 
         System.out.println(currentDate);
         System.out.println(wateredDate);
