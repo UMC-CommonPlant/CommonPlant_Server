@@ -32,13 +32,13 @@ public class UserService {
 //        return userRepository.save(user);
 //    }
 
+//
+//    public User getUser(Long name) {
+//        User user = userRepository.findById(name).orElseThrow(()->new BadRequestException(NOT_FOUND_USER));
+//        return user;
+//    }
 
-    public User getUser(Long name) {
-        User user = userRepository.findById(name).orElseThrow(()->new BadRequestException(NOT_FOUND_USER));
-        return user;
-    }
-
-    public User getUserTest(String uuid) {
+    public User getUser(String uuid) {
         return userRepository.findUserByUuid(uuid).orElseThrow(()-> new BadRequestException(NOT_FOUND_USER));
     }
 }
