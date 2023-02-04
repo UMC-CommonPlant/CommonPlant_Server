@@ -58,7 +58,7 @@ public class MemoController {
     }
 
     // 메모 수정 (PATCH: plant랑 user는 업데이트 되지 않음)
-    @PatchMapping("/memo/update/{memoIdx}")
+    @PutMapping("/memo/update/{memoIdx}")
     public ResponseEntity<JsonResponse> updateMemo(@PathVariable Long memoIdx,
                                                    @RequestPart("memo") MemoRequest.updateMemo req,
                                                    @RequestPart("image") MultipartFile file){
