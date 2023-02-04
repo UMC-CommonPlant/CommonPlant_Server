@@ -1,6 +1,8 @@
 package com.commonplant.umc.domain;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -41,6 +43,12 @@ public class Plant extends BaseTime{
     @Column(nullable = false, name = "watered_date")
     private LocalDateTime wateredDate;
 
+
+    @ManyToOne
+    @JoinColumn(name = "user_idx")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
+
     // LocalDate: 2023-01-24
     // LocalDateTime: 2023-01-24T...
     // PlantRequest와 PlantResponse의 내용을 수정해서 구현
@@ -48,8 +56,9 @@ public class Plant extends BaseTime{
 //    private LocalDate createdAt;
 
     @Builder
-    public Plant(String name, String nickname, Place place, String imgUrl, LocalDateTime wateredDate) {
+    public Plant(String name, User user, String nickname, Place place, String imgUrl, LocalDateTime wateredDate) {
         this.name = name;
+        this.user = user;
         this.nickname = nickname;
         this.place = place;
         this.imgUrl = imgUrl;

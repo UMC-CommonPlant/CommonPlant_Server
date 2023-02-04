@@ -30,15 +30,15 @@ public class PlaceController {
     private final OpenApiService openApiService;
 
     // 장소 추가
-    @PostMapping("/place/add")
-    public ResponseEntity<JsonResponse> addPlace(@RequestPart("place") PlaceRequest.addPlace req, @RequestPart("image") MultipartFile file){
-
-        User user = userService.getUser(1l);
-
-        String placeCode = placeService.addPlace(user, req, file);
-
-        return ResponseEntity.ok(new JsonResponse(true, 200,"addPlace", placeCode));
-    }
+//    @PostMapping("/place/add")
+//    public ResponseEntity<JsonResponse> addPlace(@RequestPart("place") PlaceRequest.addPlace req, @RequestPart("image") MultipartFile file){
+//
+//        User user = userService.getUser(1l);
+//
+//        String placeCode = placeService.addPlace(user, req, file);
+//
+//        return ResponseEntity.ok(new JsonResponse(true, 200,"addPlace", placeCode));
+//    }
 
     // 장소 정보 조회
     @GetMapping("/place/{placeCode}")
