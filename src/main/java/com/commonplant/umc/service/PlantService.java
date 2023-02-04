@@ -168,6 +168,22 @@ public class PlantService {
         return updatePlantTest;
     }
 
+    @Transactional
+    public String updateWateredDate(Long plantIdx, PlantRequest.updateWateredDate req, MultipartFile file){
+
+        Plant plant = plantRepository.findByPlantIdx(plantIdx);
+        System.out.println(" 물주기 리셋할 식물은: " + plantIdx);
+
+        plant.setWateredDate(
+                req.getWateredDate()
+        );
+
+        String updateWateredDateTest = " 마지막으로 식물에 물을 준 날짜: " + req.getWateredDate();
+        System.out.println(updateWateredDateTest);
+
+        return updateWateredDateTest;
+    }
+
     public String randomCode(){
         return RandomStringUtils.random(6,33,125,true,false);
     }

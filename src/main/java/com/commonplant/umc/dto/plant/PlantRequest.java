@@ -23,4 +23,9 @@ public class PlantRequest {
         private String place;
         private LocalDateTime wateredDate;
     }
+
+    @Data
+    public static class updateWateredDate {
+        private LocalDateTime wateredDate;
+    }
 }
