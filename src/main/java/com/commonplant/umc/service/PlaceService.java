@@ -67,15 +67,16 @@ public class PlaceService {
     }
 
     // ------------------------------- 친구 검색 / 조회 / 삭제 / 추가  --------------------------------
-    public List<User> searchPeople(String input) {
-        List<User> users = userRepository.findByNameContains(input);
-
-
-        return users;
-    }
+//    public List<User> searchPeople(String input) {
+//        List<User> users = userRepository.findByNameContains(input);
+//
+//
+//        return users;
+//    }
 
 
     public String randomCode(){
         return RandomStringUtils.random(6,33,125,true,false);
     }
 }
+
