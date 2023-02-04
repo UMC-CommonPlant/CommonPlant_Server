@@ -2,6 +2,7 @@ package com.commonplant.umc.service;
 
 import com.commonplant.umc.domain.Memo;
 import com.commonplant.umc.domain.Plant;
+import com.commonplant.umc.domain.User;
 import com.commonplant.umc.dto.memo.MemoRequest;
 import com.commonplant.umc.dto.memo.MemoResponse;
 import com.commonplant.umc.repository.MemoRepository;
@@ -20,30 +21,34 @@ import java.util.stream.Collectors;
 @Service
 public class MemoService {
 
-    private final FirebaseService firebaseService;
     private final MemoRepository memoRepository;
+
+    private final FirebaseService firebaseService;
     private final PlantService plantService;
 
     @Transactional
-    public String addMemo(MemoRequest.addMemo req, MultipartFile file){
+    public String addMemo(User user, MemoRequest.addMemo req, MultipartFile file){
 
         // imgUrl Setter
         String newCode = randomCode();
         Long plantMemoIdx = req.getPlant();
-        String nickname = req.getUser();
 
         String imgUrl = null;
 
         if(file.getSize()>0){
-            imgUrl = firebaseService.uploadFiles("commonPlant_" + nickname + "_" + plantMemoIdx + "_" + newCode,file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_" + "memo_"
+                    + plantMemoIdx + "_" + newCode,file);
         }
 
+        // User user = userService.getUser(req.getWriter());
         Plant plant = plantService.getPlant(req.getPlant());
         //System.out.println(plant.getPlantIdx());
 
+        System.out.println("plantMemoIdx");
+
         Memo memo = Memo.builder()
                 .plant(plant)
-                .user(req.getUser())
+                .writer(user)
                 .content(req.getContent())
                 .imgUrl(imgUrl)
                 .build();
@@ -51,7 +56,7 @@ public class MemoService {
         memoRepository.save(memo);
 
         String memoTest = " 식물 이름: " + memo.getPlant() +
-                " 메모 작성자: " + memo.getUser() + " 메모 내용: " + memo.getContent() +
+                " 메모 작성자: " + memo.getWriter() + " 메모 내용: " + memo.getContent() +
                 " 메모 작성일: " + memo.getCreatedAt();
 
         return memoTest;
@@ -65,7 +70,7 @@ public class MemoService {
         MemoResponse.memoCardRes testRes = new MemoResponse.memoCardRes(
                 memo.getMemoIdx(),
                 memo.getPlant(),
-                memo.getUser(),
+                memo.getWriter(),
                 memo.getContent(),
                 memo.getImgUrl(),
                 memo.getCreatedAt()
@@ -84,7 +89,7 @@ public class MemoService {
                 map(memo -> new MemoResponse.memoCardRes(
                                 memo.getMemoIdx(),
                                 memo.getPlant(),
-                                memo.getUser(),
+                                memo.getWriter(),
                                 memo.getContent(),
                                 memo.getImgUrl(),
                                 memo.getCreatedAt()
@@ -111,17 +116,17 @@ public class MemoService {
     }
 
     @Transactional
-    public String updateMemo(Long memoIdx, MemoRequest.updateMemo req, MultipartFile file){
+    public String updateMemo(Long memoIdx, User user, MemoRequest.updateMemo req, MultipartFile file){
 
         // imgUrl Setter
         String newCode = randomCode();
         Long plantMemoIdx = req.getPlant();
-        String nickname = req.getUser();
 
         String imgUrl = null;
 
         if(file.getSize()>0){
-            imgUrl = firebaseService.uploadFiles("commonPlant_" + nickname + "_" + plantMemoIdx + "_" + newCode,file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_" + "memo_"
+                    + plantMemoIdx + "_" + newCode,file);
         }
 
         Plant plant = plantService.getPlant(req.getPlant());
@@ -131,13 +136,15 @@ public class MemoService {
 
         memo.updateMemo(
                 plant,
-                req.getUser(),
+                user,
                 req.getContent(),
                 imgUrl
         );
 
+        memoRepository.save(memo);
+
         String updateMemoTest = " 식물 이름: " + memo.getPlant() +
-                " 메모 수정자: " + memo.getUser() + " 수정 내용: " + memo.getContent()
+                " 메모 수정자: " + memo.getWriter() + " 수정 내용: " + memo.getContent()
                 + " 수정된 이미지 url: " + memo.getImgUrl()
                 + " 메모가 수정된 날짜: " + memo.getCreatedAt();
 

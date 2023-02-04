@@ -60,8 +60,8 @@ public class OAuthController{
 
     @GetMapping("/test/token/user")
     public User getUserTest() {
-        String uuid = jwtService.resolveToken();
-        User user = userService.getUser(uuid);
+        String uuid = jwtService.resolveToken();//만료 여부 확인
+        User user = userService.getUser(uuid);//Place, Plant, Memo에서는 uuid, user 사용
         return user;
     }
 

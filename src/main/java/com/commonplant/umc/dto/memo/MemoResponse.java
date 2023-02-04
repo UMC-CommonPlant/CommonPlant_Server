@@ -1,6 +1,7 @@
 package com.commonplant.umc.dto.memo;
 
 import com.commonplant.umc.domain.Plant;
+import com.commonplant.umc.domain.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,9 @@ public class MemoResponse {
 
         @JsonIgnore
         private Plant plant;
-        private String user;
+
+        // @JsonIgnore
+        private User user;
         private String content;
         private String imgUrl;
 

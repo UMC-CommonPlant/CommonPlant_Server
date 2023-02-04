@@ -3,6 +3,7 @@ package com.commonplant.umc.service;
 import com.commonplant.umc.domain.Info;
 import com.commonplant.umc.domain.Place;
 import com.commonplant.umc.domain.Plant;
+import com.commonplant.umc.domain.User;
 import com.commonplant.umc.dto.plant.PlantRequest;
 import com.commonplant.umc.dto.plant.PlantResponse;
 import com.commonplant.umc.repository.PlantRepository;
@@ -30,8 +31,9 @@ public class PlantService {
 
     private final PlantRepository plantRepository;
 
+
     @Transactional
-    public String addPlant(PlantRequest.addPlant req, MultipartFile file) throws ExecutionException, InterruptedException {
+    public String addPlant(PlantRequest.addPlant req, User user, MultipartFile file)  {
 
         Info info = infoService.getPlantInfo(req.getName());
 
@@ -52,8 +54,9 @@ public class PlantService {
         Place place = placeService.getPlace(req.getPlace());
 
         Plant plant = Plant.builder()
-                .name(req.getName())
+                .name(info.getName())
                 //.name(info.getName())
+                .user(user)
                 .nickname(req.getNickname())
                 .place(place)
                 .imgUrl(imgUrl)
@@ -105,12 +108,17 @@ public class PlantService {
         System.out.println("========parsedWateredDate======== " + parsedWateredDate);
         String parsedCurrentDate = LocalDate.now().toString();
         System.out.println("========parsedCurrentDate======== " + parsedCurrentDate);
+        String parsedCreatedDate = plant.getCreatedAt().format(dateTimeFormatter);
+        System.out.println("========parsedWateredDate======== " + parsedCreatedDate);
+
 
         // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate wateredDate = LocalDate.parse(parsedWateredDate, dateTimeFormatter);
         LocalDate currentDate = LocalDate.parse(parsedCurrentDate, dateTimeFormatter);
+        LocalDate createdDate = LocalDate.parse(parsedCreatedDate, dateTimeFormatter);
         LocalDateTime wateredDateTime = wateredDate.atStartOfDay();
         LocalDateTime currentDateTime = currentDate.atStartOfDay();
+        LocalDateTime createdDateTime = createdDate.atStartOfDay();
 
         // remainderDate: 물주기까지 남은 날짜
         Long remainderDate = (Long) info.getWater_day() - (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
@@ -119,12 +127,15 @@ public class PlantService {
         System.out.println(wateredDate);
         System.out.println(remainderDate);
 
+        Long countDate =  (Long) Duration.between(createdDateTime, currentDateTime).toDays();
+
         PlantResponse.plantCardRes testRes = new PlantResponse.plantCardRes(
                 plant.getPlantIdx(),
                 plant.getName(),
                 plant.getNickname(),
                 plant.getPlace(),
                 plant.getImgUrl(),
+                countDate,
                 plant.getCreatedAt(),
                 plant.getWateredDate()
         );

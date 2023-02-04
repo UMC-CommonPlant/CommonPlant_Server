@@ -1,6 +1,7 @@
 package com.commonplant.umc.dto.plant;
 
 import com.commonplant.umc.domain.Place;
+import com.commonplant.umc.dto.memo.MemoResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -23,10 +24,21 @@ public class PlantResponse {
         private Place place;
         private String imgUrl;
 
+        private Long countDate;
+
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime createdAt;
 
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime wateredDate;
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class plantAndMemoRes{
+        private plantCardRes plant;
+        private MemoResponse.memoListRes memoList;
     }
 }
