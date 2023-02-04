@@ -1,10 +1,7 @@
 package com.commonplant.umc.domain;
 
 import com.google.cloud.Timestamp;
-import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 public class Info {
