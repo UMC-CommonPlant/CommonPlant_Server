@@ -7,6 +7,7 @@ import com.commonplant.umc.dto.plant.PlantRequest;
 import com.commonplant.umc.dto.plant.PlantResponse;
 import com.commonplant.umc.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,12 +39,14 @@ public class PlantService {
         System.out.println("============= req.getName(): ===============" + req.getName());
         // System.out.println("============= info.getName(): ===============" + info.getName());
 
+        // imgUrl Setter
+        String newCode = randomCode();
         String nickname = req.getNickname();
 
         String imgUrl = null;
 
         if (file.getSize() > 0) {
-            imgUrl = firebaseService.uploadFiles("commonPlant_" + nickname, file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_" + nickname + "_" + newCode, file);
         }
 
         Place place = placeService.getPlace(req.getPlace());
@@ -110,7 +113,7 @@ public class PlantService {
         LocalDateTime currentDateTime = currentDate.atStartOfDay();
 
         // remainderDate: 물주기까지 남은 날짜
-        Long remainderDate = (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
+        Long remainderDate = (Long) info.getWater_day() - (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
 
         System.out.println(currentDate);
         System.out.println(wateredDate);
@@ -138,12 +141,14 @@ public class PlantService {
     @Transactional
     public String updatePlant(Long plantIdx, PlantRequest.updatePlant req, MultipartFile file){
 
-        String name = req.getNickname();
+        // imgUrl Setter
+        String newCode = randomCode();
+        String nickname = req.getNickname();
 
         String imgUrl = null;
 
-        if(file.getSize()>0){
-            imgUrl = firebaseService.uploadFiles("commonPlant_" + name,file);
+        if (file.getSize() > 0) {
+            imgUrl = firebaseService.uploadFiles("commonPlant_" + nickname + "_" + newCode, file);
         }
 
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
@@ -161,5 +166,25 @@ public class PlantService {
         System.out.println(updatePlantTest);
 
         return updatePlantTest;
+    }
+
+    @Transactional
+    public String updateWateredDate(Long plantIdx, PlantRequest.updateWateredDate req, MultipartFile file){
+
+        Plant plant = plantRepository.findByPlantIdx(plantIdx);
+        System.out.println(" 물주기 리셋할 식물은: " + plantIdx);
+
+        plant.setWateredDate(
+                req.getWateredDate()
+        );
+
+        String updateWateredDateTest = " 마지막으로 식물에 물을 준 날짜: " + req.getWateredDate();
+        System.out.println(updateWateredDateTest);
+
+        return updateWateredDateTest;
+    }
+
+    public String randomCode(){
+        return RandomStringUtils.random(6,33,125,true,false);
     }
 }

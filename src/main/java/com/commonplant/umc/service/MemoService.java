@@ -6,6 +6,7 @@ import com.commonplant.umc.dto.memo.MemoRequest;
 import com.commonplant.umc.dto.memo.MemoResponse;
 import com.commonplant.umc.repository.MemoRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,12 +27,15 @@ public class MemoService {
     @Transactional
     public String addMemo(MemoRequest.addMemo req, MultipartFile file){
 
-        String name = req.getUser();
+        // imgUrl Setter
+        String newCode = randomCode();
+        Long plantMemoIdx = req.getPlant();
+        String nickname = req.getUser();
 
         String imgUrl = null;
 
         if(file.getSize()>0){
-            imgUrl = firebaseService.uploadFiles("commonPlant_" + name,file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_" + nickname + "_" + plantMemoIdx + "_" + newCode,file);
         }
 
         Plant plant = plantService.getPlant(req.getPlant());
@@ -109,12 +113,15 @@ public class MemoService {
     @Transactional
     public String updateMemo(Long memoIdx, MemoRequest.updateMemo req, MultipartFile file){
 
-        String name = req.getUser();
+        // imgUrl Setter
+        String newCode = randomCode();
+        Long plantMemoIdx = req.getPlant();
+        String nickname = req.getUser();
 
         String imgUrl = null;
 
         if(file.getSize()>0){
-            imgUrl = firebaseService.uploadFiles("commonPlant_" + name,file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_" + nickname + "_" + plantMemoIdx + "_" + newCode,file);
         }
 
         Plant plant = plantService.getPlant(req.getPlant());
@@ -147,5 +154,9 @@ public class MemoService {
         memoRepository.deleteById(memoIdx);
 
         return memoIdx;
+    }
+
+    public String randomCode(){
+        return RandomStringUtils.random(6,33,125,true,false);
     }
 }

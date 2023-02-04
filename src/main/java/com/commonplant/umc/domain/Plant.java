@@ -3,7 +3,9 @@ package com.commonplant.umc.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 //@Data -> @Getter + @Setter
 @Getter
@@ -63,7 +65,19 @@ public class Plant extends BaseTime{
 
     // updatePlant()/setWateredDate(): wateredDate 수정은 어디서?
     public void setWateredDate(LocalDateTime wateredDate) {
-        this.wateredDate = wateredDate;
+
+        // DateTimeFormatter
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        String parsedUpdatedWateredDate = LocalDate.now().toString();
+        System.out.println("========parsedUpdatedWateredDate from Plant Domain======== " + parsedUpdatedWateredDate);
+
+        LocalDate updatedWateredDate = LocalDate.parse(parsedUpdatedWateredDate, dateTimeFormatter);
+        LocalDateTime updatedWateredDateTime = updatedWateredDate.atStartOfDay();
+
+        this.wateredDate = updatedWateredDateTime;
+        // this.wateredDate = wateredDate;
+
     }
 
     public void setImgUrl(String imgUrl) {
