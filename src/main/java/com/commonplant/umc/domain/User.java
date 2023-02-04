@@ -3,6 +3,8 @@ package com.commonplant.umc.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.UUID;
+
 @Getter
 @Table(name = "user")
 @NoArgsConstructor
@@ -12,11 +14,14 @@ public class User extends BaseTime{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_idx")
-    private Long placeIdx;
+    @Column(name = "UUID")
+    private UUID UUID;
 
     @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    private String nickName;
 
     @Column(nullable = false)
     private String email;
@@ -38,8 +43,10 @@ public class User extends BaseTime{
 
 
     @Builder
-    public void User(String name, String email, String password, Long status, Long AccessToken, Long platform, String userImgUrl){
+    public void User(UUID UUID, String name, String nickName, String email, String password, Long status, Long AccessToken, Long platform, String userImgUrl){
+        this.UUID = UUID;
         this.name = name;
+        this.nickName = nickName;
         this.email = email;
         this.password = password;
         this.status = status;

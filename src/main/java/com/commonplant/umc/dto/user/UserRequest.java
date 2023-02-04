@@ -7,10 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 public class UserRequest {
     private String name;
+    private String nickName;
     private String email;
 
-    public UserRequest( String nickname, String email) {
-        this.name = nickname;
+    public UserRequest( String name, String nickName, String email) {
+        this.name = name;
+        this.nickName = nickName;
         this.email = email;
     }
 }
