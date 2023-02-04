@@ -21,16 +21,16 @@ public class UserService {
         if(user == null || user.getName() == null ) {
             throw new RuntimeException("Invalid arguments");
         }
-        final String name = user.getName();
-        if(userRepository.existsByName(name)) {
-            log.warn("Username already exists {}", name);
-            throw new RuntimeException("Username already exists");
-        }
+        final String nickName = user.getNickName();
 
+        if(userRepository.existsByName(nickName)) {
+            log.warn("nickname already exists {}", nickName);
+            throw new RuntimeException("nickname already exists");
+        }
         return userRepository.save(user);
     }
-    public User getUser(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(()->new BadRequestException(NOT_FOUND_USER));
+    public User getUser(Long name) {
+        User user = userRepository.findById(name).orElseThrow(()->new BadRequestException(NOT_FOUND_USER));
         return user;
     }
 }
