@@ -42,7 +42,7 @@ public class PlantController {
     }
 
     // 식물 수정 (PATCH)
-    @PatchMapping("/plant/update/{plantIdx}")
+    @PutMapping("/plant/update/{plantIdx}")
     public ResponseEntity<JsonResponse> updatePlant(@PathVariable Long plantIdx,
                                                     @RequestPart("plant") PlantRequest.updatePlant req,
                                                     @RequestPart("image") MultipartFile file){
@@ -57,7 +57,7 @@ public class PlantController {
     }
 
     // 식물 물주기 날짜 갱신(PATCH)
-    @PatchMapping("/plant/update/wateredDate/{plantIdx}")
+    @PutMapping("/plant/update/wateredDate/{plantIdx}")
     public ResponseEntity<JsonResponse> updateWateredDate(@PathVariable Long plantIdx,
                                                           @RequestPart("plant") PlantRequest.updateWateredDate req,
                                                           @RequestPart("image") MultipartFile file){
