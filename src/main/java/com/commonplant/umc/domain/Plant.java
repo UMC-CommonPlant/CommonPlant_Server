@@ -77,6 +77,7 @@ public class Plant extends BaseTime{
 
         this.wateredDate = updatedWateredDateTime;
         // this.wateredDate = wateredDate;
+
     }
 
     public void setImgUrl(String imgUrl) {
