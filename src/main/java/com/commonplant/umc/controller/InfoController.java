@@ -22,13 +22,13 @@ public class InfoController {
     private final InfoService infoService;
     private final WordService wordService;
 
-    @GetMapping("/info/searchInfo/")
+    @PostMapping("/info/searchInfo")
     public ResponseEntity<JsonResponse> searchInfo(@RequestParam String name) {
         List<InfoResponse.getSearchList> searchInfo = infoService.searchInfo(name);
         return ResponseEntity.ok(new JsonResponse(true, 200, "searchInfo", searchInfo));
     }
 
-    @GetMapping("/info/getPlantInfo/")
+    @PostMapping("/info/getPlantInfo")
     public ResponseEntity<JsonResponse> getPlantInfo(@RequestParam String name) {
         wordService.addWord(name);
         Info plantInfo = infoService.getPlantInfo(name);
