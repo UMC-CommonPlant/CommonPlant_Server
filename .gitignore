@@ -20,6 +20,8 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
+src/main/java/com/commonplant/umc/config/jwt/JwtSecret.java
+
 ### IntelliJ IDEA ###
 .idea
 *.iws

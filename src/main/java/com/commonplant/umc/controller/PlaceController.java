@@ -87,19 +87,19 @@ public class PlaceController {
 
     // ------------------------------- 친구 검색 / 조회 / 삭제 / 추가  --------------------------------
 
-    @GetMapping("place/searchPeople")
-    public ResponseEntity<JsonResponse> searchPeople(@RequestBody PlaceRequest.searchPeople req){
-
-        //User Validation
-        /*
-        String userId = jwtService.resolveToken();
-        User user = userService.getUser(userId);
-        */
-        String input = req.getName();
-        List<User> users = placeService.searchPeople(input);
-
-        return ResponseEntity.ok(new JsonResponse(true, 200, "searchPeople", users));
-    }
+//    @GetMapping("place/searchPeople")
+//    public ResponseEntity<JsonResponse> searchPeople(@RequestBody PlaceRequest.searchPeople req){
+//
+//        //User Validation
+//        /*
+//        String userId = jwtService.resolveToken();
+//        User user = userService.getUser(userId);
+//        */
+//        String input = req.getName();
+//        List<User> users = placeService.searchPeople(input);
+//
+//        return ResponseEntity.ok(new JsonResponse(true, 200, "searchPeople", users));
+//    }
 
     @PutMapping("/place/addPeople")
     public ResponseEntity<JsonResponse> addPeople(@RequestBody PlaceRequest.updatePlace req){
