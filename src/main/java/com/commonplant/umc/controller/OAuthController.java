@@ -61,7 +61,7 @@ public class OAuthController{
     @GetMapping("/test/token/user")
     public User getUserTest() {
         String uuid = jwtService.resolveToken();
-        User user = userService.getUserTest(uuid);
+        User user = userService.getUser(uuid);
         return user;
     }
 
