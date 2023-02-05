@@ -84,6 +84,7 @@ public class Plant extends BaseTime{
         LocalDate updatedWateredDate = LocalDate.parse(parsedUpdatedWateredDate, dateTimeFormatter);
         LocalDateTime updatedWateredDateTime = updatedWateredDate.atStartOfDay();
 
+        System.out.println("========updatedWateredDateTime from Plant Domain======== " + updatedWateredDate);
         this.wateredDate = updatedWateredDateTime;
         // this.wateredDate = wateredDate;
 

@@ -19,7 +19,7 @@ public class Memo extends BaseTime{
     @Column(name = "memo_idx")
     private Long memoIdx;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "plant_idx", nullable = false)
     private Plant plant;
 
