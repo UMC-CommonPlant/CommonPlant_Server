@@ -21,7 +21,7 @@ public class MemoResponse {
     public static class memoCardRes{
         private Long memoIdx;
 
-        @JsonIgnore
+        // @JsonIgnore
         private Plant plant;
 
         // @JsonIgnore

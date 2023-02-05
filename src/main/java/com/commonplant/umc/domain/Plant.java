@@ -33,7 +33,7 @@ public class Plant extends BaseTime{
     private String nickname;
 
     // 장소 입력: 필수 (Garden 6-2)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "place_idx", nullable = false)
     private Place place;
 

@@ -20,7 +20,7 @@ public class PlantResponse {
 
         private String name;
         private String nickname;
-        @JsonIgnore
+        // @JsonIgnore
         private Place place;
         private String imgUrl;
 
