@@ -34,8 +34,8 @@ public class PlaceController {
      @PostMapping("/place/add")
      public ResponseEntity<JsonResponse> addPlace(@RequestPart("place") PlaceRequest.addPlace req, @RequestPart("image") MultipartFile file){
 
-         String uuid = jwtService.resolveToken();
-         User user = userService.getUser(uuid);
+          String uuid = jwtService.resolveToken();
+          User user = userService.getUser(uuid);
 
          String placeCode = placeService.addPlace(user, req, file);
 
