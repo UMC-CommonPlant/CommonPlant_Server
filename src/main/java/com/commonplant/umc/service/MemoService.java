@@ -36,8 +36,8 @@ public class MemoService {
         String imgUrl = null;
 
         if(file.getSize()>0){
-            imgUrl = firebaseService.uploadFiles("commonPlant_" + "memo_"
-                    + plantMemoIdx + "_" + newCode,file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_memo/" +
+                    plantMemoIdx + "_" + newCode,file);
         }
 
         // User user = userService.getUser(req.getWriter());
@@ -100,8 +100,11 @@ public class MemoService {
         List<List> plantAllMemoList = new ArrayList<>();
         List<MemoResponse.memoCardRes> memoListByCreatedAt = new ArrayList<>();
 
+        // TODO: 식물에 등록된 메모가 없을 경우에 대한 예외처리
         // getCreatedAt()/getCreatedAt().toLocalDate()
-        LocalDate creationDate = memoCardListDto.get(0).getCreatedAt().toLocalDate();
+        if(memoCardListDto.size() != 0) {
+            LocalDate creationDate = memoCardListDto.get(0).getCreatedAt().toLocalDate();
+        }
 
         for(int i = 0; i < memoCardListDto.size(); i++){
             memoListByCreatedAt = new ArrayList<>();
@@ -125,8 +128,8 @@ public class MemoService {
         String imgUrl = null;
 
         if(file.getSize()>0){
-            imgUrl = firebaseService.uploadFiles("commonPlant_" + "memo_"
-                    + plantMemoIdx + "_" + newCode,file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_memo/" +
+                    plantMemoIdx + "_" + newCode,file);
         }
 
         Plant plant = plantService.getPlant(req.getPlant());
