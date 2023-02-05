@@ -25,6 +25,8 @@ public class Plant extends BaseTime{
     // 식물 이름
     @Column(nullable = false)
     private String name;
+
+
     
     // 식물 애칭
     // Postman에서 메모 등록할 때 10자 이상 넣으면 500 발생!!!
@@ -43,6 +45,8 @@ public class Plant extends BaseTime{
     @Column(nullable = false, name = "watered_date")
     private LocalDateTime wateredDate;
 
+    @Column(nullable = true)
+    private Long remainderDate;
 
     @ManyToOne
     @JoinColumn(name = "user_idx")
@@ -88,6 +92,11 @@ public class Plant extends BaseTime{
         this.wateredDate = updatedWateredDateTime;
         // this.wateredDate = wateredDate;
 
+    }
+
+    public void setRemainderDate(Long remainderDate)
+    {
+        this.remainderDate = remainderDate;
     }
 
     public void setImgUrl(String imgUrl) {
