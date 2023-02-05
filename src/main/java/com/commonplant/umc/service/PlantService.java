@@ -6,11 +6,13 @@ import com.commonplant.umc.domain.Plant;
 import com.commonplant.umc.domain.User;
 import com.commonplant.umc.dto.plant.PlantRequest;
 import com.commonplant.umc.dto.plant.PlantResponse;
+import com.commonplant.umc.repository.PlaceRepository;
 import com.commonplant.umc.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Duration;
@@ -33,6 +35,7 @@ public class PlantService {
     private final InfoService infoService;
 
     private final PlantRepository plantRepository;
+    private final PlaceRepository placeRepository;
 
 
     @Transactional
@@ -58,7 +61,6 @@ public class PlantService {
 
         Plant plant = Plant.builder()
                 .name(info.getName())
-                //.name(info.getName())
                 .user(user)
                 .nickname(req.getNickname())
                 .place(place)
@@ -127,6 +129,8 @@ public class PlantService {
 
         // remainderDate: 물주기까지 남은 날짜
         Long remainderDate = (Long) info.getWater_day() - (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
+        plant.setRemainderDate(remainderDate);
+
 
         System.out.println(currentDate);
         System.out.println(wateredDate);
@@ -149,69 +153,14 @@ public class PlantService {
         return testRes;
     }
 
-//    // TODO: 같은 장소에 등록된 식물들을 정렬
-//    // 1단계: 같은 장소에 등록된 식물들 리스트 가져오기
-//    @Transactional
-//    public PlantResponse.plantListRes getPlantList(Long placeIdx) throws ExecutionException, InterruptedException{
-//
-////        Plant plantCard = plantRepository.findByPlantIdx(res.getPlantIdx());
-////
-////        PlantResponse.plantCardRes plantCardRes = plantRepository.findByPlantIdx(plantCardRes.getPlantIdx());
-//
-//        // Getter
-//        List<Plant> plantList = plantRepository.findAllByPlaceIdx(placeIdx);
-//
-//        // 물주기 구현: 남은 날짜 계산
-//        // DateTimeFormatter
-//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//
-//        // getPlantInfo()의 인자는 식물 종 이름: 식물 조회할 때 식물 종 이름을 보내서 검색하면 됨
-//        for(int i = 0; i < plantList.size(); i++){
-//            Info info = infoService.getPlantInfo(plantList.get(i).getName());
-//
-//            String parsedWateredDate = plantList.get(i).getWateredDate().format(dateTimeFormatter);
-//            String parsedCurrentDate = LocalDate.now().toString();
-//
-//            LocalDate wateredDate = LocalDate.parse(parsedWateredDate, dateTimeFormatter);
-//            LocalDate currentDate = LocalDate.parse(parsedCurrentDate, dateTimeFormatter);
-//
-//            LocalDateTime wateredDateTime = wateredDate.atStartOfDay();
-//            LocalDateTime currentDateTime = currentDate.atStartOfDay();
-//
-//            // remainderDate: 물주기까지 남은 날짜
-//            Long remainderDate = (Long) info.getWater_day()
-//                    - (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
-//        }
-//
-//        List<PlantResponse.plantCardRes> plantCardListDto = plantList.stream().
-//                map(plant -> new PlantResponse.plantCardRes(
-//                                plant.getPlantIdx(),
-//                                plant.getName(),
-//                                plant.getNickname(),
-//                                plant.getPlace(),
-//                                plant.getImgUrl(),
-//                                remainderDate,
-//                                plant.getCreatedAt(),
-//                                plant.getWateredDate()
-//                        )
-//                ).collect(Collectors.toList());
-//
-//        // Setter
-//        List<List> placeAllPlantList = new ArrayList<>();
-//        List<PlantResponse.plantCardRes> plantListByPlaceIdx = new ArrayList<>();
-//
-//        for(int i = 0; i < plantCardListDto.size(); i++){
-//            plantListByPlaceIdx = new ArrayList<>();
-//            plantListByPlaceIdx.add(plantCardListDto.get(i));
-//
-//            placeAllPlantList.add(plantListByPlaceIdx);
-//        }
-//
-//        PlantResponse.plantListRes plantListRes =
-//                new PlantResponse.plantListRes(placeAllPlantList);
-//
-//        return plantListRes;
-//    }
+
+    @Transactional
+    public List<Plant> getPlantList(Place place)
+    {
+        List<Plant> plants = plantRepository.findAllByPlaceOOrderByRemainderDateAsc(place);
+
+        return plants;
+    }
 
     @Transactional
     public Plant getPlant(Long plantIdx){
