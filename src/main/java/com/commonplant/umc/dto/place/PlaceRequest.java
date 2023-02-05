@@ -1,3 +1,4 @@
+
 package com.commonplant.umc.dto.place;
 
 import lombok.*;
@@ -25,6 +26,7 @@ public class PlaceRequest {
     @AllArgsConstructor
     @Data
     public static class searchPeople{
+
         private String name;
 
     }

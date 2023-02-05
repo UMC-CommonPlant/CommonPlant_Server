@@ -1,3 +1,4 @@
+
 package com.commonplant.umc.controller;
 
 
@@ -5,11 +6,9 @@ import com.commonplant.umc.domain.Place;
 import com.commonplant.umc.domain.User;
 import com.commonplant.umc.dto.JsonResponse;
 import com.commonplant.umc.dto.place.PlaceRequest;
-import com.commonplant.umc.dto.place.PlaceResponse;
-import com.commonplant.umc.service.OpenApiService;
-import com.commonplant.umc.service.PlaceService;
 import com.commonplant.umc.service.UserService;
-import lombok.Getter;
+import com.commonplant.umc.service.PlaceService;
+import com.commonplant.umc.utils.weather.OpenApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,16 +27,16 @@ public class PlaceController {
     private final UserService userService;
     private final OpenApiService openApiService;
 
-    // 장소 추가
-//    @PostMapping("/place/add")
-//    public ResponseEntity<JsonResponse> addPlace(@RequestPart("place") PlaceRequest.addPlace req, @RequestPart("image") MultipartFile file){
-//
-//        User user = userService.getUser(1l);
-//
-//        String placeCode = placeService.addPlace(user, req, file);
-//
-//        return ResponseEntity.ok(new JsonResponse(true, 200,"addPlace", placeCode));
-//    }
+     // 장소 추가
+    @PostMapping("/place/add")
+    public ResponseEntity<JsonResponse> addPlace(@RequestPart("place") PlaceRequest.addPlace req, @RequestPart("image") MultipartFile file){
+
+        User user = userService.getUser(1l);
+
+        String placeCode = placeService.addPlace(user, req, file);
+
+        return ResponseEntity.ok(new JsonResponse(true, 200,"addPlace", placeCode));
+    }
 
     // 장소 정보 조회
     @GetMapping("/place/{placeCode}")
@@ -77,8 +75,8 @@ public class PlaceController {
         System.out.println(x);
         System.out.println(y);
 
-        place.setLongitude(x);
-        place.setLatitude(y);
+        place.setGirdX(x);
+        place.setGridY(y);
 
         return ResponseEntity.ok(new JsonResponse(true, 200,"getPlace", place));
     }
@@ -119,3 +117,4 @@ public class PlaceController {
 
 
 }
+\
