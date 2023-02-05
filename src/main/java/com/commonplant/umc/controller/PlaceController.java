@@ -2,6 +2,7 @@
 package com.commonplant.umc.controller;
 
 
+import com.commonplant.umc.config.jwt.JwtService;
 import com.commonplant.umc.domain.Place;
 import com.commonplant.umc.domain.User;
 import com.commonplant.umc.dto.JsonResponse;
@@ -27,16 +28,19 @@ public class PlaceController {
     private final UserService userService;
     private final OpenApiService openApiService;
 
+    private final JwtService jwtService;
+
      // 장소 추가
-//    @PostMapping("/place/add")
-//    public ResponseEntity<JsonResponse> addPlace(@RequestPart("place") PlaceRequest.addPlace req, @RequestPart("image") MultipartFile file){
-//
-//        User user = userService.getUser(1l);
-//
-//        String placeCode = placeService.addPlace(user, req, file);
-//
-//        return ResponseEntity.ok(new JsonResponse(true, 200,"addPlace", placeCode));
-//    }
+     @PostMapping("/place/add")
+     public ResponseEntity<JsonResponse> addPlace(@RequestPart("place") PlaceRequest.addPlace req, @RequestPart("image") MultipartFile file){
+
+         String uuid = jwtService.resolveToken();
+         User user = userService.getUser(uuid);
+
+         String placeCode = placeService.addPlace(user, req, file);
+
+         return ResponseEntity.ok(new JsonResponse(true, 200,"addPlace", placeCode));
+     }
 
     // 장소 정보 조회
     @GetMapping("/place/{placeCode}")
