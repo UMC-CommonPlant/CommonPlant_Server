@@ -55,9 +55,11 @@ public class MemoService {
 
         memoRepository.save(memo);
 
-        String memoTest = " 식물 애칭: " + memo.getPlant().getNickname() +
-                " 메모 작성자: " + memo.getWriter() + " 메모 내용: " + memo.getContent() +
-                " 메모 작성일: " + memo.getCreatedAt() + " 메모를 추가한 식물의 인덱스는: " + memo.getPlant().getPlantIdx();
+        String memoTest = " 메모 작성자의 닉네임: " + memo.getWriter().getNickName()
+                + " 메모 작성자의 프로필 사진: " + memo.getWriter().getUserImgUrl()
+                + " 메모에 업로드된 식물의 사진: " + memo.getImgUrl()
+                + " 메모 내용: " + memo.getContent()
+                + " 메모 작성일: " + memo.getCreatedAt();
 
         return memoTest;
     }
