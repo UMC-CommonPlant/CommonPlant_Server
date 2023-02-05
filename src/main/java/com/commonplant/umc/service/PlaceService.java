@@ -1,15 +1,17 @@
 package com.commonplant.umc.service;
 
 
-import com.commonplant.umc.config.FirebaseConfig;
 import com.commonplant.umc.config.exception.BadRequestException;
 import com.commonplant.umc.domain.Belong;
 import com.commonplant.umc.domain.Place;
 import com.commonplant.umc.domain.User;
+import com.commonplant.umc.utils.weather.OpenApiService;
+import com.commonplant.umc.utils.weather.Weather;
 import com.commonplant.umc.dto.place.PlaceRequest;
 import com.commonplant.umc.repository.BelongRepository;
 import com.commonplant.umc.repository.PlaceRepository;
 import com.commonplant.umc.repository.UserRepository;
+import com.commonplant.umc.utils.weather.TransLocalPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +31,9 @@ public class PlaceService {
     private final BelongRepository belongRepository;
     private final UserRepository userRepository;
     private final FirebaseService firebaseService;
-
     private final OpenApiService openApiService;
+
+    private final TransLocalPoint transLocalPoint;
 
 
     @Transactional
@@ -46,12 +49,23 @@ public class PlaceService {
         String json = openApiService.getKakaoApiFromAddress(req.getAddress());
         HashMap<String, String> xy = openApiService.getXYMapfromJson(json);
 
-        String x = xy.get("x");
-        String y = xy.get("y");
+        String y = xy.get("x");
+        String x = xy.get("y");
 
+        double lat = Double.parseDouble(x);
+        double lng = Double.parseDouble(y);
+
+        Weather.LatXLngY rs =transLocalPoint.convertGRID_GPS(0, lat, lng);
+
+
+        int grid_x = (int)rs.getX();
+        int grid_y = (int)rs.getY();
+
+        x = Integer.toString(grid_x);
+        y = Integer.toString(grid_y);
 
         Place place = Place.builder().name(req.getName()).owner(user).address(req.getAddress())
-                .longitude(x).latitude(y).placeImgUrl(imgUrl).code(newCode).build();
+                .gridX(x).gridY(y).placeImgUrl(imgUrl).code(newCode).build();
         placeRepository.save(place);
 
         Belong belong = Belong.builder().user(user).place(place).build();
