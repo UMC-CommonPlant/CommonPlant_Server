@@ -9,7 +9,9 @@ public class PlantRequest {
 
     @Data
     public static class addPlant {
+
         private String name;
+        private String nickname;
         private String place;
         private LocalDate createdAt;
         private LocalDateTime wateredDate;
@@ -17,8 +19,13 @@ public class PlantRequest {
 
     @Data
     public static class updatePlant {
-        private String name;
+        private String nickname;
         private String place;
+        private LocalDateTime wateredDate;
+    }
+
+    @Data
+    public static class updateWateredDate {
         private LocalDateTime wateredDate;
     }
 }

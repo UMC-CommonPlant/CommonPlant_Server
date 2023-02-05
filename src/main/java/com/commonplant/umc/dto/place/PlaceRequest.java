@@ -1,3 +1,4 @@
+
 package com.commonplant.umc.dto.place;
 
 import lombok.*;

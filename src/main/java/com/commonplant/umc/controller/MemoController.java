@@ -1,10 +1,12 @@
 package com.commonplant.umc.controller;
 
+import com.commonplant.umc.config.jwt.JwtService;
+import com.commonplant.umc.domain.User;
 import com.commonplant.umc.dto.JsonResponse;
 import com.commonplant.umc.dto.memo.MemoRequest;
 import com.commonplant.umc.dto.memo.MemoResponse;
-import com.commonplant.umc.dto.plant.PlantResponse;
 import com.commonplant.umc.service.MemoService;
+import com.commonplant.umc.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +20,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemoController {
 
+    private final UserService userService;
     private final MemoService memoService;
+    private final JwtService jwtService;
 
     // 메모 등록 (POST)
     @PostMapping("/memo/add")
     public ResponseEntity<JsonResponse> addMemo(@RequestPart("memo") MemoRequest.addMemo req, @RequestPart("image") MultipartFile file){
 
-        System.out.println("=============ADD MEMO TEST.NAME===============" + req.getUser() + req.getContent());
-        System.out.println("=============ADD MEMO TEST.NAME===============" + file);
-        System.out.println("=============ADD MEMO TEST.NAME===============" + req.getCreatedAt());
+        String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
+        System.out.println(user.getEmail());
 
-        String memoTest = memoService.addMemo(req, file);
+        System.out.println("=============ADD MEMO TEST.NAME===============" + req.getPlant());
+        System.out.println("=============ADD MEMO TEST.NAME===============" + req.getContent());
+        System.out.println("=============ADD MEMO TEST.NAME===============" + file);
+
+        String memoTest = memoService.addMemo(user, req, file);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "addMemo", memoTest));
     }
@@ -36,6 +44,8 @@ public class MemoController {
     // 특정 메모 조회 (GET)
     @GetMapping("/memo/card/{memoIdx}")
     public ResponseEntity<JsonResponse> getMemoCard(@PathVariable Long memoIdx) {
+
+        String uuid = jwtService.resolveToken();
 
         System.out.println("=============GET MEMO TEST.NAME===============");
 
@@ -50,6 +60,8 @@ public class MemoController {
     @GetMapping("/plant/{plantIdx}/memoList")
     public ResponseEntity<JsonResponse> getMemoList(@PathVariable Long plantIdx){
 
+        String uuid = jwtService.resolveToken();
+
         System.out.println("=============GET MEMO LIST TEST.NAME===============");
 
         MemoResponse.memoListRes res = memoService.getMemoList(plantIdx);
@@ -58,16 +70,18 @@ public class MemoController {
     }
 
     // 메모 수정 (PATCH: plant랑 user는 업데이트 되지 않음)
-    @PatchMapping("/memo/update/{memoIdx}")
+    @PutMapping("/memo/update/{memoIdx}")
     public ResponseEntity<JsonResponse> updateMemo(@PathVariable Long memoIdx,
                                                    @RequestPart("memo") MemoRequest.updateMemo req,
                                                    @RequestPart("image") MultipartFile file){
 
         System.out.println("=============UPDATE MEMO TEST.NAME==============" + req.getContent());
         System.out.println("=============UPDATE MEMO TEST.NAME==============" + file);
-        // System.out.println("=============UPDATE PLANT TEST.NAME===============" + req.getCreatedAt());
 
-        String updateMemoTest = memoService.updateMemo(memoIdx, req, file);
+        String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
+
+        String updateMemoTest = memoService.updateMemo(memoIdx, user, req, file);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "updateMemo", updateMemoTest));
     }

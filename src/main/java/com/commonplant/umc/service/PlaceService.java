@@ -1,3 +1,4 @@
+
 package com.commonplant.umc.service;
 
 
@@ -93,3 +94,4 @@ public class PlaceService {
         return RandomStringUtils.random(6,33,125,true,false);
     }
 }
+

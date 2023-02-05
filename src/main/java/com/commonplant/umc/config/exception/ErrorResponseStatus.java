@@ -18,11 +18,12 @@ public enum ErrorResponseStatus {
     //4000 : Database, Server 오류
     DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다."),
     FILE_SAVE_ERROR(false, 4001, "파일 저장이 실패하였습니다."),
-    EXIST_USER(false, 4002, "이미 등록된 id가 있습니다."),
+    EXIST_USER(false, 4002, "이미 등록된 유저가 있습니다."),
     NOT_FOUND_USER(false, 4003, "등록된 유저가 없습니다."),
     INVALID_PWD(false, 4004, "비밀번호가 올바르지 않습니다."),
     PLACE_CODE_ERROR(false, 4005, "잘못된 place code 입니다."),
-
+    WRONG_PLATFORM(false, 4006, "잘못된 플랫폼입니다."),
+    EXPIRED_JWT(false, 4007, "만료된 토큰입니다."),
 
     //5000 : Server connection 오류
     SERVER_ERROR(false, 5000, "서버와의 연결에 실패하였습니다."),

@@ -3,6 +3,8 @@ package com.commonplant.umc.domain;
 import lombok.*;
 
 import javax.persistence.*;
+
+
 @Getter
 @Table(name = "user")
 @NoArgsConstructor
@@ -13,37 +15,36 @@ public class User extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_idx")
-    private Long placeIdx;
+    private Long userIdx;
 
     @Column(nullable = false)
-    private String name;
+    private String uuid;
+
+    @Column(nullable = false)
+    private String nickName;
 
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
 
-    @Column(name = "status")
-    private Long status;
+    @Column(name = "status", columnDefinition = "varchar(20) default 'ACTIVE'")
+    private String status;
 
-    @Column(name = "AccessToken")
-    private Long AccessToken;
+    @Column(name = "refresh_token")
+    private String refreshToken;
 
     @Column(name = "platform")
-    private Long platform;
+    private String platform;
 
     @Column(nullable = true)
     private String userImgUrl;
 
 
     @Builder
-    public void User(String name, String email, String password, Long status, Long AccessToken, Long platform, String userImgUrl){
-        this.name = name;
+    public User(String uuid, String nickName, String email, String platform, String userImgUrl){
+        this.uuid = uuid;
+        this.nickName = nickName;
         this.email = email;
-        this.password = password;
-        this.status = status;
-        this.AccessToken = AccessToken;
         this.platform = platform;
         this.userImgUrl = userImgUrl;
     }

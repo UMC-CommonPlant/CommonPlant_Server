@@ -1,3 +1,4 @@
+
 package com.commonplant.umc.domain;
 
 import lombok.*;
