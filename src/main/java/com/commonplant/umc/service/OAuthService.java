@@ -70,12 +70,19 @@ public class OAuthService{
             String uuid = UuidUtil.generateType1UUID();
             String imageUrl = firebaseService.uploadFiles(uuid, image);
 
-            User user = User.builder().nickName(req.getNickName()).userImgUrl(imageUrl).uuid(uuid).email(req.getEmail()).platform(req.getLoginType()).build();
+            User user = User.builder()
+                    .nickName(req.getNickName())
+                    .userImgUrl(imageUrl)
+                    .uuid(uuid)
+                    .email(req.getEmail())
+                    .platform(req.getLoginType()).
+                    build();
             userRepository.save(user);
 
             return jwtService.createToken(user.getUuid());
         }
     }
+
 
 
 
