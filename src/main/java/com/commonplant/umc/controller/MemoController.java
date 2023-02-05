@@ -5,7 +5,6 @@ import com.commonplant.umc.domain.User;
 import com.commonplant.umc.dto.JsonResponse;
 import com.commonplant.umc.dto.memo.MemoRequest;
 import com.commonplant.umc.dto.memo.MemoResponse;
-import com.commonplant.umc.dto.plant.PlantResponse;
 import com.commonplant.umc.service.MemoService;
 import com.commonplant.umc.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +31,10 @@ public class MemoController {
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
         System.out.println(user.getEmail());
-        // User user = userService.getUser(1L);
 
-//        System.out.println("=============ADD MEMO TEST.NAME===============" + req.getWriter());
         System.out.println("=============ADD MEMO TEST.NAME===============" + req.getPlant());
         System.out.println("=============ADD MEMO TEST.NAME===============" + req.getContent());
         System.out.println("=============ADD MEMO TEST.NAME===============" + file);
-        // System.out.println("=============ADD MEMO TEST.NAME===============" + req.getCreatedAt());
 
         String memoTest = memoService.addMemo(user, req, file);
 
@@ -48,7 +44,9 @@ public class MemoController {
     // 특정 메모 조회 (GET)
     @GetMapping("/memo/card/{memoIdx}")
     public ResponseEntity<JsonResponse> getMemoCard(@PathVariable Long memoIdx) {
+
         String uuid = jwtService.resolveToken();
+
         System.out.println("=============GET MEMO TEST.NAME===============");
 
         MemoResponse.memoCardRes res = memoService.getMemoCard(memoIdx);
@@ -61,7 +59,9 @@ public class MemoController {
     // 식물 별로 조회해야 하는데... plant 테이블의 plant_idx 사용?
     @GetMapping("/plant/{plantIdx}/memoList")
     public ResponseEntity<JsonResponse> getMemoList(@PathVariable Long plantIdx){
+
         String uuid = jwtService.resolveToken();
+
         System.out.println("=============GET MEMO LIST TEST.NAME===============");
 
         MemoResponse.memoListRes res = memoService.getMemoList(plantIdx);
@@ -77,8 +77,6 @@ public class MemoController {
 
         System.out.println("=============UPDATE MEMO TEST.NAME==============" + req.getContent());
         System.out.println("=============UPDATE MEMO TEST.NAME==============" + file);
-        // System.out.println("=============UPDATE PLANT TEST.NAME===============" + req.getCreatedAt());
-
 
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
