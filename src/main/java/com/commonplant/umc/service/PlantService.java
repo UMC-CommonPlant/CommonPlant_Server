@@ -33,7 +33,7 @@ public class PlantService {
 
 
     @Transactional
-    public String addPlant(PlantRequest.addPlant req, User user, MultipartFile file)  {
+    public Long addPlant(PlantRequest.addPlant req, User user, MultipartFile file)  {
 
         Info info = infoService.getPlantInfo(req.getName());
 
@@ -48,7 +48,7 @@ public class PlantService {
         String imgUrl = null;
 
         if (file.getSize() > 0) {
-            imgUrl = firebaseService.uploadFiles("commonPlant_" + nickname + "_" + newCode, file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_plant/" + nickname + "_" + newCode, file);
         }
 
         Place place = placeService.getPlace(req.getPlace());
@@ -63,14 +63,16 @@ public class PlantService {
                 .wateredDate(req.getWateredDate())
                 .build();
 
-        plantRepository.save(plant);
+//        plantRepository.save(plant);
 
-        String test = " 식물 이름: " + plant.getName()
-                + " 식물 애칭: " + plant.getNickname() + " 이미지 url: " + plant.getImgUrl()
-                + " 식물과 함께하기 시작한 날: " + plant.getCreatedAt()
-                + " 식물에 마지막으로 물을 준 날: " + plant.getWateredDate();
+//        String test = " 식물 이름: " + plant.getName()
+//                + " 식물 애칭: " + plant.getNickname() + " 이미지 url: " + plant.getImgUrl()
+//                + " 식물과 함께하기 시작한 날: " + plant.getCreatedAt()
+//                + " 식물에 마지막으로 물을 준 날: " + plant.getWateredDate();
+//
+//        return test;
 
-        return test;
+        return plantRepository.save(plant).getPlantIdx();
     }
 
     // getplantCard(): 식물 1개의 정보를 얻어옴
@@ -109,7 +111,7 @@ public class PlantService {
         String parsedCurrentDate = LocalDate.now().toString();
         System.out.println("========parsedCurrentDate======== " + parsedCurrentDate);
         String parsedCreatedDate = plant.getCreatedAt().format(dateTimeFormatter);
-        System.out.println("========parsedWateredDate======== " + parsedCreatedDate);
+        System.out.println("========parsedCreatedDate======== " + parsedCreatedDate);
 
 
         // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -159,7 +161,7 @@ public class PlantService {
         String imgUrl = null;
 
         if (file.getSize() > 0) {
-            imgUrl = firebaseService.uploadFiles("commonPlant_" + nickname + "_" + newCode, file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_plant/" + nickname + "_" + newCode, file);
         }
 
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
@@ -189,7 +191,7 @@ public class PlantService {
                 req.getWateredDate()
         );
 
-        String updateWateredDateTest = " 마지막으로 식물에 물을 준 날짜: " + req.getWateredDate();
+        String updateWateredDateTest = " 마지막으로 식물에 물을 준 날짜: " + plant.getWateredDate();
         System.out.println(updateWateredDateTest);
 
         return updateWateredDateTest;

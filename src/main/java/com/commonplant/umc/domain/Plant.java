@@ -33,7 +33,7 @@ public class Plant extends BaseTime{
     private String nickname;
 
     // 장소 입력: 필수 (Garden 6-2)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "place_idx", nullable = false)
     private Place place;
 
@@ -84,6 +84,7 @@ public class Plant extends BaseTime{
         LocalDate updatedWateredDate = LocalDate.parse(parsedUpdatedWateredDate, dateTimeFormatter);
         LocalDateTime updatedWateredDateTime = updatedWateredDate.atStartOfDay();
 
+        System.out.println("========updatedWateredDateTime from Plant Domain======== " + updatedWateredDate);
         this.wateredDate = updatedWateredDateTime;
         // this.wateredDate = wateredDate;
 

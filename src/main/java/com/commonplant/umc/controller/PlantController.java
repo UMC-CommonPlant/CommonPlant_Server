@@ -47,8 +47,7 @@ public class PlantController {
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
 
-
-        String test = plantService.addPlant(req, user,file);
+        Long test = plantService.addPlant(req, user,file);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "addPlant", test));
     }
@@ -61,7 +60,6 @@ public class PlantController {
 
         System.out.println("=============UPDATE PLANT TEST.NAME===============" + req.getNickname());
         System.out.println("=============UPDATE PLANT TEST.NAME===============" + file);
-        // System.out.println("=============UPDATE PLANT TEST.NAME===============" + req.getCreatedAt());
 
         String updatePlantTest = plantService.updatePlant(plantIdx, req, file);
 
@@ -75,9 +73,8 @@ public class PlantController {
                                                           @RequestPart("image") MultipartFile file){
 
         System.out.println("=============UPDATE PLANT WATERED DATE TEST.NAME===============");
-        // System.out.println("=============UPDATE PLANT WATERED DATE TEST.NAME===============" + req.getNickname());
-        String uuid = jwtService.resolveToken();
 
+        String uuid = jwtService.resolveToken();
 
         String updateWateredDateTest = plantService.updateWateredDate(plantIdx, req, file);
 
@@ -85,18 +82,21 @@ public class PlantController {
     }
 
     // 식물 조회 (GET)
-    //memo list 까지 response로 줄 수 있게
+    // memo list 까지 response로 줄 수 있게 구현 완료!
     @GetMapping("/plant/card/{plantIdx}")
     public ResponseEntity<JsonResponse> getPlantCard(@PathVariable Long plantIdx)
             throws ExecutionException, InterruptedException {
+
         String uuid = jwtService.resolveToken();
+
         System.out.println("=============GET PLANT TEST.NAME===============");
 
         PlantResponse.plantCardRes plant = plantService.getPlantCard(plantIdx);
         MemoResponse.memoListRes memoList = memoService.getMemoList(plant.getPlantIdx());
         System.out.println(memoList);
-        return ResponseEntity.ok(new JsonResponse(true,200, "getPlantCard", new PlantResponse.plantAndMemoRes(plant, memoList)));
-//        return ResponseEntity.ok(new JsonResponse(true,200, "getPlantCard",plant));
+
+        return ResponseEntity.ok(new JsonResponse(true,200, "getPlantCard",
+                new PlantResponse.plantAndMemoRes(plant, memoList)));
     }
 
     // 테스트 (GET)

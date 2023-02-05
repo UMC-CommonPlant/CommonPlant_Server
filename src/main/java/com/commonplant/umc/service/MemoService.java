@@ -36,13 +36,13 @@ public class MemoService {
         String imgUrl = null;
 
         if(file.getSize()>0){
-            imgUrl = firebaseService.uploadFiles("commonPlant_" + "memo_"
-                    + plantMemoIdx + "_" + newCode,file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_memo/" +
+                    plantMemoIdx + "_" + newCode,file);
         }
 
         // User user = userService.getUser(req.getWriter());
         Plant plant = plantService.getPlant(req.getPlant());
-        //System.out.println(plant.getPlantIdx());
+        // System.out.println(plant.getPlantIdx());
 
         System.out.println("plantMemoIdx");
 
@@ -55,9 +55,9 @@ public class MemoService {
 
         memoRepository.save(memo);
 
-        String memoTest = " 식물 이름: " + memo.getPlant() +
+        String memoTest = " 식물 애칭: " + memo.getPlant().getNickname() +
                 " 메모 작성자: " + memo.getWriter() + " 메모 내용: " + memo.getContent() +
-                " 메모 작성일: " + memo.getCreatedAt();
+                " 메모 작성일: " + memo.getCreatedAt() + " 메모를 추가한 식물의 인덱스는: " + memo.getPlant().getPlantIdx();
 
         return memoTest;
     }
@@ -66,6 +66,8 @@ public class MemoService {
     public MemoResponse.memoCardRes getMemoCard(Long memoIdx){
 
         Memo memo = memoRepository.findByMemoIdx(memoIdx);
+
+        // TODO: 메모 작성일 Parsing -> CreatedAt()을 memoCardRes에서 @JsonFormat을 사용하여 해결
 
         MemoResponse.memoCardRes testRes = new MemoResponse.memoCardRes(
                 memo.getMemoIdx(),
@@ -100,8 +102,11 @@ public class MemoService {
         List<List> plantAllMemoList = new ArrayList<>();
         List<MemoResponse.memoCardRes> memoListByCreatedAt = new ArrayList<>();
 
+        // TODO: 식물에 등록된 메모가 없을 경우에 대한 예외처리
         // getCreatedAt()/getCreatedAt().toLocalDate()
-        LocalDate creationDate = memoCardListDto.get(0).getCreatedAt().toLocalDate();
+        if(memoCardListDto.size() != 0) {
+            LocalDate creationDate = memoCardListDto.get(0).getCreatedAt().toLocalDate();
+        }
 
         for(int i = 0; i < memoCardListDto.size(); i++){
             memoListByCreatedAt = new ArrayList<>();
@@ -125,8 +130,8 @@ public class MemoService {
         String imgUrl = null;
 
         if(file.getSize()>0){
-            imgUrl = firebaseService.uploadFiles("commonPlant_" + "memo_"
-                    + plantMemoIdx + "_" + newCode,file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_memo/" +
+                    plantMemoIdx + "_" + newCode,file);
         }
 
         Plant plant = plantService.getPlant(req.getPlant());
