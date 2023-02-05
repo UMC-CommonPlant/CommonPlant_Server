@@ -56,6 +56,19 @@ public class PlaceController {
         return ResponseEntity.ok(new JsonResponse(true, 200,"getPlace", place));
     }
 
+    // 사용자가 속한 장소리스트
+    @GetMapping("/place/userPlace")
+    public ResponseEntity<JsonResponse> getUserPlaceList() {
+        String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
+
+        List<Place> places = placeService.getUserPlaces(user);
+
+
+        return ResponseEntity.ok(new JsonResponse(true, 200,"getPlace", places));
+    }
+
+
     @GetMapping("/openApiTest/{placeCode}")
     public ResponseEntity<JsonResponse> openApiTest(@PathVariable String placeCode)
     {
