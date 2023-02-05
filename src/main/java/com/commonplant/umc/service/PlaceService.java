@@ -83,10 +83,20 @@ public class PlaceService {
 
     // ------------------------------- 친구 검색 / 조회 / 삭제 / 추가  --------------------------------
     public List<User> searchPeople(String input) {
-        List<User> users = userRepository.findByNameContains(input);
+        List<User> users = userRepository.findBynickNameContains(input);
 
 
         return users;
+    }
+
+    public String addPeople(String name, String placeCode) {
+        User newUser = userRepository.findBynickName(name);
+        Place place = getPlace(placeCode);
+
+        Belong belong = Belong.builder().user(newUser).place(place).build();
+        belongRepository.save(belong);
+
+        return place.getCode();
     }
 
 
