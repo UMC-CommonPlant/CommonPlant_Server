@@ -34,6 +34,16 @@ public class PlaceRequest {
     @NoArgsConstructor
     @AllArgsConstructor
     @Data
+    public static class addPeople{
+
+        private String name;
+        private String placeCode;
+
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
     public static class address{
         private String address;
     }

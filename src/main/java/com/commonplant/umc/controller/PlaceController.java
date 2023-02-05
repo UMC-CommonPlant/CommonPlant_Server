@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -34,8 +35,10 @@ public class PlaceController {
      @PostMapping("/place/add")
      public ResponseEntity<JsonResponse> addPlace(@RequestPart("place") PlaceRequest.addPlace req, @RequestPart("image") MultipartFile file){
 
-          String uuid = jwtService.resolveToken();
-          User user = userService.getUser(uuid);
+
+        String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
+
 
          String placeCode = placeService.addPlace(user, req, file);
 
@@ -45,11 +48,8 @@ public class PlaceController {
     // 장소 정보 조회
     @GetMapping("/place/{placeCode}")
     public ResponseEntity<JsonResponse> getPlaceInfo(@PathVariable String placeCode) {
-        //User Validation
-        /*
-        String userId = jwtService.resolveToken();
-        User user = userService.getUser(userId);
-        */
+        String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
 
         Place place = placeService.getPlace(placeCode);
         // 날씨 정보 api 구현 필요
@@ -58,14 +58,24 @@ public class PlaceController {
         return ResponseEntity.ok(new JsonResponse(true, 200,"getPlace", place));
     }
 
+    // 사용자가 속한 장소리스트
+    @GetMapping("/place/userPlace")
+    public ResponseEntity<JsonResponse> getUserPlaceList() {
+        String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
+
+        List<Place> places = placeService.getUserPlaces(user);
+
+
+        return ResponseEntity.ok(new JsonResponse(true, 200,"getPlace", places));
+    }
+
+
     @GetMapping("/openApiTest/{placeCode}")
     public ResponseEntity<JsonResponse> openApiTest(@PathVariable String placeCode)
     {
-        //User Validation
-        /*
-        String userId = jwtService.resolveToken();
-        User user = userService.getUser(userId);
-        */
+        String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
 
         Place place = placeService.getPlace(placeCode);
 
@@ -89,34 +99,32 @@ public class PlaceController {
 
     // ------------------------------- 친구 검색 / 조회 / 삭제 / 추가  --------------------------------
 
-//    @GetMapping("place/searchPeople")
-//    public ResponseEntity<JsonResponse> searchPeople(@RequestBody PlaceRequest.searchPeople req){
-//
-//        //User Validation
-//        /*
-//        String userId = jwtService.resolveToken();
-//        User user = userService.getUser(userId);
-//        */
-//        String input = req.getName();
-//        List<User> users = placeService.searchPeople(input);
-//
-//        return ResponseEntity.ok(new JsonResponse(true, 200, "searchPeople", users));
-//    }
+    // 유저 검색
+    @PutMapping("place/searchPeople")
+    public ResponseEntity<JsonResponse> searchPeople(@RequestBody PlaceRequest.searchPeople req){
 
-    @PutMapping("/place/addPeople")
-    public ResponseEntity<JsonResponse> addPeople(@RequestBody PlaceRequest.updatePlace req){
+        String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
 
-        //User Validation
-        /*
-        String userId = jwtService.resolveToken();
-        User user = userService.getUser(userId);
-        */
+        String input = req.getName();
+        List<User> users = placeService.searchPeople(input);
 
-
-        return ResponseEntity.ok(new JsonResponse(true, 200, "addPeople", null)) ;
+        return ResponseEntity.ok(new JsonResponse(true, 200, "searchPeople", users));
     }
 
+    // 참여인원 추가
+    @PutMapping("/place/addPeople")
+    public ResponseEntity<JsonResponse> addPeople(@RequestBody PlaceRequest.addPeople req){
 
+        String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
+
+
+        String placeCode = placeService.addPeople(req.getName(), req.getPlaceCode());
+
+
+        return ResponseEntity.ok(new JsonResponse(true, 200, "addPeople", placeCode)) ;
+    }
 
 
 

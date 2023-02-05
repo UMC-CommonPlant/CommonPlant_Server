@@ -44,7 +44,7 @@ public class PlaceService {
         String imgUrl = null;
 
         if(file.getSize()>0){
-            imgUrl = firebaseService.uploadFiles("commonPlant_"+newCode,file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_place/" + newCode, file);
               }
         // 주소 좌표 변환
         String json = openApiService.getKakaoApiFromAddress(req.getAddress());
@@ -81,12 +81,29 @@ public class PlaceService {
         return place;
     }
 
+    public List<Place> getUserPlaces(User user)
+    {
+        List<Place> places = belongRepository.findAllByUserOrdOrderByCreatedAtAsc(user);
+
+        return places;
+    }
+
     // ------------------------------- 친구 검색 / 조회 / 삭제 / 추가  --------------------------------
     public List<User> searchPeople(String input) {
         List<User> users = userRepository.findBynickNameContains(input);
 
 
         return users;
+    }
+
+    public String addPeople(String name, String placeCode) {
+        User newUser = userRepository.findBynickName(name);
+        Place place = getPlace(placeCode);
+
+        Belong belong = Belong.builder().user(newUser).place(place).build();
+        belongRepository.save(belong);
+
+        return place.getCode();
     }
 
 

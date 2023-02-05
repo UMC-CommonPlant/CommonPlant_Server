@@ -6,18 +6,23 @@ import com.commonplant.umc.domain.Plant;
 import com.commonplant.umc.domain.User;
 import com.commonplant.umc.dto.plant.PlantRequest;
 import com.commonplant.umc.dto.plant.PlantResponse;
+import com.commonplant.umc.repository.PlaceRepository;
 import com.commonplant.umc.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -30,6 +35,7 @@ public class PlantService {
     private final InfoService infoService;
 
     private final PlantRepository plantRepository;
+    private final PlaceRepository placeRepository;
 
 
     @Transactional
@@ -55,7 +61,6 @@ public class PlantService {
 
         Plant plant = Plant.builder()
                 .name(info.getName())
-                //.name(info.getName())
                 .user(user)
                 .nickname(req.getNickname())
                 .place(place)
@@ -124,11 +129,14 @@ public class PlantService {
 
         // remainderDate: 물주기까지 남은 날짜
         Long remainderDate = (Long) info.getWater_day() - (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
+        plant.setRemainderDate(remainderDate);
+
 
         System.out.println(currentDate);
         System.out.println(wateredDate);
         System.out.println(remainderDate);
 
+        // countDate: 식물이 처음 온 날
         Long countDate =  (Long) Duration.between(createdDateTime, currentDateTime).toDays();
 
         PlantResponse.plantCardRes testRes = new PlantResponse.plantCardRes(
@@ -143,6 +151,15 @@ public class PlantService {
         );
 
         return testRes;
+    }
+
+
+    @Transactional
+    public List<Plant> getPlantList(Place place)
+    {
+        List<Plant> plants = plantRepository.findAllByPlaceOOrderByRemainderDateAsc(place);
+
+        return plants;
     }
 
     @Transactional
