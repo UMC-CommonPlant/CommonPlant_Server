@@ -99,6 +99,22 @@ public class PlantController {
                 new PlantResponse.plantAndMemoRes(plant, memoList)));
     }
 
+
+    // TODO: 같은 장소에 있는 식물 리스트 조회 (GET)
+    // 장소 별로 조회... place 테이블의 place_idx 사용?
+//    @GetMapping("/place/{placeIdx}/plantList")
+//    public ResponseEntity<JsonResponse> getPlantList(@PathVariable Long placeIdx)
+//            throws ExecutionException, InterruptedException {
+//
+//        String uuid = jwtService.resolveToken();
+//
+//        System.out.println("=============GET PLANT LIST TEST.NAME===============");
+//
+//        PlantResponse.plantListRes res = plantService.getPlantList(placeIdx);
+//
+//        return ResponseEntity.ok(new JsonResponse(true, 200, "getPlantList", res));
+//    }
+
     // 테스트 (GET)
     @GetMapping("/plant/test/plantIdx")
     public ResponseEntity<JsonResponse> getPlant() {
