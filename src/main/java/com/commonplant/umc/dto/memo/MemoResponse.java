@@ -22,10 +22,11 @@ public class MemoResponse {
         private Long memoIdx;
 
         // @JsonIgnore
-        private Plant plant;
+        // private Plant plant;
+        private Long plantIdx;
 
         // @JsonIgnore
-        private User user;
+        // private User user;
         private String userNickName;
         private String userImgUrl;
 
