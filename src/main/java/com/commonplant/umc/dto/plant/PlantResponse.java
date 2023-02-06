@@ -23,8 +23,11 @@ public class PlantResponse {
 
         private String name;
         private String nickname;
+
         // @JsonIgnore
-        private Place place;
+        // private Place place;
+        private String place;
+
         private String imgUrl;
 
         private Long countDate;

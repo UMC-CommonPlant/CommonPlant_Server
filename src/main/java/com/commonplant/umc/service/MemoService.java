@@ -75,8 +75,9 @@ public class MemoService {
 
         MemoResponse.memoCardRes testRes = new MemoResponse.memoCardRes(
                 memo.getMemoIdx(),
-                memo.getPlant(),
-                memo.getWriter(),
+                // memo.getPlant(),
+                memo.getPlant().getPlantIdx(),
+                // memo.getWriter(),
                 memo.getWriter().getNickName(),
                 memo.getWriter().getUserImgUrl(),
                 memo.getContent(),
@@ -96,8 +97,9 @@ public class MemoService {
         List<MemoResponse.memoCardRes> memoCardListDto = memoList.stream().
                 map(memo -> new MemoResponse.memoCardRes(
                                 memo.getMemoIdx(),
-                                memo.getPlant(),
-                                memo.getWriter(),
+                                // memo.getPlant(),
+                                memo.getPlant().getPlantIdx(),
+                                // memo.getWriter(),
                                 memo.getWriter().getNickName(),
                                 memo.getWriter().getUserImgUrl(),
                                 memo.getContent(),

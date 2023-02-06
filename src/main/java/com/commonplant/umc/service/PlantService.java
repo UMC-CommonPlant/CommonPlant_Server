@@ -164,7 +164,7 @@ public class PlantService {
                 plant.getPlantIdx(),
                 plant.getName(),
                 plant.getNickname(),
-                plant.getPlace(),
+                plant.getPlace().getName(),
                 plant.getImgUrl(),
                 countDate,
                 plant.getRemainderDate(),
