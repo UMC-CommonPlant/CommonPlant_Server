@@ -30,6 +30,14 @@ public class PlantResponse {
         private Long countDate;
         private Long remainderDate;
 
+        // Info
+        private String scientific_name;
+        private Long water_day;
+        private String sunlight;
+        private Long temp_min;
+        private Long temp_max;
+        private String humidity;
+
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime createdAt;
 

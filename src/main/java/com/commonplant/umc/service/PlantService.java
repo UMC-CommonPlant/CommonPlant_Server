@@ -169,6 +169,12 @@ public class PlantService {
                 countDate,
                 plant.getRemainderDate(),
                 // remainderDate,
+                info.getScientific_name(),
+                info.getWater_day(),
+                info.getSunlight(),
+                info.getTemp_min(),
+                info.getTemp_max(),
+                info.getHumidity(),
                 plant.getCreatedAt(),
                 plant.getWateredDate()
         );
