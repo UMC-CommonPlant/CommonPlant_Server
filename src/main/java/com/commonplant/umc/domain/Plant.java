@@ -53,12 +53,6 @@ public class Plant extends BaseTime{
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    // LocalDate: 2023-01-24
-    // LocalDateTime: 2023-01-24T...
-    // PlantRequest와 PlantResponse의 내용을 수정해서 구현
-//    @Column(nullable = false, name = "created_at", updatable = false)
-//    private LocalDate createdAt;
-
     @Builder
     public Plant(String name, User user, String nickname, Place place, String imgUrl, LocalDateTime wateredDate) {
         this.name = name;

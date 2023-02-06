@@ -31,11 +31,11 @@ public class PlantResponse {
         private Long remainderDate;
 
         // Info
-        private String scientific_name;
-        private Long water_day;
+        private String scientificName;
+        private Long waterDay;
         private String sunlight;
-        private Long temp_min;
-        private Long temp_max;
+        private Long tempMin;
+        private Long tempMax;
         private String humidity;
 
         @JsonFormat(pattern = "yyyy-MM-dd")
