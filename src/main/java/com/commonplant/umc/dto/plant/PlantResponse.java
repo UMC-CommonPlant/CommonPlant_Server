@@ -28,6 +28,7 @@ public class PlantResponse {
         private String imgUrl;
 
         private Long countDate;
+        private Long remainderDate;
 
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime createdAt;
