@@ -94,13 +94,13 @@ public class PlantService {
         Info info = infoService.getPlantInfo(plant.getName());
 
         System.out.println("=============GET PLANT INFO FROM FIREBASE===============");
-        System.out.println(info.getName());
+        // System.out.println(info.getName());
+        // System.out.println(info.getImgUrl());
 
-        System.out.println(info.getImgUrl());
         System.out.println(info.getScientific_name());
+
         //water_day: Long
         System.out.println(info.getWater_day());
-
         System.out.println(info.getSunlight());
         System.out.println(info.getTemp_min());
         System.out.println(info.getTemp_max());
@@ -137,7 +137,7 @@ public class PlantService {
         System.out.println(remainderDate);
 
         // countDate: 식물이 처음 온 날
-        Long countDate =  (Long) Duration.between(createdDateTime, currentDateTime).toDays();
+        Long countDate =  (Long) Duration.between(createdDateTime, currentDateTime).toDays() + 1;
 
         PlantResponse.plantCardRes testRes = new PlantResponse.plantCardRes(
                 plant.getPlantIdx(),
@@ -146,6 +146,7 @@ public class PlantService {
                 plant.getPlace(),
                 plant.getImgUrl(),
                 countDate,
+                remainderDate,
                 plant.getCreatedAt(),
                 plant.getWateredDate()
         );
@@ -157,7 +158,7 @@ public class PlantService {
     @Transactional
     public List<Plant> getPlantList(Place place)
     {
-        List<Plant> plants = plantRepository.findAllByPlaceOOrderByRemainderDateAsc(place);
+        List<Plant> plants = plantRepository.findAllByPlaceOrderByRemainderDate(place);
 
         return plants;
     }
