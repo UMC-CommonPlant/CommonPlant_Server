@@ -36,7 +36,7 @@ public class MemoController {
         System.out.println("=============ADD MEMO TEST.NAME===============" + req.getContent());
         System.out.println("=============ADD MEMO TEST.NAME===============" + file);
 
-        String memoTest = memoService.addMemo(user, req, file);
+        Long memoTest = memoService.addMemo(user, req, file);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "addMemo", memoTest));
     }
