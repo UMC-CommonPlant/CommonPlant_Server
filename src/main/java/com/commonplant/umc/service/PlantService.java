@@ -228,7 +228,7 @@ public class PlantService {
     }
 
     @Transactional
-    public String updateWateredDate(Long plantIdx, PlantRequest.updateWateredDate req, MultipartFile file){
+    public String updateWateredDate(Long plantIdx, PlantRequest.updateWateredDate req){
 
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
         System.out.println(" 물주기 리셋할 식물은: " + plantIdx);

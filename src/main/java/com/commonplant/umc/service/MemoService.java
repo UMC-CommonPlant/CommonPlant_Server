@@ -27,7 +27,7 @@ public class MemoService {
     private final PlantService plantService;
 
     @Transactional
-    public String addMemo(User user, MemoRequest.addMemo req, MultipartFile file){
+    public Long addMemo(User user, MemoRequest.addMemo req, MultipartFile file){
 
         // imgUrl Setter
         String newCode = randomCode();
@@ -55,13 +55,15 @@ public class MemoService {
 
         memoRepository.save(memo);
 
-        String memoTest = " 메모 작성자의 닉네임: " + memo.getWriter().getNickName()
-                + " 메모 작성자의 프로필 사진: " + memo.getWriter().getUserImgUrl()
-                + " 메모에 업로드된 식물의 사진: " + memo.getImgUrl()
-                + " 메모 내용: " + memo.getContent()
-                + " 메모 작성일: " + memo.getCreatedAt();
+//        String memoTest = " 메모 작성자의 닉네임: " + memo.getWriter().getNickName()
+//                + " 메모 작성자의 프로필 사진: " + memo.getWriter().getUserImgUrl()
+//                + " 메모에 업로드된 식물의 사진: " + memo.getImgUrl()
+//                + " 메모 내용: " + memo.getContent()
+//                + " 메모 작성일: " + memo.getCreatedAt();
+//
+//        return memoTest;
 
-        return memoTest;
+        return memo.getPlant().getPlantIdx();
     }
 
     @Transactional
