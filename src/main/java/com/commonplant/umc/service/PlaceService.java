@@ -33,9 +33,7 @@ public class PlaceService {
     private final UserRepository userRepository;
     private final FirebaseService firebaseService;
     private final OpenApiService openApiService;
-
     private final TransLocalPoint transLocalPoint;
-
 
     @Transactional
     public String addPlace(User user, PlaceRequest.addPlace req, MultipartFile file) {
@@ -91,7 +89,6 @@ public class PlaceService {
     // ------------------------------- 친구 검색 / 조회 / 삭제 / 추가  --------------------------------
     public List<User> searchPeople(String input) {
         List<User> users = userRepository.findBynickNameContains(input);
-
 
         return users;
     }

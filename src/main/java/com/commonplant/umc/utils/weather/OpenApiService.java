@@ -31,8 +31,6 @@ import java.util.Map;
 public class OpenApiService {
 
         private final String BASE_URL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst?";
-
-
         private final String dataType = "pageNo=1&dataType=JSON";
         private final String serviceKey = "&serviceKey=NCQVHIPVNbjiBU6M6d8NBB0UKhwS299XrWuFSw7N1bVxkj6mHLDNNbJi4ZhEH0IgKev0UyTOHPXXVV4dezZDpw==";
        // private final String defaultQueryParam = "&MobileOS=ETC&MobileApp=AppTest&_type=json";
@@ -46,8 +44,6 @@ public class OpenApiService {
 
             String date = "20230202";
             String time = "0600";
-            x = "67";
-            y = "101";
 
             return BASE_URL
                     + dataType
