@@ -158,7 +158,7 @@ public class PlantService {
     @Transactional
     public List<Plant> getPlantList(Place place)
     {
-        List<Plant> plants = plantRepository.findAllByPlaceOOrderByRemainderDateAsc(place);
+        List<Plant> plants = plantRepository.findAllByPlaceOrderByRemainderDate(place);
 
         return plants;
     }
