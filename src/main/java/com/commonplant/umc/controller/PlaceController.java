@@ -10,6 +10,8 @@ import com.commonplant.umc.dto.place.PlaceRequest;
 import com.commonplant.umc.service.UserService;
 import com.commonplant.umc.service.PlaceService;
 import com.commonplant.umc.utils.weather.OpenApiService;
+import com.commonplant.umc.utils.weather.TransLocalPoint;
+import com.commonplant.umc.utils.weather.Weather;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,21 +31,20 @@ public class PlaceController {
     private final PlaceService placeService;
     private final UserService userService;
     private final OpenApiService openApiService;
-
     private final JwtService jwtService;
+
+    private final TransLocalPoint transLocalPoint;
 
      // 장소 추가
      @PostMapping("/place/add")
      public ResponseEntity<JsonResponse> addPlace(@RequestPart("place") PlaceRequest.addPlace req, @RequestPart("image") MultipartFile file){
 
-
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
 
+        String placeCode = placeService.addPlace(user, req, file);
 
-         String placeCode = placeService.addPlace(user, req, file);
-
-         return ResponseEntity.ok(new JsonResponse(true, 200,"addPlace", placeCode));
+        return ResponseEntity.ok(new JsonResponse(true, 200,"addPlace", placeCode));
      }
 
     // 장소 정보 조회
@@ -89,9 +91,24 @@ public class PlaceController {
         System.out.println(x);
         System.out.println(y);
 
-        place.setGirdX(x);
-        place.setGridY(y);
+        double lat = Double.parseDouble(x);
+        double lng = Double.parseDouble(y);
 
+        Weather.LatXLngY rs = transLocalPoint.convertGRID_GPS(0, lat, lng);
+
+        int grid_x = (int)rs.getX();
+        int grid_y = (int)rs.getY();
+
+        x = Integer.toString(grid_x);
+        y = Integer.toString(grid_y);
+
+        try {
+            String url = openApiService.makeUrl(x, y);
+            openApiService.fetch(url);
+        }
+        catch(UnsupportedEncodingException e){
+            System.out.println(e.getMessage());
+        }
         return ResponseEntity.ok(new JsonResponse(true, 200,"getPlace", place));
     }
 
@@ -119,9 +136,7 @@ public class PlaceController {
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
 
-
         String placeCode = placeService.addPeople(req.getName(), req.getPlaceCode());
-
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "addPeople", placeCode)) ;
     }
