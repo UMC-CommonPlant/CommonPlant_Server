@@ -67,7 +67,7 @@ public class PlaceController {
         List<Place> places = placeService.getUserPlaces(user);
 
 
-        return ResponseEntity.ok(new JsonResponse(true, 200,"getPlace", places));
+        return ResponseEntity.ok(new JsonResponse(true, 200,"userPlace", places));
     }
 
 
@@ -100,7 +100,7 @@ public class PlaceController {
     // ------------------------------- 친구 검색 / 조회 / 삭제 / 추가  --------------------------------
 
     // 유저 검색
-    @PutMapping("place/searchPeople")
+    @PutMapping("/place/searchPeople")
     public ResponseEntity<JsonResponse> searchPeople(@RequestBody PlaceRequest.searchPeople req){
 
         String uuid = jwtService.resolveToken();
