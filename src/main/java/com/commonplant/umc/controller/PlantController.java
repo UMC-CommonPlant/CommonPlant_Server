@@ -74,14 +74,13 @@ public class PlantController {
     // 식물 물주기 날짜 갱신(PATCH)
     @PutMapping("/plant/update/wateredDate/{plantIdx}")
     public ResponseEntity<JsonResponse> updateWateredDate(@PathVariable Long plantIdx,
-                                                          @RequestPart("plant") PlantRequest.updateWateredDate req,
-                                                          @RequestPart("image") MultipartFile file){
+                                                          @RequestBody PlantRequest.updateWateredDate req){
 
         System.out.println("=============UPDATE PLANT WATERED DATE TEST.NAME===============");
 
         String uuid = jwtService.resolveToken();
 
-        String updateWateredDateTest = plantService.updateWateredDate(plantIdx, req, file);
+        String updateWateredDateTest = plantService.updateWateredDate(plantIdx, req);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "updateWateredDate", updateWateredDateTest));
     }
