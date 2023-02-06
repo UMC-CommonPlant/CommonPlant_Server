@@ -26,6 +26,10 @@ public class MemoResponse {
 
         // @JsonIgnore
         private User user;
+        private String userNickName;
+        private String userImgUrl;
+
+
         private String content;
         private String imgUrl;
 

@@ -66,7 +66,28 @@ public class PlantService {
                 .place(place)
                 .imgUrl(imgUrl)
                 .wateredDate(req.getWateredDate())
+                // .remainderDate(remainderDate)
                 .build();
+
+        // remainderDate는 wateredDate를 활용해서 구해야 하기 때문에 동시에 저장되지 못함 (null 오류)
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // WateredDate: 마지막으로 물 준 날짜, CurrentDate: 오늘 날짜
+        String parsedWateredDate = plant.getWateredDate().format(dateTimeFormatter);
+        System.out.println("========parsedWateredDate======== " + parsedWateredDate);
+        String parsedCurrentDate = LocalDate.now().toString();
+        System.out.println("========parsedCurrentDate======== " + parsedCurrentDate);
+
+        // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate wateredDate = LocalDate.parse(parsedWateredDate, dateTimeFormatter);
+        LocalDate currentDate = LocalDate.parse(parsedCurrentDate, dateTimeFormatter);
+        LocalDateTime wateredDateTime = wateredDate.atStartOfDay();
+        LocalDateTime currentDateTime = currentDate.atStartOfDay();
+
+        Long remainderDate = (Long) info.getWater_day()
+                - (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
+
+        plant.setRemainderDate(remainderDate);
 
 //        plantRepository.save(plant);
 
@@ -127,14 +148,14 @@ public class PlantService {
         LocalDateTime currentDateTime = currentDate.atStartOfDay();
         LocalDateTime createdDateTime = createdDate.atStartOfDay();
 
-        // remainderDate: 물주기까지 남은 날짜
-        Long remainderDate = (Long) info.getWater_day() - (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
-        plant.setRemainderDate(remainderDate);
+        // remainderDate: 물주기까지 남은 날짜 (-> addPlant로 이동)
+        // Long remainderDate = (Long) info.getWater_day() - (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
+        // plant.setRemainderDate(remainderDate);
 
 
         System.out.println(currentDate);
         System.out.println(wateredDate);
-        System.out.println(remainderDate);
+        System.out.println(plant.getRemainderDate());
 
         // countDate: 식물이 처음 온 날
         Long countDate =  (Long) Duration.between(createdDateTime, currentDateTime).toDays() + 1;
@@ -146,7 +167,14 @@ public class PlantService {
                 plant.getPlace(),
                 plant.getImgUrl(),
                 countDate,
-                remainderDate,
+                plant.getRemainderDate(),
+                // remainderDate,
+                info.getScientific_name(),
+                info.getWater_day(),
+                info.getSunlight(),
+                info.getTemp_min(),
+                info.getTemp_max(),
+                info.getHumidity(),
                 plant.getCreatedAt(),
                 plant.getWateredDate()
         );
@@ -205,8 +233,17 @@ public class PlantService {
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
         System.out.println(" 물주기 리셋할 식물은: " + plantIdx);
 
+        // getPlantInfo()의 인자는 식물 종 이름: 식물 조회할 때 식물 종 이름을 보내서 검색하면 됨
+        Info info = infoService.getPlantInfo(plant.getName());
+
         plant.setWateredDate(
                 req.getWateredDate()
+        );
+
+        Long resetRemainderDate = (Long) info.getWater_day();
+
+        plant.setRemainderDate(
+                resetRemainderDate
         );
 
         String updateWateredDateTest = " 마지막으로 식물에 물을 준 날짜: " + plant.getWateredDate();

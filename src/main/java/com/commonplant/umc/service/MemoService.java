@@ -75,6 +75,8 @@ public class MemoService {
                 memo.getMemoIdx(),
                 memo.getPlant(),
                 memo.getWriter(),
+                memo.getWriter().getNickName(),
+                memo.getWriter().getUserImgUrl(),
                 memo.getContent(),
                 memo.getImgUrl(),
                 memo.getCreatedAt()
@@ -94,6 +96,8 @@ public class MemoService {
                                 memo.getMemoIdx(),
                                 memo.getPlant(),
                                 memo.getWriter(),
+                                memo.getWriter().getNickName(),
+                                memo.getWriter().getUserImgUrl(),
                                 memo.getContent(),
                                 memo.getImgUrl(),
                                 memo.getCreatedAt()
