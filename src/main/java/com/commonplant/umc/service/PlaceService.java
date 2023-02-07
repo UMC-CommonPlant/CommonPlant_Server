@@ -146,7 +146,7 @@ public class PlaceService {
     }
 
     public List<PlantResponse.plantOfPlaceRes> getPlantListOfPlace(Place place){
-        List<Plant> plants = plantRepository.findAllByPlaceOrderByRemainderDate(place);
+        List<Plant> plants = plantRepository.findAllByPlaceOrderByRemainderDateDesc(place);
         System.out.println("Plant: " + plants);
         List<PlantResponse.plantOfPlaceRes> plantList = new ArrayList<>();
 
