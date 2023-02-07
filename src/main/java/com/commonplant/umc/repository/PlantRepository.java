@@ -16,4 +16,6 @@ public interface PlantRepository extends JpaRepository<Plant, Long> {
     List<Plant> findAllByPlaceOrderByRemainderDate(Place place);
 
     Plant findByPlantIdx(Long plantIdx);
+
+
 }

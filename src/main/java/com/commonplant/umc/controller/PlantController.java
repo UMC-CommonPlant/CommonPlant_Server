@@ -113,8 +113,6 @@ public class PlantController {
 
         Place place = placeService.getPlace(placeCode);
 
-
-
         System.out.println("=============GET PLANT LIST TEST.NAME===============");
 
         List<Plant> plants = plantService.getPlantList(place);

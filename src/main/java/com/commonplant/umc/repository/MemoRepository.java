@@ -1,6 +1,7 @@
 package com.commonplant.umc.repository;
 
 import com.commonplant.umc.domain.Memo;
+import com.commonplant.umc.domain.Plant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,6 +15,7 @@ public interface MemoRepository extends JpaRepository<Memo, Long> { // 상속 �
     @Query(value = "SELECT m FROM Memo m WHERE m.plant.plantIdx = ?1 "
             + "ORDER BY m.createdAt DESC")
     List<Memo> findAllByPlantIdxOrderByCreatedAtDesc(Long plantIdx);
+
 
     // findByMemoIdx(): 메모 수정/삭제할 때 사용
     Memo findByMemoIdx(Long memoIdx);
