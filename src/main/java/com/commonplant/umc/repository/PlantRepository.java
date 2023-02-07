@@ -12,8 +12,8 @@ import java.util.List;
 public interface PlantRepository extends JpaRepository<Plant, Long> {
 
     @Query(value = "SELECT p FROM Plant p WHERE p.place= ?1 "
-            + "ORDER BY p.remainderDate")
-    List<Plant> findAllByPlaceOrderByRemainderDate(Place place);
+            + "ORDER BY p.remainderDate DESC")
+    List<Plant> findAllByPlaceOrderByRemainderDateDesc(Place place);
 
     Plant findByPlantIdx(Long plantIdx);
 
