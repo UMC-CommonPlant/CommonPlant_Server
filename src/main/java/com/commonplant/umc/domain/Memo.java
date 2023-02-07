@@ -31,7 +31,7 @@ public class Memo extends BaseTime{
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User writer;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 200)
     private String content;
 
     @Column(nullable = true, name = "img_url")
