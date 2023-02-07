@@ -19,6 +19,7 @@ public interface BelongRepository extends JpaRepository<Belong, Long> {
     @Query("SELECT b.user FROM Belong b WHERE b.place=?1 "  + "ORDER BY b.createdAt")
     List<User> findAllByPlaceOrderByCreatedAtAsc(Place place);
 
+    Long countByPlace(Place place);
 
     public Optional<Belong> findByUserAndPlace(User user, Place place);
 

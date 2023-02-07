@@ -183,7 +183,7 @@ public class PlantService {
     @Transactional
     public List<Plant> getPlantList(Place place)
     {
-        List<Plant> plants = plantRepository.findAllByPlaceOrderByRemainderDate(place);
+        List<Plant> plants = plantRepository.findAllByPlaceOrderByRemainderDateDesc(place);
 
         return plants;
     }
