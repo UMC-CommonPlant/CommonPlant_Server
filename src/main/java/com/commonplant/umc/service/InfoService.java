@@ -94,4 +94,34 @@ public class InfoService {
         firestore.collection(COLLECTION_NAME).document(info.getName()).set(info);
         return info;
     }
+
+    public List<InfoResponse.getSearchList> recommendInfo(String name) {
+        List<InfoResponse.getSearchList> plantNames = new ArrayList<>();
+        Firestore firestore = FirestoreClient.getFirestore();
+        CollectionReference collectionReference = firestore.collection(COLLECTION_NAME);
+        Query query = collectionReference.whereArrayContains("tag", name);
+        ApiFuture<QuerySnapshot> querySnapshot = query.get();
+        Info info = null;
+        try {
+            for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
+                String plantName = document.getId();
+                DocumentReference documentReference = collectionReference.document(plantName);
+                ApiFuture<DocumentSnapshot> apiFuture = documentReference.get();
+                DocumentSnapshot documentSnapshot = apiFuture.get();
+                if (documentSnapshot.exists()) {
+                    info = documentSnapshot.toObject(Info.class);
+                    assert info != null;
+                    plantNames.add(new InfoResponse.getSearchList(info));
+                }
+            }
+        } catch (ExecutionException e) {
+            System.out.println("ExecutionException");
+        } catch (InterruptedException e) {
+            System.out.println("InterruptedException");
+        } catch (AssertionError e) {
+            System.out.println("AssertionError");
+        }
+
+        return plantNames;
+    }
 }
