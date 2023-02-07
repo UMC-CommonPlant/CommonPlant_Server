@@ -1,6 +1,7 @@
 package com.commonplant.umc.dto.plant;
 
 import com.commonplant.umc.domain.Place;
+import com.commonplant.umc.domain.Plant;
 import com.commonplant.umc.dto.memo.MemoResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -63,6 +64,38 @@ public class PlantResponse {
     @Builder
     public static class plantListRes{
         private List<List> plantCardDto = new ArrayList<>();
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class plantOfPlaceRes{
+        private String name;       // 식물 종 이름 (학명)
+
+        private String nickname;   // 애칭
+
+        private String imgUrl;     // 식물 이미지
+
+        private String recentMemo;   // 제일 최근 메모
+
+        private Long remainderDate;   // 물주기 D-Day
+
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDateTime wateredDate;   // 마지막으로 물 준 날
+
+
+        @Builder
+        public plantOfPlaceRes(Plant plant, String recentMemo)
+        {
+            this.name = plant.getName();
+            this.nickname = plant.getNickname();
+            this.imgUrl = plant.getImgUrl();
+            this.remainderDate = plant.getRemainderDate();
+            this.wateredDate = plant.getWateredDate();
+            this.recentMemo = recentMemo;
+        }
+
+
     }
 
 }

@@ -7,6 +7,8 @@ import com.commonplant.umc.domain.Place;
 import com.commonplant.umc.domain.User;
 import com.commonplant.umc.dto.JsonResponse;
 import com.commonplant.umc.dto.place.PlaceRequest;
+import com.commonplant.umc.dto.place.PlaceResponse;
+import com.commonplant.umc.dto.plant.PlantResponse;
 import com.commonplant.umc.service.UserService;
 import com.commonplant.umc.service.PlaceService;
 import com.commonplant.umc.utils.weather.OpenApiService;
@@ -53,11 +55,23 @@ public class PlaceController {
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
 
+        // place info
         Place place = placeService.getPlace(placeCode);
-        // 날씨 정보 api 구현 필요
+
+        // weather info
+        Weather.weatherInfo weather = null;
+
+        // isOwner ( 내가 이 장소의 리더인지 아닌지)
+        Boolean isOwner = placeService.isOwner(user, place);
+
+        // userInfo
+        List<PlaceResponse.userInfoList> userInfoList = placeService.getUserListOfPlace(place);
+
+        // plantInfo
+        List<PlantResponse.plantOfPlaceRes> plantInfoList = placeService.getPlantListOfPlace(place);
 
 
-        return ResponseEntity.ok(new JsonResponse(true, 200,"getPlace", place));
+        return ResponseEntity.ok(new JsonResponse(true, 200,"getPlace", new PlaceResponse.getPlaceInfo(place, isOwner, userInfoList, plantInfoList)));
     }
 
     // 사용자가 속한 장소리스트

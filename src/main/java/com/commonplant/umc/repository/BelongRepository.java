@@ -8,10 +8,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BelongRepository extends JpaRepository<Belong, Long> {
 
-    @Query("SELECT m.place FROM Belong m WHERE m.user=?1")
-    List<Place> findAllByUserOrdOrderByCreatedAtAsc(User user);
+    @Query("SELECT b.place FROM Belong b WHERE b.user=?1 "  + "ORDER BY b.createdAt")
+    List<Place> findAllByUserOrderByCreatedAtAsc(User user);
+
+    @Query("SELECT b.user FROM Belong b WHERE b.place=?1 "  + "ORDER BY b.createdAt")
+    List<User> findAllByPlaceOrderByCreatedAtAsc(Place place);
+
+
+    public Optional<Belong> findByUserAndPlace(User user, Place place);
+
 }

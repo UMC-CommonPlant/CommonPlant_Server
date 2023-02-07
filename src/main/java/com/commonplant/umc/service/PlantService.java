@@ -29,13 +29,10 @@ import java.util.stream.Collectors;
 public class PlantService {
 
     private final FirebaseService firebaseService;
-
     private final PlaceService placeService;
-
     private final InfoService infoService;
-
     private final PlantRepository plantRepository;
-    private final PlaceRepository placeRepository;
+
 
 
     @Transactional
