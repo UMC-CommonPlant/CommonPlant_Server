@@ -81,8 +81,11 @@ public class PlantService {
         LocalDateTime wateredDateTime = wateredDate.atStartOfDay();
         LocalDateTime currentDateTime = currentDate.atStartOfDay();
 
-        Long remainderDate = (Long) info.getWater_day()
-                - (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
+//        Long remainderDate = (Long) info.getWater_day()
+//                - (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
+
+        Long remainderDate = (Long) Duration.between(wateredDateTime, currentDateTime).toDays()
+                - (Long) info.getWater_day();
 
         plant.setRemainderDate(remainderDate);
 
@@ -183,7 +186,7 @@ public class PlantService {
     @Transactional
     public List<Plant> getPlantList(Place place)
     {
-        List<Plant> plants = plantRepository.findAllByPlaceOrderByRemainderDate(place);
+        List<Plant> plants = plantRepository.findAllByPlaceOrderByRemainderDateDesc(place);
 
         return plants;
     }
@@ -237,7 +240,7 @@ public class PlantService {
                 req.getWateredDate()
         );
 
-        Long resetRemainderDate = (Long) info.getWater_day();
+        Long resetRemainderDate = -1 * (Long) info.getWater_day();
 
         plant.setRemainderDate(
                 resetRemainderDate
