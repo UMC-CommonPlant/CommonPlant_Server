@@ -41,4 +41,10 @@ public class InfoController {
         Info plantInfo = infoService.addPlantInfo(info, file);
         return ResponseEntity.ok(new JsonResponse(true, 200, "addPlantInfo", plantInfo));
     }
+
+    @PostMapping("info/getRecommendInfo")
+    public ResponseEntity<JsonResponse> getRecommendInfo(@RequestParam String name) {
+        List<InfoResponse.getSearchList> searchInfo = infoService.recommendInfo(name);
+        return ResponseEntity.ok(new JsonResponse(true, 200, "recommendInfo", searchInfo));
+    }
 }
