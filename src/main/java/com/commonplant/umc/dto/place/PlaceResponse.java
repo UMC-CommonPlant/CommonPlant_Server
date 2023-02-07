@@ -1,6 +1,7 @@
 package com.commonplant.umc.dto.place;
 
 import com.commonplant.umc.domain.Place;
+import com.commonplant.umc.domain.Plant;
 import com.commonplant.umc.domain.User;
 import com.commonplant.umc.dto.plant.PlantResponse;
 import com.commonplant.umc.utils.weather.Weather;
@@ -51,33 +52,52 @@ public class PlaceResponse {
     }
 
     @NoArgsConstructor
-    @AllArgsConstructor
     @Data
-    public class getMainPage{
+    public static class getMainPage{
         public String nickName; // (현재) 사용자 닉네임
         public List<placeList> placeList;   // 장소 목록
         public List<plantList> plantList;   // 식물 목록
+
+        @Builder
+        public getMainPage(String nickName, List<placeList> placeList, List<plantList> plantList)
+        {
+            this.nickName = nickName;
+            this.placeList = placeList;
+            this.plantList = plantList;
+        }
     }
 
     @NoArgsConstructor
     @AllArgsConstructor
     @Data
-    public class placeList{
+    public static class placeList{
         private String placeCode;   // 장소 PK
 
         private String placeName;   // 장소 이름
 
         private String ImgUrl;      // 장소 이미지
 
-        private int countUser;      // 참여 인원수
+        private Long countUser;      // 참여 인원수
 
-        private int countPlant;     // 등록된 식물 수
+        private Long countPlant;     // 등록된 식물 수
+
+        @Builder
+        public placeList(Place place, Long countUser, Long countPlant)
+        {
+            this.placeCode = place.getCode();
+            this.placeName = place.getName();
+            this.ImgUrl = place.getPlaceImgUrl();
+
+            this.countUser = countUser;
+            this.countPlant = countPlant;
+        }
+
     }
 
     @NoArgsConstructor
     @AllArgsConstructor
     @Data
-    public class plantList{
+    public static class plantList{
         private Long plantIdx;       // 식물 PK
 
         private String plantName;    // 식물 이름
@@ -86,9 +106,20 @@ public class PlaceResponse {
 
         private String placeCode;     // 속한 장소
 
-        private int countUserOfPlace;  // 속한 장소 사람 수
+        private Long countUserOfPlace;  // 속한 장소 사람 수
 
         private Long remainderDate;    // 물주기 D-day
+
+        @Builder
+        public plantList(Plant plant, String placeCode, Long countUser)
+        {
+            this.plantIdx = plant.getPlantIdx();
+            this.plantName = plant.getName();
+            this.ImgUrl = plant.getImgUrl();
+            this.placeCode = placeCode;
+            this.countUserOfPlace = countUser;
+            this.remainderDate = plant.getRemainderDate();
+        }
 
     }
 

@@ -88,6 +88,39 @@ public class PlaceService {
         return places;
     }
 
+    public List<PlaceResponse.placeList> getUserPlaceList(User user){
+
+        List<Place> places = placeRepository.findAllByOwner(user);
+        List<PlaceResponse.placeList> placeLists = new ArrayList<>();
+
+        for(Place p: places)
+        {
+            Long countUser = belongRepository.countByPlace(p);
+            Long countPlant = plantRepository.countByPlace(p);
+
+            placeLists.add(new PlaceResponse.placeList(p,countUser, countPlant));
+        }
+
+
+       return placeLists;
+    }
+
+    public List<PlaceResponse.plantList> getUserPlantList(User user){
+
+        List<Plant> plants = plantRepository.findAllByUser(user);
+        List<PlaceResponse.plantList> plantLists = new ArrayList<>();
+
+        for(Plant p: plants){
+            Place place = p.getPlace();
+            String placeCode = place.getCode();
+            Long countUser = belongRepository.countByPlace(place);
+
+            plantLists.add(new PlaceResponse.plantList(p, placeCode, countUser));
+        }
+
+        return plantLists;
+    }
+
     // ------------------------------- 친구 검색 / 추가  --------------------------------
     public List<User> searchPeople(String input) {
         List<User> users = userRepository.findBynickNameContains(input);
@@ -156,6 +189,8 @@ public class PlaceService {
             System.out.println("memoList: " + memoList);
             if(memoList.isEmpty())
             {
+                String recentMemo = null;
+                plantList.add(new PlantResponse.plantOfPlaceRes(p,recentMemo));
                 continue;
             }
             Memo recent = memoList.get(0);

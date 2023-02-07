@@ -37,6 +37,28 @@ public class PlaceController {
 
     private final TransLocalPoint transLocalPoint;
 
+
+    // myGarden 메인페이지
+    @GetMapping("/place/myGarden")
+    public ResponseEntity<JsonResponse> getMyGarden()
+    {
+        String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
+
+        // user Info
+        String nickName = user.getNickName();
+
+        // place List Info
+        List<PlaceResponse.placeList> placeLists = placeService.getUserPlaceList(user);
+
+        // plant List Info
+        List<PlaceResponse.plantList> plantLists = placeService.getUserPlantList(user);
+
+
+
+        return ResponseEntity.ok(new JsonResponse(true, 200,"myGarden", new PlaceResponse.getMainPage(nickName,placeLists,plantLists)));
+    }
+
      // 장소 추가
      @PostMapping("/place/add")
      public ResponseEntity<JsonResponse> addPlace(@RequestPart("place") PlaceRequest.addPlace req, @RequestPart("image") MultipartFile file){
@@ -48,6 +70,8 @@ public class PlaceController {
 
         return ResponseEntity.ok(new JsonResponse(true, 200,"addPlace", placeCode));
      }
+
+
 
     // 장소 정보 조회
     @GetMapping("/place/{placeCode}")
