@@ -100,7 +100,7 @@ public class PlaceResponse {
     public static class plantList{
         private Long plantIdx;       // 식물 PK
 
-        private String plantName;    // 식물 이름
+        private String plantNickName;    // 식물 이름
 
         private String ImgUrl;       // 식물 이미지
 
@@ -114,7 +114,7 @@ public class PlaceResponse {
         public plantList(Plant plant, String placeCode, Long countUser)
         {
             this.plantIdx = plant.getPlantIdx();
-            this.plantName = plant.getName();
+            this.plantNickName = plant.getNickname();
             this.ImgUrl = plant.getImgUrl();
             this.placeCode = placeCode;
             this.countUserOfPlace = countUser;
