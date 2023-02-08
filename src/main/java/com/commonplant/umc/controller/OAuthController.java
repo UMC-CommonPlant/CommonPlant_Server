@@ -75,21 +75,4 @@ public class OAuthController{
         User user = userService.getUser(uuid);//Place, Plant, Memo에서는 uuid, user 사용
         return user;
     }
-
-
-    private HttpEntity<MultiValueMap<String, String>> generateAuthCodeRequest(String accessToken) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        return new HttpEntity<>(generateParam(accessToken), headers);
-    }
-
-    private MultiValueMap<String, String> generateParam(String accessToken) {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type","authorization_code");
-        params.add("client_id",CLIENT_ID);
-        params.add("redirect_uri", REDIRECT_URL);
-        params.add("accessToken", accessToken);
-        return params;
-    }
 }

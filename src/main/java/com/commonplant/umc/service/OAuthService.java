@@ -4,14 +4,12 @@ import com.commonplant.umc.config.exception.BadRequestException;
 import com.commonplant.umc.config.jwt.JwtService;
 import com.commonplant.umc.domain.User;
 import com.commonplant.umc.dto.user.KakaoProfile;
+import com.commonplant.umc.dto.user.NaverProfile;
 import com.commonplant.umc.dto.user.UserRequest;
 import com.commonplant.umc.repository.UserRepository;
 import com.commonplant.umc.utils.UuidUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonElement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -23,12 +21,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
-
-import java.io.*;
 
 import static com.commonplant.umc.config.exception.ErrorResponseStatus.*;
 
@@ -48,6 +40,8 @@ public class OAuthService{
         switch (loginType){
             case "kakao":
                 email = kakaoLogin(accessToken); break;
+            case "naver":
+                email = naverLogin(accessToken); break;
             default: throw new BadRequestException(WRONG_PLATFORM);
         }
 
@@ -83,9 +77,6 @@ public class OAuthService{
         }
     }
 
-
-
-
     public String kakaoLogin(String accessToken){
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -108,44 +99,25 @@ public class OAuthService{
         return kakaoProfile.getKakao_account().getEmail();
     }
 
+    public String naverLogin(String accessToken){
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(headers);
+        ResponseEntity<String> response;
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        String redirect_uri="https://openapi.naver.com/v1/nid/me";
 
-    public HashMap<String, Object> getUserInfo(String accessToken) {
-        HashMap<String, Object> userInfo = new HashMap<>();
-        String reqUrl = "https://kapi.kakao.com/v2/user/me";
-        try {
-            URL url = new URL(reqUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
-            int responseCode = conn.getResponseCode();
-            System.out.println("responseCode =" + responseCode);
+        NaverProfile naverProfile = null;
+        try{
+            response=restTemplate.exchange(redirect_uri, HttpMethod.POST, request, String.class);
+            naverProfile = objectMapper.readValue(response.getBody(), NaverProfile.class);
+        }catch(HttpClientErrorException e){
+            log.info("[REJECT]naver login error");
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            String line = "";
-            String result = "";
-
-            while((line = br.readLine()) != null) {
-                result += line;
-            }
-            System.out.println("response body ="+result);
-
-            Gson gson = new Gson();
-            JsonElement element = gson.fromJson(result, JsonElement.class);
-
-            JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
-            JsonObject kakaoAccount = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
-
-            String name = properties.getAsJsonObject().get("name").getAsString();
-            String email = kakaoAccount.getAsJsonObject().get("email").getAsString();
-
-            userInfo.put("name", name);
-            userInfo.put("email", email);
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        }catch(JsonProcessingException e){
+            log.info("[REJECT]naverMapper error");
         }
-        return userInfo;
+        return naverProfile.getNaver_account().getEmail();
     }
 }

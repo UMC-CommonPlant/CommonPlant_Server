@@ -21,13 +21,6 @@ public class UserController {
     private final UserRepository userRepository;
     private final JwtService jwtService;
 
-    @ResponseBody
-    @GetMapping("/kakao")
-    public ResponseEntity<JsonResponse> kakaoCallback(@RequestParam String code){
-        String response = "Load Kakao API successfully!";
-        return ResponseEntity.ok(new JsonResponse(true, 200, "getKakaoApi",response));
-    }
-
     @GetMapping("/users/myProfile")
     public ResponseEntity<JsonResponse> getUserProfile(){
         String uuid = jwtService.resolveToken();
