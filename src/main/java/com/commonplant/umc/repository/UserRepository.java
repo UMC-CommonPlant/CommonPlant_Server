@@ -14,10 +14,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
       List<User> findBynickNameContains(String name);
 
       User findBynickName(String name);
-//
-//    Boolean existsByName(String name);
-//
-//    List<User> findByNameAndPassword(String name, String password);
 
     @Query("select u from User u where u.email=?1 and u.platform=?2")
     User findUserByEmail(String email, String loginType);
