@@ -45,7 +45,7 @@ public class PlantResponse {
         @JsonFormat(pattern = "yyyy.MM.dd")
         private LocalDateTime createdAt;
 
-        @JsonFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(pattern = "yyyy.MM.dd")
         private LocalDateTime wateredDate;
     }
 
@@ -80,7 +80,7 @@ public class PlantResponse {
 
         private Long remainderDate;   // 물주기 D-Day
 
-        @JsonFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(pattern = "yyyy.MM.dd")
         private LocalDateTime wateredDate;   // 마지막으로 물 준 날
 
 
