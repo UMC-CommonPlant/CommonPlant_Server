@@ -8,6 +8,7 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -81,14 +82,17 @@ public class InfoService {
     }
 
     public Info addPlantInfo(Info info, MultipartFile file) {
+        String infoName = "info";
         String imgUrl = null;
+        String random = RandomStringUtils.random(6,33,125,true,false);
+
         String fileName;
         Firestore firestore = FirestoreClient.getFirestore();
         info.setCreated_at(Timestamp.now());
         fileName = info.getName().replaceAll(" ", "_");
 
         if (file.getSize() > 0) {
-            imgUrl = firebaseService.uploadFiles("commonPlant_" + fileName, file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_" +infoName+ random, file);
         }
         info.setImgUrl(imgUrl);
         firestore.collection(COLLECTION_NAME).document(info.getName()).set(info);
