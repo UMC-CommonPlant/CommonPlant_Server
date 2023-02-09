@@ -98,4 +98,13 @@ public class PlantResponse {
 
     }
 
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    public static class plantUpdateCardRes{
+        private Long plantIdx;
+
+        private String nickName;
+        private String imgUrl;
+    }
 }
