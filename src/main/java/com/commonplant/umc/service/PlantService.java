@@ -214,13 +214,12 @@ public class PlantService {
 
         plant.updatePlant(
                 req.getNickname(),
-                imgUrl,
-                req.getWateredDate()
+                imgUrl
+                // req.getWateredDate()
         );
 
         String updatePlantTest = " 식물 애칭: " + req.getNickname() + " 수정된 장소: " + req.getPlace()
-                + " 수정된 이미지 url: " + plant.getImgUrl()
-                + " 식물과 함께하기 시작한 날: " + plant.getCreatedAt();
+                + " 수정된 이미지 url: " + plant.getImgUrl();
 
         System.out.println(updatePlantTest);
 

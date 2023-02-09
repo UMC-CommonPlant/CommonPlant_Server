@@ -63,11 +63,11 @@ public class Plant extends BaseTime{
         this.wateredDate = wateredDate;
     }
 
-    public void updatePlant(String nickname, String imgUrl, LocalDateTime wateredDate){
+    public void updatePlant(String nickname, String imgUrl){
         this.nickname = nickname;
         // this.place = place;
         this.imgUrl = imgUrl;
-        this.wateredDate = wateredDate;
+        // this.wateredDate = wateredDate;
     }
 
     // updatePlant()/setWateredDate(): wateredDate 수정은 어디서?
