@@ -42,7 +42,7 @@ public class PlantResponse {
         private Long tempMax;
         private String humidity;
 
-        @JsonFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(pattern = "yyyy.MM.dd")
         private LocalDateTime createdAt;
 
         @JsonFormat(pattern = "yyyy-MM-dd")

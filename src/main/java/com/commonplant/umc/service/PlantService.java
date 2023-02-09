@@ -227,7 +227,7 @@ public class PlantService {
     }
 
     @Transactional
-    public String updateWateredDate(Long plantIdx, PlantRequest.updateWateredDate req){
+    public String updateWateredDate(Long plantIdx){
 
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
         System.out.println(" 물주기 리셋할 식물은: " + plantIdx);
@@ -236,7 +236,7 @@ public class PlantService {
         Info info = infoService.getPlantInfo(plant.getName());
 
         plant.setWateredDate(
-                req.getWateredDate()
+                plant.getWateredDate()
         );
 
         Long resetRemainderDate = -1 * (Long) info.getWater_day();

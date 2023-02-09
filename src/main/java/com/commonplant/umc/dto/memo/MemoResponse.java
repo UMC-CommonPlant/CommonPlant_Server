@@ -34,7 +34,7 @@ public class MemoResponse {
         private String content;
         private String imgUrl;
 
-        @JsonFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(pattern = "yyyy.MM.dd")
         private LocalDateTime createdAt;
     }
 
