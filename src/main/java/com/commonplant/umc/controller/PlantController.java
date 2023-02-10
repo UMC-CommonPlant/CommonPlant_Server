@@ -79,8 +79,9 @@ public class PlantController {
         System.out.println("=============UPDATE PLANT WATERED DATE TEST.NAME===============");
 
         String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
 
-        String updateWateredDateTest = plantService.updateWateredDate(plantIdx);
+        String updateWateredDateTest = plantService.updateWateredDate(plantIdx, user);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "updateWateredDate", updateWateredDateTest));
     }
@@ -92,10 +93,11 @@ public class PlantController {
             throws ExecutionException, InterruptedException {
 
         String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
 
         System.out.println("=============GET PLANT TEST.NAME===============");
 
-        PlantResponse.plantCardRes plant = plantService.getPlantCard(plantIdx);
+        PlantResponse.plantCardRes plant = plantService.getPlantCard(plantIdx, user);
         MemoResponse.memoListRes memoList = memoService.getMemoList(plant.getPlantIdx());
         System.out.println(memoList);
 

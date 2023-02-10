@@ -70,6 +70,11 @@ public class PlantService {
 
         Place place = placeService.getPlace(req.getPlace());
 
+        // TODO: 장소를 조회할 수 있는 유저만 식물이 등록 가능하게 하기
+        if(!placeService.ExistUserInPlace(user, place)){
+            throw new BadRequestException(ErrorResponseStatus.NOT_FOUND_USER_IN_PLACE);
+        }
+
         // TODO: 마지막으로 물 준 날짜 - 날짜를 선택하지 않으면 등록일을 기준으로 설정
         LocalDateTime initialWateredDate = null;
 
@@ -131,9 +136,17 @@ public class PlantService {
     // 함께한지 1일이 지났어요!: getCreatedAt() 활용
     // Info에서 불러와야 할 정보: name, scientific_name, water_day
     @Transactional
-    public PlantResponse.plantCardRes getPlantCard(Long plantIdx) throws ExecutionException, InterruptedException {
+    public PlantResponse.plantCardRes getPlantCard(Long plantIdx, User user) throws ExecutionException, InterruptedException {
 
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
+
+        Place place = plant.getPlace();
+        System.out.println("========== 식물이 등록된 장소는: ==========" + place);
+
+        // TODO: 장소를 조회할 수 있는 유저만 등록한 식물 정보를 조회 가능하게 하기
+        if(!placeService.ExistUserInPlace(user, place)){
+            throw new BadRequestException(ErrorResponseStatus.NOT_FOUND_USER_IN_PLACE);
+        }
 
         System.out.println(plant.getName());
 
@@ -253,10 +266,18 @@ public class PlantService {
     }
 
     @Transactional
-    public String updateWateredDate(Long plantIdx){
+    public String updateWateredDate(Long plantIdx, User user){
 
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
         System.out.println(" 물주기 리셋할 식물은: " + plantIdx);
+
+        Place place = plant.getPlace();
+        System.out.println("========== 식물이 등록된 장소는: ==========" + place);
+
+        // TODO: 장소를 조회할 수 있는 유저만 식물 물주기 업데이트 가능
+        if(!placeService.ExistUserInPlace(user, place)){
+            throw new BadRequestException(ErrorResponseStatus.NOT_FOUND_USER_IN_PLACE);
+        }
 
         // getPlantInfo()의 인자는 식물 종 이름: 식물 조회할 때 식물 종 이름을 보내서 검색하면 됨
         Info info = infoService.getPlantInfo(plant.getName());
