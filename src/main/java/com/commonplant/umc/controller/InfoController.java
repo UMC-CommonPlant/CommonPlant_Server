@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -32,7 +33,28 @@ public class InfoController {
     public ResponseEntity<JsonResponse> getPlantInfo(@RequestParam String name) {
         wordService.addWord(name);
         Info plantInfo = infoService.getPlantInfo(name);
-        return ResponseEntity.ok(new JsonResponse(true, 200, "addPlantInfo", plantInfo));
+        InfoResponse.getPlantInfo returnPlantInfo = new InfoResponse.getPlantInfo(plantInfo);
+        LocalDate now = LocalDate.now();
+        int monthValue = now.getMonthValue();
+        String waterType = "";
+        returnPlantInfo.setMonthValue(monthValue);
+
+        switch(monthValue){
+            case 1: case 2: case 12:
+                waterType = plantInfo.getWater_winter();
+                break;
+            case 3: case 4: case 5:
+                waterType = plantInfo.getWater_spring();
+                break;
+            case 6: case 7: case 8:
+                waterType = plantInfo.getWater_summer();
+                break;
+            case 9: case 10: case 11:
+                waterType = plantInfo.getWater_autumn();
+                break;
+        }
+        returnPlantInfo.setWaterType(waterType);
+        return ResponseEntity.ok(new JsonResponse(true, 200, "addPlantInfo", returnPlantInfo));
     }
 
     @PostMapping("info/addPlantInfo")
