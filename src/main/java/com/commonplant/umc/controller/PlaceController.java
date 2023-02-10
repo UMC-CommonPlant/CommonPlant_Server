@@ -40,8 +40,7 @@ public class PlaceController {
 
     // myGarden 메인페이지
     @GetMapping("/place/myGarden")
-    public ResponseEntity<JsonResponse> getMyGarden()
-    {
+    public ResponseEntity<JsonResponse> getMyGarden() {
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
 
@@ -55,22 +54,20 @@ public class PlaceController {
         List<PlaceResponse.plantList> plantLists = placeService.getUserPlantList(user);
 
 
-
-        return ResponseEntity.ok(new JsonResponse(true, 200,"myGarden", new PlaceResponse.getMainPage(nickName,placeLists,plantLists)));
+        return ResponseEntity.ok(new JsonResponse(true, 200, "myGarden", new PlaceResponse.getMainPage(nickName, placeLists, plantLists)));
     }
 
-     // 장소 추가
-     @PostMapping("/place/add")
-     public ResponseEntity<JsonResponse> addPlace(@RequestPart("place") PlaceRequest.addPlace req, @RequestPart("image") MultipartFile file){
+    // 장소 추가
+    @PostMapping("/place/add")
+    public ResponseEntity<JsonResponse> addPlace(@RequestPart("place") PlaceRequest.addPlace req, @RequestPart("image") MultipartFile file) {
 
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
 
         String placeCode = placeService.addPlace(user, req, file);
 
-        return ResponseEntity.ok(new JsonResponse(true, 200,"addPlace", placeCode));
-     }
-
+        return ResponseEntity.ok(new JsonResponse(true, 200, "addPlace", placeCode));
+    }
 
 
     // 장소 정보 조회
@@ -78,6 +75,8 @@ public class PlaceController {
     public ResponseEntity<JsonResponse> getPlaceInfo(@PathVariable String placeCode) {
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
+
+        placeService.UserOnPlace(placeCode, user.getUuid());
 
         // place info
         Place place = placeService.getPlace(placeCode);
@@ -95,7 +94,7 @@ public class PlaceController {
         List<PlantResponse.plantOfPlaceRes> plantInfoList = placeService.getPlantListOfPlace(place);
 
 
-        return ResponseEntity.ok(new JsonResponse(true, 200,"getPlace", new PlaceResponse.getPlaceInfo(place, isOwner, userInfoList, plantInfoList)));
+        return ResponseEntity.ok(new JsonResponse(true, 200, "getPlace", new PlaceResponse.getPlaceInfo(place, isOwner, userInfoList, plantInfoList)));
     }
 
     // 사용자가 속한 장소리스트
@@ -107,13 +106,12 @@ public class PlaceController {
         List<Place> places = placeService.getUserPlaces(user);
 
 
-        return ResponseEntity.ok(new JsonResponse(true, 200,"userPlace", places));
+        return ResponseEntity.ok(new JsonResponse(true, 200, "userPlace", places));
     }
 
 
     @GetMapping("/openApiTest/{placeCode}")
-    public ResponseEntity<JsonResponse> openApiTest(@PathVariable String placeCode)
-    {
+    public ResponseEntity<JsonResponse> openApiTest(@PathVariable String placeCode) {
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
 
@@ -134,8 +132,8 @@ public class PlaceController {
 
         Weather.LatXLngY rs = transLocalPoint.convertGRID_GPS(0, lat, lng);
 
-        int grid_x = (int)rs.getX();
-        int grid_y = (int)rs.getY();
+        int grid_x = (int) rs.getX();
+        int grid_y = (int) rs.getY();
 
         x = Integer.toString(grid_x);
         y = Integer.toString(grid_y);
@@ -143,20 +141,18 @@ public class PlaceController {
         try {
             String url = openApiService.makeUrl(x, y);
             openApiService.fetch(url);
-        }
-        catch(UnsupportedEncodingException e){
+        } catch (UnsupportedEncodingException e) {
             System.out.println(e.getMessage());
         }
-        return ResponseEntity.ok(new JsonResponse(true, 200,"getPlace", place));
+        return ResponseEntity.ok(new JsonResponse(true, 200, "getPlace", place));
     }
-
 
 
     // ------------------------------- 친구 검색 / 조회 / 삭제 / 추가  --------------------------------
 
     // 유저 검색
     @PutMapping("/place/searchPeople")
-    public ResponseEntity<JsonResponse> searchPeople(@RequestBody PlaceRequest.searchPeople req){
+    public ResponseEntity<JsonResponse> searchPeople(@RequestBody PlaceRequest.searchPeople req) {
 
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
@@ -169,17 +165,29 @@ public class PlaceController {
 
     // 참여인원 추가
     @PutMapping("/place/addPeople")
-    public ResponseEntity<JsonResponse> addPeople(@RequestBody PlaceRequest.addPeople req){
+    public ResponseEntity<JsonResponse> addPeople(@RequestBody PlaceRequest.addPeople req) {
 
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
 
         String placeCode = placeService.addPeople(req.getName(), req.getPlaceCode());
 
-        return ResponseEntity.ok(new JsonResponse(true, 200, "addPeople", placeCode)) ;
+        return ResponseEntity.ok(new JsonResponse(true, 200, "addPeople", placeCode));
     }
 
+    // 장소에 등록된 친구리스트
+    @GetMapping("/place/{placeCode}/friendList")
+    public ResponseEntity<JsonResponse> friendList(@PathVariable String placeCode) {
 
+        String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
+
+        Place place = placeService.getPlace(placeCode);
+        boolean isOwner = placeService.isOwner(user, place);
+
+        List<PlaceResponse.userInfoList> userInfoLists = placeService.getUserListOfPlace(place);
+
+        return ResponseEntity.ok(new JsonResponse(true, 200, "peopleList", new PlaceResponse.friendList(isOwner, userInfoLists)));
+    }
 
 }
-
