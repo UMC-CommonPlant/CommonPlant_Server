@@ -124,12 +124,18 @@ public class PlaceResponse {
     }
 
     @NoArgsConstructor
-    @AllArgsConstructor
     @Data
-    public class searchPeople{
-        private String nickName;
+    public static class friendList{
+        private boolean isOwner;
 
-        private String ImgUrl;
+        private List<userInfoList> userInfoLists;
+
+        @Builder
+        public friendList(boolean isOwner, List<userInfoList> userInfoLists)
+        {
+            this.isOwner = isOwner;
+            this.userInfoLists = userInfoLists;
+        }
     }
 
     @NoArgsConstructor

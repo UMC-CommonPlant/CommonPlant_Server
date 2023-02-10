@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import static com.commonplant.umc.config.exception.ErrorResponseStatus.NOT_FOUND_USER_IN_PLACE;
 import static com.commonplant.umc.config.exception.ErrorResponseStatus.PLACE_CODE_ERROR;
 
 @Service
@@ -163,6 +164,15 @@ public class PlaceService {
 
         return false;
     }
+    public void UserOnPlace(String placeCode, String uuid) {
+        List<String> userList = belongRepository.findUserByPlace(placeCode);
+        if(userList.contains(uuid)){
+            System.out.println("true");
+        }else{
+            System.out.println("false");
+            throw new BadRequestException(NOT_FOUND_USER_IN_PLACE);
+        }
+    }
 
     public List<PlaceResponse.userInfoList> getUserListOfPlace(Place place){
 
@@ -174,6 +184,7 @@ public class PlaceService {
             boolean isOwner = isOwner(u, place);
             userInfoList.add(new PlaceResponse.userInfoList(u, isOwner));
         }
+
 
         return userInfoList;
     }

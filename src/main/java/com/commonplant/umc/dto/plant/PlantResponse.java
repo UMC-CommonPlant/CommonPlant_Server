@@ -107,4 +107,5 @@ public class PlantResponse {
         private String nickName;
         private String imgUrl;
     }
+
 }
