@@ -25,6 +25,13 @@ public enum ErrorResponseStatus {
     WRONG_PLATFORM(false, 4006, "잘못된 플랫폼입니다."),
     EXPIRED_JWT(false, 4007, "만료된 토큰입니다."),
 
+    NO_SELECTED_IMAGE(false, 4200, "식물의 소중한 첫 사진을 등록해주세요!"),
+    NO_PLANT_NICKNAME(false, 4201, "식물 애칭을 입력해 주세요."),
+    LONG_PLANT_NICKNAME(false, 4202, "식물의 애칭은 10자 이하로 설정해주세요!"),
+
+    NO_MEMO_CONTENT(false, 4301, "메모 내용을 입력해 주세요."),
+    LONG_MEMO_CONTENT(false, 4302, "메모의 내용은 200자 이하로 작성해주세요!"),
+
     //5000 : Server connection 오류
     SERVER_ERROR(false, 5000, "서버와의 연결에 실패하였습니다."),
 

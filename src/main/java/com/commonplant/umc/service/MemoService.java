@@ -1,5 +1,7 @@
 package com.commonplant.umc.service;
 
+import com.commonplant.umc.config.exception.BadRequestException;
+import com.commonplant.umc.config.exception.ErrorResponseStatus;
 import com.commonplant.umc.domain.Memo;
 import com.commonplant.umc.domain.Plant;
 import com.commonplant.umc.domain.User;
@@ -46,10 +48,22 @@ public class MemoService {
 
         System.out.println("plantMemoIdx");
 
+        // TODO: 식물의 애칭이 등록되어 있지 않거나 10자를 넘어갈 경우 예외처리
+        String content = null;
+
+        if (req.getContent().length() == 0) {
+            throw new BadRequestException(ErrorResponseStatus.NO_MEMO_CONTENT);
+        } else if (req.getContent().length() <= 200) {
+            content = req.getContent();
+        } else {
+            throw new BadRequestException(ErrorResponseStatus.LONG_MEMO_CONTENT);
+        }
+
         Memo memo = Memo.builder()
                 .plant(plant)
                 .writer(user)
-                .content(req.getContent())
+                //.content(req.getContent())
+                .content(content)
                 .imgUrl(imgUrl)
                 .build();
 
