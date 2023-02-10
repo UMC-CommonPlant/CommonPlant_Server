@@ -1,5 +1,7 @@
 package com.commonplant.umc.service;
 
+import com.commonplant.umc.config.exception.BadRequestException;
+import com.commonplant.umc.config.exception.ErrorResponseStatus;
 import com.commonplant.umc.domain.Info;
 import com.commonplant.umc.domain.Place;
 import com.commonplant.umc.domain.Plant;
@@ -46,15 +48,37 @@ public class PlantService {
 
         // imgUrl Setter
         String newCode = randomCode();
-        String nickname = req.getNickname();
+        String nickname = null;
 
         String imgUrl = null;
 
+        // TODO: 식물의 애칭이 등록되어 있지 않거나 10자를 넘어갈 경우 예외처리
+        if (req.getNickname().length() == 0) {
+            throw new BadRequestException(ErrorResponseStatus.NO_PLANT_NICKNAME);
+        } else if (req.getNickname().length() <= 10) {
+            nickname = req.getNickname();
+        } else {
+            throw new BadRequestException(ErrorResponseStatus.LONG_PLANT_NICKNAME);
+        }
+
+        // TODO: 식물 등록할 때 이미지가 없을 경우 예외처리
         if (file.getSize() > 0) {
             imgUrl = firebaseService.uploadFiles("commonPlant_plant/" + nickname + "_" + newCode, file);
+        } else {
+            throw new BadRequestException(ErrorResponseStatus.NO_SELECTED_IMAGE);
         }
 
         Place place = placeService.getPlace(req.getPlace());
+
+        // TODO: 마지막으로 물 준 날짜 - 날짜를 선택하지 않으면 등록일을 기준으로 설정
+        LocalDateTime initialWateredDate = null;
+
+        if (req.getWateredDate() == null) {
+            // initialWateredDate = req.getCreatedAt().atStartOfDay(); // req.getCreatedAt() -> null 오류 발생
+            initialWateredDate = LocalDate.now().atStartOfDay();
+        } else {
+            initialWateredDate = req.getWateredDate();
+        }
 
         Plant plant = Plant.builder()
                 .name(info.getName())
@@ -62,7 +86,8 @@ public class PlantService {
                 .nickname(req.getNickname())
                 .place(place)
                 .imgUrl(imgUrl)
-                .wateredDate(req.getWateredDate())
+                // .wateredDate(req.getWateredDate())
+                .wateredDate(initialWateredDate)
                 // .remainderDate(remainderDate)
                 .build();
 
