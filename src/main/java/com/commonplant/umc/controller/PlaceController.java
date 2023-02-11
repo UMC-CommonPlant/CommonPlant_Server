@@ -76,10 +76,13 @@ public class PlaceController {
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
 
-        placeService.UserOnPlace(placeCode, user.getUuid());
+
+
 
         // place info
         Place place = placeService.getPlace(placeCode);
+
+        placeService.UserOnPlace(place, user.getUuid());
 
         // weather info
         Weather.weatherInfo weather = null;

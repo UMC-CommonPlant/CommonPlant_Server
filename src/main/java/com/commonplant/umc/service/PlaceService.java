@@ -22,8 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import static com.commonplant.umc.config.exception.ErrorResponseStatus.NOT_FOUND_USER_IN_PLACE;
-import static com.commonplant.umc.config.exception.ErrorResponseStatus.PLACE_CODE_ERROR;
+import static com.commonplant.umc.config.exception.ErrorResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -135,7 +134,8 @@ public class PlaceService {
 
         if(ExistUserInPlace(newUser, place))
         {
-            return "이미 장소에 존재하는 유저입니다.";
+            System.out.println("false");
+            throw new BadRequestException(EXIST_USER_IN_PLACE);
         }
 
         Belong belong = Belong.builder().user(newUser).place(place).build();
@@ -159,13 +159,13 @@ public class PlaceService {
     public boolean ExistUserInPlace(User user, Place place) {
         Optional<Belong> findUser = belongRepository.findByUserAndPlace(user, place);
 
-        if (!findUser.isEmpty())
+        if(!findUser.isEmpty())
             return true;
-
-        return false;
+        else
+            return false;
     }
-    public void UserOnPlace(String placeCode, String uuid) {
-        List<String> userList = belongRepository.findUserByPlace(placeCode);
+    public void UserOnPlace(Place place, String uuid) {
+        List<String> userList = belongRepository.findUserByPlace(place);
         if(userList.contains(uuid)){
             System.out.println("true");
         }else{

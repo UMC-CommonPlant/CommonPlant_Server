@@ -20,7 +20,7 @@ public interface BelongRepository extends JpaRepository<Belong, Long> {
     List<User> findAllByPlaceOrderByCreatedAtAsc(Place place);
 
     @Query(value = "SELECT b.user.uuid FROM Belong b WHERE b.place=?1")
-    List<String> findUserByPlace(String teamCode);
+    List<String> findUserByPlace(Place place);
 
     Long countByPlace(Place place);
 

@@ -26,6 +26,7 @@ public enum ErrorResponseStatus {
     EXPIRED_JWT(false, 4007, "만료된 토큰입니다."),
 
     NOT_FOUND_USER_IN_PLACE(false, 4101, "장소에 등록되지 않은 유저입니다."),
+    EXIST_USER_IN_PLACE(false, 4102, "이미 장소에 존재하는 유저입니다."),
 
     NO_SELECTED_IMAGE(false, 4200, "식물의 소중한 첫 사진을 등록해주세요!"),
     NO_PLANT_NICKNAME(false, 4201, "식물 애칭을 입력해 주세요."),
