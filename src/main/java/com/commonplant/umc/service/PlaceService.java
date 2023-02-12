@@ -44,7 +44,7 @@ public class PlaceService {
         String imgUrl = null;
 
         if(file.getSize()>0){
-            imgUrl = firebaseService.uploadFiles("commonPlant_place/" + newCode, file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_place_" + newCode, file);
               }
         // 주소 좌표 변환
         String json = openApiService.getKakaoApiFromAddress(req.getAddress());
