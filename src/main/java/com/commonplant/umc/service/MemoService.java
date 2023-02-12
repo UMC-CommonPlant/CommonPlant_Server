@@ -38,7 +38,7 @@ public class MemoService {
         String imgUrl = null;
 
         if(file.getSize()>0){
-            imgUrl = firebaseService.uploadFiles("commonPlant_memo/" +
+            imgUrl = firebaseService.uploadFiles("commonPlant_memo_" +
                     plantMemoIdx + "_" + newCode,file);
         }
 
@@ -154,7 +154,7 @@ public class MemoService {
         String imgUrl = null;
 
         if(file.getSize()>0){
-            imgUrl = firebaseService.uploadFiles("commonPlant_memo/" +
+            imgUrl = firebaseService.uploadFiles("commonPlant_memo_" +
                     plantMemoIdx + "_" + newCode,file);
         }
 

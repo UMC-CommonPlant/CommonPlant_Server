@@ -63,7 +63,7 @@ public class PlantService {
 
         // TODO: 식물 등록할 때 이미지가 없을 경우 예외처리
         if (file.getSize() > 0) {
-            imgUrl = firebaseService.uploadFiles("commonPlant_plant/" + nickname + "_" + newCode, file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_plant_" + nickname + "_" + newCode, file);
         } else {
             throw new BadRequestException(ErrorResponseStatus.NO_SELECTED_IMAGE);
         }
@@ -246,7 +246,7 @@ public class PlantService {
         String imgUrl = null;
 
         if (file.getSize() > 0) {
-            imgUrl = firebaseService.uploadFiles("commonPlant_plant/" + nickname + "_" + newCode, file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_plant_" + nickname + "_" + newCode, file);
         }
 
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
