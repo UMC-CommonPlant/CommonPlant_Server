@@ -8,23 +8,19 @@ import com.commonplant.umc.domain.Plant;
 import com.commonplant.umc.domain.User;
 import com.commonplant.umc.dto.plant.PlantRequest;
 import com.commonplant.umc.dto.plant.PlantResponse;
-import com.commonplant.umc.repository.PlaceRepository;
 import com.commonplant.umc.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -63,7 +59,7 @@ public class PlantService {
 
         // TODO: 식물 등록할 때 이미지가 없을 경우 예외처리
         if (file.getSize() > 0) {
-            imgUrl = firebaseService.uploadFiles("commonPlant_plant_" + nickname + "_" + newCode, file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_plant_" + newCode + "_" + newCode, file);
         } else {
             throw new BadRequestException(ErrorResponseStatus.NO_SELECTED_IMAGE);
         }
@@ -246,7 +242,7 @@ public class PlantService {
         String imgUrl = null;
 
         if (file.getSize() > 0) {
-            imgUrl = firebaseService.uploadFiles("commonPlant_plant_" + nickname + "_" + newCode, file);
+            imgUrl = firebaseService.uploadFiles("commonPlant_plant_" + newCode + "_" + newCode, file);
         }
 
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
