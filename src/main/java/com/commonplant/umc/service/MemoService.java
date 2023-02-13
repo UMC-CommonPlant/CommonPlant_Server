@@ -32,14 +32,14 @@ public class MemoService {
     public Long addMemo(User user, MemoRequest.addMemo req, MultipartFile file){
 
         // imgUrl Setter
-        String newCode = randomCode();
+        String newCode = null;
         Long plantMemoIdx = req.getPlant();
 
         String imgUrl = null;
 
         if(file.getSize()>0){
-            imgUrl = firebaseService.uploadFiles("commonPlant_memo_" +
-                    plantMemoIdx + "_" + newCode,file);
+            newCode = randomCode();
+            imgUrl = firebaseService.uploadFiles("commonPlant_memo_" + plantMemoIdx + "_" + newCode, file);
         }
 
         // User user = userService.getUser(req.getWriter());
