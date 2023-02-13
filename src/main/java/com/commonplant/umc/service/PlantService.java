@@ -34,7 +34,7 @@ public class PlantService {
 
 
     @Transactional
-    public Long addPlant(PlantRequest.addPlant req, User user, MultipartFile file)  {
+    public Long addPlant(PlantRequest.addPlant req, User user, MultipartFile file) {
 
         Info info = infoService.getPlantInfo(req.getName());
 
@@ -43,7 +43,7 @@ public class PlantService {
         // System.out.println("============= info.getName(): ===============" + info.getName());
 
         // imgUrl Setter
-        String newCode = randomCode();
+        String newCode = null;
         String nickname = null;
 
         String imgUrl = null;
@@ -59,6 +59,7 @@ public class PlantService {
 
         // TODO: 식물 등록할 때 이미지가 없을 경우 예외처리
         if (file.getSize() > 0) {
+            newCode = randomCode();
             imgUrl = firebaseService.uploadFiles("commonPlant_plant_" + newCode + "_" + newCode, file);
         } else {
             throw new BadRequestException(ErrorResponseStatus.NO_SELECTED_IMAGE);
@@ -94,6 +95,7 @@ public class PlantService {
                 .build();
 
         // remainderDate는 wateredDate를 활용해서 구해야 하기 때문에 동시에 저장되지 못함 (null 오류)
+        // DateTimeFormatter
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // WateredDate: 마지막으로 물 준 날짜, CurrentDate: 오늘 날짜
@@ -102,28 +104,16 @@ public class PlantService {
         String parsedCurrentDate = LocalDate.now().toString();
         System.out.println("========parsedCurrentDate======== " + parsedCurrentDate);
 
-        // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate wateredDate = LocalDate.parse(parsedWateredDate, dateTimeFormatter);
         LocalDate currentDate = LocalDate.parse(parsedCurrentDate, dateTimeFormatter);
         LocalDateTime wateredDateTime = wateredDate.atStartOfDay();
         LocalDateTime currentDateTime = currentDate.atStartOfDay();
 
-//        Long remainderDate = (Long) info.getWater_day()
-//                - (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
-
+        // remainderDate: D-DAY
         Long remainderDate = (Long) Duration.between(wateredDateTime, currentDateTime).toDays()
                 - (Long) info.getWater_day();
 
         plant.setRemainderDate(remainderDate);
-
-//        plantRepository.save(plant);
-
-//        String test = " 식물 이름: " + plant.getName()
-//                + " 식물 애칭: " + plant.getNickname() + " 이미지 url: " + plant.getImgUrl()
-//                + " 식물과 함께하기 시작한 날: " + plant.getCreatedAt()
-//                + " 식물에 마지막으로 물을 준 날: " + plant.getWateredDate();
-//
-//        return test;
 
         return plantRepository.save(plant).getPlantIdx();
     }
@@ -150,8 +140,6 @@ public class PlantService {
         Info info = infoService.getPlantInfo(plant.getName());
 
         System.out.println("=============GET PLANT INFO FROM FIREBASE===============");
-        // System.out.println(info.getName());
-        // System.out.println(info.getImgUrl());
 
         System.out.println(info.getScientific_name());
 
@@ -174,8 +162,6 @@ public class PlantService {
         String parsedCreatedDate = plant.getCreatedAt().format(dateTimeFormatter);
         System.out.println("========parsedCreatedDate======== " + parsedCreatedDate);
 
-
-        // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate wateredDate = LocalDate.parse(parsedWateredDate, dateTimeFormatter);
         LocalDate currentDate = LocalDate.parse(parsedCurrentDate, dateTimeFormatter);
         LocalDate createdDate = LocalDate.parse(parsedCreatedDate, dateTimeFormatter);
@@ -186,7 +172,6 @@ public class PlantService {
         // remainderDate: 물주기까지 남은 날짜 (-> addPlant로 이동)
         // Long remainderDate = (Long) info.getWater_day() - (Long) Duration.between(wateredDateTime, currentDateTime).toDays();
         // plant.setRemainderDate(remainderDate);
-
 
         System.out.println(currentDate);
         System.out.println(wateredDate);
@@ -219,50 +204,70 @@ public class PlantService {
 
 
     @Transactional
-    public List<Plant> getPlantList(Place place)
-    {
+    public List<Plant> getPlantList(Place place) {
         List<Plant> plants = plantRepository.findAllByPlaceOrderByRemainderDateDesc(place);
 
         return plants;
     }
 
     @Transactional
-    public Plant getPlant(Long plantIdx){
+    public Plant getPlant(Long plantIdx) {
         return plantRepository.findByPlantIdx(plantIdx);
     }
 
 
     @Transactional
-    public String updatePlant(Long plantIdx, PlantRequest.updatePlant req, MultipartFile file){
+    public Long updatePlant(Long plantIdx, PlantRequest.updatePlant req, MultipartFile file, User user) {
 
-        // imgUrl Setter
-        String newCode = randomCode();
-        String nickname = req.getNickname();
-
-        String imgUrl = null;
-
-        if (file.getSize() > 0) {
-            imgUrl = firebaseService.uploadFiles("commonPlant_plant_" + newCode + "_" + newCode, file);
-        }
+//        Place place = placeService.getPlace(req.getPlace());
+//
+//        // TODO: 장소를 조회할 수 있는 유저만 식물을 수정 가능하게 하기
+//        if(!placeService.ExistUserInPlace(user, place)){
+//            throw new BadRequestException(ErrorResponseStatus.NOT_FOUND_USER_IN_PLACE);
+//        }
 
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
 
+        String nickname = null;
+
+        // TODO: 식물의 애칭이 등록되어 있지 않거나 10자를 넘어갈 경우 예외처리
+        // TODO: 수정 전 닉네임과 수정 후 닉네임이 같을 경우?
+        if (req.getNickname().length() == 0) {
+            throw new BadRequestException(ErrorResponseStatus.NO_PLANT_NICKNAME);
+        } else if (req.getNickname().length() <= 10) {
+            nickname = req.getNickname();
+        } else {
+            throw new BadRequestException(ErrorResponseStatus.LONG_PLANT_NICKNAME);
+        }
+
+        // imgUrl Setter
+        // 이미지가 바뀌더라도 url은 똑같게!
+        String imgUrl = plant.getImgUrl();
+
+        if (file.getSize() > 0) {
+            imgUrl = firebaseService.uploadFiles(imgUrl, file);
+        } else {
+            throw new BadRequestException(ErrorResponseStatus.NO_SELECTED_IMAGE);
+        }
+
+        // updatePlant
         plant.updatePlant(
-                req.getNickname(),
+                nickname,
                 imgUrl
-                // req.getWateredDate()
         );
+//
+//        String updatePlantTest = " 식물 애칭: " + nickname + " 수정된 장소: " + req.getPlace()
+//                + " 수정된 이미지 url: " + imgUrl;
+//
+//        System.out.println(updatePlantTest);
+//
+//        return updatePlantTest;
 
-        String updatePlantTest = " 식물 애칭: " + req.getNickname() + " 수정된 장소: " + req.getPlace()
-                + " 수정된 이미지 url: " + plant.getImgUrl();
-
-        System.out.println(updatePlantTest);
-
-        return updatePlantTest;
+        return plantRepository.save(plant).getPlantIdx();
     }
 
     @Transactional
-    public String updateWateredDate(Long plantIdx, User user){
+    public String updateWateredDate(Long plantIdx, User user) {
 
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
         System.out.println(" 물주기 리셋할 식물은: " + plantIdx);
@@ -294,7 +299,7 @@ public class PlantService {
         return updateWateredDateTest;
     }
 
-    public String randomCode(){
+    public String randomCode() {
         return RandomStringUtils.random(6,33,125,true,false);
     }
 }
