@@ -70,6 +70,8 @@ public class PlantResponse {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class plantOfPlaceRes{
+
+        private Long plantIdx;    // 식물 PK
         private String name;       // 식물 종 이름 (학명)
 
         private String nickname;   // 애칭

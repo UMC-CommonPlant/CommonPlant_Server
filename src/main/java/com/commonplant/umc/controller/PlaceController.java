@@ -53,7 +53,6 @@ public class PlaceController {
         // plant List Info
         List<PlaceResponse.plantList> plantLists = placeService.getUserPlantList(user);
 
-
         return ResponseEntity.ok(new JsonResponse(true, 200, "myGarden", new PlaceResponse.getMainPage(nickName, placeLists, plantLists)));
     }
 
@@ -75,9 +74,6 @@ public class PlaceController {
     public ResponseEntity<JsonResponse> getPlaceInfo(@PathVariable String placeCode) {
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
-
-
-
 
         // place info
         Place place = placeService.getPlace(placeCode);
@@ -149,7 +145,6 @@ public class PlaceController {
         }
         return ResponseEntity.ok(new JsonResponse(true, 200, "getPlace", place));
     }
-
 
     // ------------------------------- 친구 검색 / 조회 / 삭제 / 추가  --------------------------------
 
