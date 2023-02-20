@@ -20,8 +20,12 @@ public class PlantRequest {
     @Data
     public static class updatePlant {
         private String nickname;
-        private String place;
-        private LocalDateTime wateredDate;
+        
+        // 식물 수정 화면에서 장소 수정은 이루어지지 않음 
+        // private String place;
+        
+        // updateWateredDate로 이동
+        // private LocalDateTime wateredDate;
     }
 
     @Data

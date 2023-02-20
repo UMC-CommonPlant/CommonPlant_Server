@@ -212,12 +212,12 @@ public class PlantService {
     @Transactional
     public Long updatePlant(Long plantIdx, PlantRequest.updatePlant req, MultipartFile file, User user) {
 
-//        Place place = placeService.getPlace(req.getPlace());
-//
-//        // TODO: 장소를 조회할 수 있는 유저만 식물을 수정 가능하게 하기
-//        if(!placeService.ExistUserInPlace(user, place)){
-//            throw new BadRequestException(ErrorResponseStatus.NOT_FOUND_USER_IN_PLACE);
-//        }
+        Place place = getPlant(plantIdx).getPlace();
+
+        // TODO: 장소를 조회할 수 있는 유저만 식물을 수정 가능하게 하기
+        if (!placeService.ExistUserInPlace(user, place)) {
+            throw new BadRequestException(ErrorResponseStatus.NOT_FOUND_USER_IN_PLACE);
+        }
 
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
 
@@ -235,10 +235,11 @@ public class PlantService {
 
         // imgUrl Setter
         // 이미지가 바뀌더라도 url은 똑같게!
-        String imgUrl = plant.getImgUrl();
+        String imgUrl = null;
 
         if (file.getSize() > 0) {
-            imgUrl = firebaseService.uploadFiles(imgUrl, file);
+            imgUrl = plant.getImgUrl();
+            // imgUrl = firebaseService.uploadFiles(imgUrl, file);
         } else {
             throw new BadRequestException(ErrorResponseStatus.NO_SELECTED_IMAGE);
         }
@@ -248,13 +249,6 @@ public class PlantService {
                 nickname,
                 imgUrl
         );
-//
-//        String updatePlantTest = " 식물 애칭: " + nickname + " 수정된 장소: " + req.getPlace()
-//                + " 수정된 이미지 url: " + imgUrl;
-//
-//        System.out.println(updatePlantTest);
-//
-//        return updatePlantTest;
 
         return plantRepository.save(plant).getPlantIdx();
     }
