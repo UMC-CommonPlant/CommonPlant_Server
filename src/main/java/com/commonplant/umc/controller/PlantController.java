@@ -67,24 +67,25 @@ public class PlantController {
         return ResponseEntity.ok(new JsonResponse(true, 200, "addPlant", test));
     }
 
-    // 식물 수정 (PATCH)
+    // 식물 수정 (PUT)
+    // TODO: @RequestPart to @RequestParam
     @PutMapping("/plant/update/{plantIdx}")
     public ResponseEntity<JsonResponse> updatePlant(@PathVariable Long plantIdx,
-                                                    @RequestPart("plant") PlantRequest.updatePlant req,
+                                                    @RequestParam("nickname") String nickname,
                                                     @RequestPart("image") MultipartFile file){
 
-        System.out.println("=============UPDATE PLANT TEST.NAME===============" + req.getNickname());
+        System.out.println("=============UPDATE PLANT TEST.NAME===============" + nickname);
         System.out.println("=============UPDATE PLANT TEST.NAME===============" + file);
 
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
 
-        Long updatePlantTest = plantService.updatePlant(plantIdx, req, file, user);
+        Long updatePlantTest = plantService.updatePlant(plantIdx, nickname, file, user);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "updatePlant", updatePlantTest));
     }
 
-    // 식물 물주기 날짜 갱신(PATCH)
+    // 식물 물주기 날짜 갱신 (PUT)
     @PutMapping("/plant/update/wateredDate/{plantIdx}")
     public ResponseEntity<JsonResponse> updateWateredDate(@PathVariable Long plantIdx){
 

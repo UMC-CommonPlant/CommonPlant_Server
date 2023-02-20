@@ -210,7 +210,7 @@ public class PlantService {
 
 
     @Transactional
-    public Long updatePlant(Long plantIdx, PlantRequest.updatePlant req, MultipartFile file, User user) {
+    public Long updatePlant(Long plantIdx, String nickname, MultipartFile file, User user) {
 
         Place place = getPlant(plantIdx).getPlace();
 
@@ -221,14 +221,14 @@ public class PlantService {
 
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
 
-        String nickname = null;
+        String plantNickname = null;
 
         // TODO: 식물의 애칭이 등록되어 있지 않거나 10자를 넘어갈 경우 예외처리
         // TODO: 수정 전 닉네임과 수정 후 닉네임이 같을 경우?
-        if (req.getNickname().length() == 0) {
+        if (nickname.length() == 0) {
             throw new BadRequestException(ErrorResponseStatus.NO_PLANT_NICKNAME);
-        } else if (req.getNickname().length() <= 10) {
-            nickname = req.getNickname();
+        } else if (nickname.length() <= 10) {
+            plantNickname = nickname;
         } else {
             throw new BadRequestException(ErrorResponseStatus.LONG_PLANT_NICKNAME);
         }
@@ -246,7 +246,8 @@ public class PlantService {
 
         // updatePlant
         plant.updatePlant(
-                nickname,
+                // nickname,
+                plantNickname,
                 imgUrl
         );
 
