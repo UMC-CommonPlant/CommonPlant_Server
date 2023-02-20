@@ -18,8 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -56,9 +54,6 @@ public class PlantController {
         System.out.println("=============ADD PLANT TEST.NAME===============" + place);
         System.out.println("=============ADD PLANT TEST.NAME===============" + wateredDate);
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate parsedWateredDate = LocalDate.parse(wateredDate, dateTimeFormatter);
-
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
 
@@ -80,7 +75,7 @@ public class PlantController {
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
 
-        Long updatePlantTest = plantService.updatePlant(plantIdx, nickname, file, user);
+        Long updatePlantTest = plantService.updatePlant(plantIdx, nickname, user, file);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "updatePlant", updatePlantTest));
     }

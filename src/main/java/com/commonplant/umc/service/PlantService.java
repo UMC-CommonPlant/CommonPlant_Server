@@ -210,7 +210,7 @@ public class PlantService {
 
 
     @Transactional
-    public Long updatePlant(Long plantIdx, String nickname, MultipartFile file, User user) {
+    public Long updatePlant(Long plantIdx, String nickname, User user, MultipartFile file) {
 
         Place place = getPlant(plantIdx).getPlace();
 
