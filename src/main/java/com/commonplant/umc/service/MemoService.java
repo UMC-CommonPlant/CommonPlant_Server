@@ -29,11 +29,11 @@ public class MemoService {
     private final PlantService plantService;
 
     @Transactional
-    public Long addMemo(User user, MemoRequest.addMemo req, MultipartFile file){
+    public Long addMemo(User user, Long plant, String content, MultipartFile file){
 
         // imgUrl Setter
         String newCode = null;
-        Long plantMemoIdx = req.getPlant();
+        Long plantMemoIdx = plant;
 
         String imgUrl = null;
 
@@ -43,27 +43,25 @@ public class MemoService {
         }
 
         // User user = userService.getUser(req.getWriter());
-        Plant plant = plantService.getPlant(req.getPlant());
-        // System.out.println(plant.getPlantIdx());
+        Plant memoPlant = plantService.getPlant(plantMemoIdx);
 
-        System.out.println("plantMemoIdx");
+        System.out.println(plantMemoIdx);
 
         // TODO: 식물의 애칭이 등록되어 있지 않거나 10자를 넘어갈 경우 예외처리
-        String content = null;
+        String memoContent = null;
 
-        if (req.getContent().length() == 0) {
+        if (content.length() == 0) {
             throw new BadRequestException(ErrorResponseStatus.NO_MEMO_CONTENT);
-        } else if (req.getContent().length() <= 200) {
-            content = req.getContent();
+        } else if (content.length() <= 200) {
+            memoContent = content;
         } else {
             throw new BadRequestException(ErrorResponseStatus.LONG_MEMO_CONTENT);
         }
 
         Memo memo = Memo.builder()
-                .plant(plant)
+                .plant(memoPlant)
                 .writer(user)
-                //.content(req.getContent())
-                .content(content)
+                .content(memoContent)
                 .imgUrl(imgUrl)
                 .build();
 
