@@ -210,51 +210,46 @@ public class PlantService {
 
 
     @Transactional
-    public Long updatePlant(Long plantIdx, PlantRequest.updatePlant req, MultipartFile file, User user) {
+    public Long updatePlant(Long plantIdx, String nickname, User user, MultipartFile file) {
 
-//        Place place = placeService.getPlace(req.getPlace());
-//
-//        // TODO: 장소를 조회할 수 있는 유저만 식물을 수정 가능하게 하기
-//        if(!placeService.ExistUserInPlace(user, place)){
-//            throw new BadRequestException(ErrorResponseStatus.NOT_FOUND_USER_IN_PLACE);
-//        }
+        Place place = getPlant(plantIdx).getPlace();
+
+        // TODO: 장소를 조회할 수 있는 유저만 식물을 수정 가능하게 하기
+        if (!placeService.ExistUserInPlace(user, place)) {
+            throw new BadRequestException(ErrorResponseStatus.NOT_FOUND_USER_IN_PLACE);
+        }
 
         Plant plant = plantRepository.findByPlantIdx(plantIdx);
 
-        String nickname = null;
+        String plantNickname = null;
 
         // TODO: 식물의 애칭이 등록되어 있지 않거나 10자를 넘어갈 경우 예외처리
         // TODO: 수정 전 닉네임과 수정 후 닉네임이 같을 경우?
-        if (req.getNickname().length() == 0) {
+        if (nickname.length() == 0) {
             throw new BadRequestException(ErrorResponseStatus.NO_PLANT_NICKNAME);
-        } else if (req.getNickname().length() <= 10) {
-            nickname = req.getNickname();
+        } else if (nickname.length() <= 10) {
+            plantNickname = nickname;
         } else {
             throw new BadRequestException(ErrorResponseStatus.LONG_PLANT_NICKNAME);
         }
 
         // imgUrl Setter
         // 이미지가 바뀌더라도 url은 똑같게!
-        String imgUrl = plant.getImgUrl();
+        String imgUrl = null;
 
         if (file.getSize() > 0) {
-            imgUrl = firebaseService.uploadFiles(imgUrl, file);
+            imgUrl = plant.getImgUrl();
+            // imgUrl = firebaseService.uploadFiles(imgUrl, file);
         } else {
             throw new BadRequestException(ErrorResponseStatus.NO_SELECTED_IMAGE);
         }
 
         // updatePlant
         plant.updatePlant(
-                nickname,
+                // nickname,
+                plantNickname,
                 imgUrl
         );
-//
-//        String updatePlantTest = " 식물 애칭: " + nickname + " 수정된 장소: " + req.getPlace()
-//                + " 수정된 이미지 url: " + imgUrl;
-//
-//        System.out.println(updatePlantTest);
-//
-//        return updatePlantTest;
 
         return plantRepository.save(plant).getPlantIdx();
     }
