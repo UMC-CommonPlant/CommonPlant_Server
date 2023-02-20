@@ -34,25 +34,24 @@ public class PlantService {
 
 
     @Transactional
-    public Long addPlant(PlantRequest.addPlant req, User user, MultipartFile file) {
+    public Long addPlant(String name, String nickname, String place, String wateredDate, User user, MultipartFile file) {
 
-        Info info = infoService.getPlantInfo(req.getName());
+        Info info = infoService.getPlantInfo(name);
 
         System.out.println("=============ADD PLANT INFO TO DATABASE===============");
-        System.out.println("============= req.getName(): ===============" + req.getName());
-        // System.out.println("============= info.getName(): ===============" + info.getName());
+        System.out.println("============= RequestParam(name): ===============" + name);
 
         // imgUrl Setter
         String newCode = null;
-        String nickname = null;
+        String plantNickname = null;
 
         String imgUrl = null;
 
         // TODO: 식물의 애칭이 등록되어 있지 않거나 10자를 넘어갈 경우 예외처리
-        if (req.getNickname().length() == 0) {
+        if (nickname.length() == 0) {
             throw new BadRequestException(ErrorResponseStatus.NO_PLANT_NICKNAME);
-        } else if (req.getNickname().length() <= 10) {
-            nickname = req.getNickname();
+        } else if (nickname.length() <= 10) {
+            plantNickname = nickname;
         } else {
             throw new BadRequestException(ErrorResponseStatus.LONG_PLANT_NICKNAME);
         }
@@ -65,33 +64,31 @@ public class PlantService {
             throw new BadRequestException(ErrorResponseStatus.NO_SELECTED_IMAGE);
         }
 
-        Place place = placeService.getPlace(req.getPlace());
+        Place plantPlace = placeService.getPlace(place);
 
         // TODO: 장소를 조회할 수 있는 유저만 식물이 등록 가능하게 하기
-        if(!placeService.ExistUserInPlace(user, place)){
+        if(!placeService.ExistUserInPlace(user, plantPlace)){
             throw new BadRequestException(ErrorResponseStatus.NOT_FOUND_USER_IN_PLACE);
         }
 
         // TODO: 마지막으로 물 준 날짜 - 날짜를 선택하지 않으면 등록일을 기준으로 설정
         LocalDateTime initialWateredDate = null;
 
-        if (req.getWateredDate() == null) {
+        if (wateredDate == null) {
             // initialWateredDate = req.getCreatedAt().atStartOfDay(); // req.getCreatedAt() -> null 오류 발생
             initialWateredDate = LocalDate.now().atStartOfDay();
         } else {
-            initialWateredDate = req.getWateredDate();
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            initialWateredDate = LocalDate.parse(wateredDate, dateTimeFormatter).atStartOfDay();
         }
 
         Plant plant = Plant.builder()
-                .name(info.getName())
+                .name(name)
                 .user(user)
-                .nickname(nickname)
-                // .nickname(req.getNickname())
-                .place(place)
+                .nickname(plantNickname)
+                .place(plantPlace)
                 .imgUrl(imgUrl)
-                // .wateredDate(req.getWateredDate())
                 .wateredDate(initialWateredDate)
-                // .remainderDate(remainderDate)
                 .build();
 
         // remainderDate는 wateredDate를 활용해서 구해야 하기 때문에 동시에 저장되지 못함 (null 오류)
@@ -99,18 +96,14 @@ public class PlantService {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // WateredDate: 마지막으로 물 준 날짜, CurrentDate: 오늘 날짜
-        String parsedWateredDate = plant.getWateredDate().format(dateTimeFormatter);
-        System.out.println("========parsedWateredDate======== " + parsedWateredDate);
         String parsedCurrentDate = LocalDate.now().toString();
         System.out.println("========parsedCurrentDate======== " + parsedCurrentDate);
 
-        LocalDate wateredDate = LocalDate.parse(parsedWateredDate, dateTimeFormatter);
         LocalDate currentDate = LocalDate.parse(parsedCurrentDate, dateTimeFormatter);
-        LocalDateTime wateredDateTime = wateredDate.atStartOfDay();
         LocalDateTime currentDateTime = currentDate.atStartOfDay();
 
         // remainderDate: D-DAY
-        Long remainderDate = (Long) Duration.between(wateredDateTime, currentDateTime).toDays()
+        Long remainderDate = (Long) Duration.between(initialWateredDate, currentDateTime).toDays()
                 - (Long) info.getWater_day();
 
         plant.setRemainderDate(remainderDate);

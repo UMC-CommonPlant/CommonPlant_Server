@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -40,19 +42,27 @@ public class PlantController {
     }
 
     // 식물 등록 (POST)
+    // TODO: @RequestPart to @RequestParam
     @PostMapping("/plant/add")
-    public ResponseEntity<JsonResponse> addPlant(@RequestPart("plant") PlantRequest.addPlant req, @RequestPart("image") MultipartFile file)
+    public ResponseEntity<JsonResponse> addPlant(@RequestParam("name") String name,
+                                                 @RequestParam("nickname") String nickname,
+                                                 @RequestParam("place") String place,
+                                                 @RequestParam("wateredDate") String wateredDate,
+                                                 @RequestPart("image") MultipartFile file)
             throws ExecutionException, InterruptedException {
 
-        System.out.println("=============ADD PLANT TEST.NAME===============" + req.getNickname());
-        System.out.println("=============ADD PLANT TEST.NAME===============" + req.getPlace());
-        System.out.println("=============ADD PLANT TEST.NAME===============" + file);
-        System.out.println("=============ADD PLANT TEST.NAME===============" + req.getCreatedAt());
+        System.out.println("=============ADD PLANT TEST.NAME===============" + name);
+        System.out.println("=============ADD PLANT TEST.NAME===============" + nickname);
+        System.out.println("=============ADD PLANT TEST.NAME===============" + place);
+        System.out.println("=============ADD PLANT TEST.NAME===============" + wateredDate);
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate parsedWateredDate = LocalDate.parse(wateredDate, dateTimeFormatter);
 
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
 
-        Long test = plantService.addPlant(req, user,file);
+        Long test = plantService.addPlant(name, nickname, place, wateredDate, user, file);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "addPlant", test));
     }
