@@ -25,18 +25,21 @@ public class MemoController {
     private final JwtService jwtService;
 
     // 메모 등록 (POST)
+    // TODO: @RequestPart to @RequestParam
     @PostMapping("/memo/add")
-    public ResponseEntity<JsonResponse> addMemo(@RequestPart("memo") MemoRequest.addMemo req, @RequestPart("image") MultipartFile file){
+    public ResponseEntity<JsonResponse> addMemo(@RequestParam("plant") Long plant,
+                                                @RequestParam("content") String content,
+                                                @RequestPart("image") MultipartFile file){
 
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
         System.out.println(user.getEmail());
 
-        System.out.println("=============ADD MEMO TEST.NAME===============" + req.getPlant());
-        System.out.println("=============ADD MEMO TEST.NAME===============" + req.getContent());
+        System.out.println("=============ADD MEMO TEST.NAME===============" + plant);
+        System.out.println("=============ADD MEMO TEST.NAME===============" + content);
         System.out.println("=============ADD MEMO TEST.NAME===============" + file);
 
-        Long memoTest = memoService.addMemo(user, req, file);
+        Long memoTest = memoService.addMemo(user, plant, content, file);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "addMemo", memoTest));
     }
