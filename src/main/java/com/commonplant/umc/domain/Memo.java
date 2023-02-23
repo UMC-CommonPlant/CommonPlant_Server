@@ -46,9 +46,9 @@ public class Memo extends BaseTime{
     }
 
     // Memo 테이블의 plant 칼럼은 plant_idx!!!
-    public void updateMemo(Plant plant, User writer, String content, String imgUrl){
-        this.plant = plant;
-        this.writer = writer;
+    public void updateMemo(String content, String imgUrl){
+        // this.plant = plant;
+        // this.writer = writer;
         this.content = content;
         this.imgUrl = imgUrl;
     }
