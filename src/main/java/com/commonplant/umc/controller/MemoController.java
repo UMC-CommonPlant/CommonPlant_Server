@@ -72,19 +72,20 @@ public class MemoController {
         return ResponseEntity.ok(new JsonResponse(true, 200, "getMemoList", res));
     }
 
-    // 메모 수정 (PATCH: plant랑 user는 업데이트 되지 않음)
+    // 메모 수정 (PUT: plant는 업데이트 되지 않음)
+    // TODO: @RequestPart to @RequestParam
     @PutMapping("/memo/update/{memoIdx}")
     public ResponseEntity<JsonResponse> updateMemo(@PathVariable Long memoIdx,
-                                                   @RequestPart("memo") MemoRequest.updateMemo req,
+                                                   @RequestParam("content") String content,
                                                    @RequestPart("image") MultipartFile file){
 
-        System.out.println("=============UPDATE MEMO TEST.NAME==============" + req.getContent());
+        System.out.println("=============UPDATE MEMO TEST.NAME==============" + content);
         System.out.println("=============UPDATE MEMO TEST.NAME==============" + file);
 
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
 
-        String updateMemoTest = memoService.updateMemo(memoIdx, user, req, file);
+        Long updateMemoTest = memoService.updateMemo(memoIdx, user, content, file);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "updateMemo", updateMemoTest));
     }
