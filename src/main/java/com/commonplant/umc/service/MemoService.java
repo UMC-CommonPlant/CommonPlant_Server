@@ -3,6 +3,7 @@ package com.commonplant.umc.service;
 import com.commonplant.umc.config.exception.BadRequestException;
 import com.commonplant.umc.config.exception.ErrorResponseStatus;
 import com.commonplant.umc.domain.Memo;
+import com.commonplant.umc.domain.Place;
 import com.commonplant.umc.domain.Plant;
 import com.commonplant.umc.domain.User;
 import com.commonplant.umc.dto.memo.MemoRequest;
@@ -26,10 +27,18 @@ public class MemoService {
     private final MemoRepository memoRepository;
 
     private final FirebaseService firebaseService;
+    private final PlaceService placeService;
     private final PlantService plantService;
 
     @Transactional
     public Long addMemo(User user, Long plant, String content, MultipartFile file){
+
+        // TODO: 장소에 속해 있는 유저만 메모를 추가 가능하게 하기
+        Place place = plantService.getPlant(plant).getPlace();
+
+        if (!placeService.ExistUserInPlace(user, place)) {
+            throw new BadRequestException(ErrorResponseStatus.NOT_FOUND_USER_IN_PLACE);
+        }
 
         // imgUrl Setter
         String newCode = null;
@@ -42,7 +51,6 @@ public class MemoService {
             imgUrl = firebaseService.uploadFiles("commonPlant_memo_" + plantMemoIdx + "_" + newCode, file);
         }
 
-        // User user = userService.getUser(req.getWriter());
         Plant memoPlant = plantService.getPlant(plantMemoIdx);
 
         System.out.println(plantMemoIdx);
@@ -102,6 +110,8 @@ public class MemoService {
 
     @Transactional
     public MemoResponse.memoListRes getMemoList(Long plantIdx){
+
+        // TODO: 장소에 속해 있는 유저만 메모 리스트를 조회 가능하게 하기
 
         // Getter
         List<Memo> memoList = memoRepository.findAllByPlantIdxOrderByCreatedAtDesc(plantIdx);
@@ -201,9 +211,16 @@ public class MemoService {
     }
 
     @Transactional
-    public Long deleteMemo(Long memoIdx){
+    public Long deleteMemo(Long memoIdx, User user){
 
         Memo memo = memoRepository.findByMemoIdx(memoIdx);
+
+        // TODO: 메모의 작성한 사람과 수정하려는 사람이 같은지 비교
+        User writer = memo.getWriter();
+
+        if (writer != user) {
+            throw new BadRequestException(ErrorResponseStatus.INVALID_USER_JWT);
+        }
 
         memoRepository.deleteById(memoIdx);
 
