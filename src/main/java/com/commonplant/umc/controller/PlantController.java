@@ -106,7 +106,7 @@ public class PlantController {
         System.out.println("=============GET PLANT TEST.NAME===============");
 
         PlantResponse.plantCardRes plant = plantService.getPlantCard(plantIdx, user);
-        MemoResponse.memoListRes memoList = memoService.getMemoList(plant.getPlantIdx());
+        MemoResponse.memoListRes memoList = memoService.getMemoList(plant.getPlantIdx(), user);
         System.out.println(memoList);
 
         return ResponseEntity.ok(new JsonResponse(true,200, "getPlantCard",

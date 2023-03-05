@@ -109,9 +109,14 @@ public class MemoService {
     }
 
     @Transactional
-    public MemoResponse.memoListRes getMemoList(Long plantIdx){
+    public MemoResponse.memoListRes getMemoList(Long plantIdx, User user){
 
         // TODO: 장소에 속해 있는 유저만 메모 리스트를 조회 가능하게 하기
+        Place place = plantService.getPlant(plantIdx).getPlace();
+
+        if (!placeService.ExistUserInPlace(user, place)) {
+            throw new BadRequestException(ErrorResponseStatus.NOT_FOUND_USER_IN_PLACE);
+        }
 
         // Getter
         List<Memo> memoList = memoRepository.findAllByPlantIdxOrderByCreatedAtDesc(plantIdx);
