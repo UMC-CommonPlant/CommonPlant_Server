@@ -20,17 +20,14 @@ public class PlaceResponse {
         private String name;     // 장소 명
         private String address;    // 주소
 
-        // -------------- 날씨 정보 ----------------------
+        // -------------- 날씨 정보 ----------------ㅌ------
         private String highestTemp;    // 최고기온
         private String minimumTemp;   // 최저기온
         private String humidity;     // 습도
 
         // ------------- 참여 인원 정보 -------------------
-
         private Boolean isOwner;    // 내가 리더인지 아닌지
-
         private List<userInfoList> userInfoList;
-
 
         // --------------- 식물 정보 ----------------------
 

@@ -28,6 +28,7 @@ public enum ErrorResponseStatus {
     NOT_FOUND_USER_IN_PLACE(false, 4101, "장소에 등록되지 않은 유저입니다."),
     EXIST_USER_IN_PLACE(false, 4102, "이미 장소에 존재하는 유저입니다."),
 
+    LEADER_DELETE(false,4103, "리더는 삭제할 수 없습니다."),
     NO_SELECTED_IMAGE(false, 4200, "식물의 소중한 첫 사진을 등록해주세요!"),
     NO_PLANT_NICKNAME(false, 4201, "식물 애칭을 입력해 주세요."),
     LONG_PLANT_NICKNAME(false, 4202, "식물의 애칭은 10자 이하로 설정해주세요!"),

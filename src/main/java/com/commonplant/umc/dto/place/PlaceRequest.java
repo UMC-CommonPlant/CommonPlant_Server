@@ -3,6 +3,8 @@ package com.commonplant.umc.dto.place;
 
 import lombok.*;
 
+import java.util.List;
+
 public class PlaceRequest {
 
     @NoArgsConstructor
@@ -17,9 +19,10 @@ public class PlaceRequest {
     @NoArgsConstructor
     @AllArgsConstructor
     @Data
-    public class updatePlace {
+    public static class updatePlace {
         private String name;
         private String address;
+        private String placeCode;
     }
 
     @NoArgsConstructor
@@ -35,10 +38,16 @@ public class PlaceRequest {
     @AllArgsConstructor
     @Data
     public static class addPeople{
-
         private String name;
         private String placeCode;
 
+    }
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    public static class deletePeople{
+        private List<String> name;
+        private String placeCode;
     }
 
     @NoArgsConstructor
