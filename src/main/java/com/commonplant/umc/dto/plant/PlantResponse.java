@@ -70,32 +70,27 @@ public class PlantResponse {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class plantOfPlaceRes{
+
+        private Long plantIdx;    // 식물 PK
         private String name;       // 식물 종 이름 (학명)
-
         private String nickname;   // 애칭
-
         private String imgUrl;     // 식물 이미지
-
         private String recentMemo;   // 제일 최근 메모
-
         private Long remainderDate;   // 물주기 D-Day
-
         @JsonFormat(pattern = "yyyy.MM.dd")
         private LocalDateTime wateredDate;   // 마지막으로 물 준 날
-
 
         @Builder
         public plantOfPlaceRes(Plant plant, String recentMemo)
         {
             this.name = plant.getName();
             this.nickname = plant.getNickname();
+            this.plantIdx = plant.getPlantIdx();
             this.imgUrl = plant.getImgUrl();
             this.remainderDate = plant.getRemainderDate();
             this.wateredDate = plant.getWateredDate();
             this.recentMemo = recentMemo;
         }
-
-
     }
 
     @NoArgsConstructor

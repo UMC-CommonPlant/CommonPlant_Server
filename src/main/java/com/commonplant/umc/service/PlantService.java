@@ -66,6 +66,7 @@ public class PlantService {
 
         Place plantPlace = placeService.getPlace(place);
 
+
         // TODO: 장소를 조회할 수 있는 유저만 식물이 등록 가능하게 하기
         if(!placeService.ExistUserInPlace(user, plantPlace)){
             throw new BadRequestException(ErrorResponseStatus.NOT_FOUND_USER_IN_PLACE);
@@ -201,6 +202,11 @@ public class PlantService {
         List<Plant> plants = plantRepository.findAllByPlaceOrderByRemainderDateDesc(place);
 
         return plants;
+    }
+
+    @Transactional
+    public void deleteAllMemo(Plant plant){
+
     }
 
     @Transactional

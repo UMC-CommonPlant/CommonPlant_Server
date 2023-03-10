@@ -21,15 +21,12 @@ public class Place extends BaseTime{
 
     @Column(nullable = false)     // 장소 이름
     private String name;
-
     @ManyToOne
     @JoinColumn(name = "user_idx")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private User owner;          // 소유자 (리더)
-
+    private User owner;      // 소유자 (리더)
     @Column(nullable = true)
     private String girdX;    // 경도 (x)
-
     @Column(nullable = true)
     private String gridY;     // 위도 (y)
     @Column(nullable = false)
@@ -62,4 +59,11 @@ public class Place extends BaseTime{
         this.gridY = gridY;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

@@ -6,6 +6,7 @@ import com.commonplant.umc.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,5 +26,9 @@ public interface BelongRepository extends JpaRepository<Belong, Long> {
     Long countByPlace(Place place);
 
     public Optional<Belong> findByUserAndPlace(User user, Place place);
+    @Transactional
+    void deleteByUser(User user);
 
+    @Transactional
+    void deleteAllByPlace(Place place);
 }

@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -81,6 +82,28 @@ public class PlaceService {
         return place;
     }
 
+    @Transactional
+    public void deletePlace(Place place){
+        List <Plant> plants = plantRepository.findAllByPlace(place);
+        for(Plant p : plants) {
+            memoRepository.deleteAllByPlant(p);
+        }
+        plantRepository.deleteAllByPlace(place);
+        belongRepository.deleteAllByPlace(place);
+        placeRepository.delete(place);
+    }
+
+    public void updatePlaceImg(Place place, MultipartFile file){
+        String imgUrl = null;
+        if(file.getSize()>0){
+            imgUrl = firebaseService.uploadFiles("commonPlant_place_" + place.getCode(), file);
+            place.setPlaceImgUrl(imgUrl);
+            placeRepository.save(place);
+        }
+        else throw new BadRequestException(FILE_SAVE_ERROR);
+
+    }
+
     public List<Place> getUserPlaces(User user)
     {
         List<Place> places = belongRepository.findAllByUserOrderByCreatedAtAsc(user);
@@ -121,6 +144,8 @@ public class PlaceService {
         return plantLists;
     }
 
+
+
     // ------------------------------- 친구 검색 / 추가  --------------------------------
     public List<User> searchPeople(String input) {
         List<User> users = userRepository.findBynickNameContains(input);
@@ -140,6 +165,28 @@ public class PlaceService {
 
         Belong belong = Belong.builder().user(newUser).place(place).build();
         belongRepository.save(belong);
+
+        return place.getCode();
+    }
+
+    @Transactional
+    public String deletePeople(List<String> name, String placeCode) {
+        List<User> users = new ArrayList<>();
+        Place place = getPlace(placeCode);
+        User leader = place.getOwner();
+
+        for (String s : name) {
+            User user = userRepository.findBynickName(s);
+            users.add(user);
+        }
+
+        if(users.contains(leader))
+        {
+            throw new BadRequestException(LEADER_DELETE);
+        }
+        for (User user : users) {
+            belongRepository.deleteByUser(user);
+        }
 
         return place.getCode();
     }
@@ -184,7 +231,6 @@ public class PlaceService {
             boolean isOwner = isOwner(u, place);
             userInfoList.add(new PlaceResponse.userInfoList(u, isOwner));
         }
-
 
         return userInfoList;
     }

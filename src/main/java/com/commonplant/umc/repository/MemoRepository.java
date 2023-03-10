@@ -1,10 +1,12 @@
 package com.commonplant.umc.repository;
 
 import com.commonplant.umc.domain.Memo;
+import com.commonplant.umc.domain.Place;
 import com.commonplant.umc.domain.Plant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,4 +21,7 @@ public interface MemoRepository extends JpaRepository<Memo, Long> { // 상속 �
 
     // findByMemoIdx(): 메모 수정/삭제할 때 사용
     Memo findByMemoIdx(Long memoIdx);
+
+    @Transactional
+    void deleteAllByPlant(Plant plant);
 }
