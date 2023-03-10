@@ -4,6 +4,7 @@ import com.commonplant.umc.domain.Memo;
 import com.commonplant.umc.domain.Place;
 import com.commonplant.umc.domain.Plant;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,4 +25,10 @@ public interface MemoRepository extends JpaRepository<Memo, Long> { // 상속 �
 
     @Transactional
     void deleteAllByPlant(Plant plant);
+
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM Memo m WHERE m.plant.plantIdx = ?1")
+    void deleteAllByPlantIdx(Long plantIdx);
 }

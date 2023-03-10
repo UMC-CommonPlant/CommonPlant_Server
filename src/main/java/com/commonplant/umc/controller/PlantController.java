@@ -140,4 +140,18 @@ public class PlantController {
 
         return ResponseEntity.ok(new JsonResponse(true,200, "getPlant", res));
     }
+
+    // 식물 삭제
+    @DeleteMapping("/plant/delete/{plantIdx}")
+    public ResponseEntity deletePlant(@PathVariable Long plantIdx){
+
+        System.out.println("=============DELETE PLANT TEST.NAME==============");
+
+        String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
+
+        Long deletePlantTest = plantService.deletePlant(plantIdx, user);
+
+        return ResponseEntity.ok(new JsonResponse(true, 200, "deletePlant", deletePlantTest));
+    }
 }
