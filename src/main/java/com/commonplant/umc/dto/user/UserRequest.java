@@ -16,6 +16,12 @@ public class UserRequest {
         private String nickName;
         private String loginType;
     }
-
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    public static class update{
+        private String email;
+        private String nickName;
+    }
 }
 

@@ -14,6 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
       List<User> findBynickNameContains(String name);
 
       User findBynickName(String name);
+      Optional<User> findUserBynickName(String name);
 
     @Query("select u from User u where u.email=?1 and u.platform=?2")
     User findUserByEmail(String email, String loginType);

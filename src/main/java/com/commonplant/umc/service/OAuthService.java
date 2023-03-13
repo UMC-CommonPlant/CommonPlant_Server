@@ -3,6 +3,7 @@ package com.commonplant.umc.service;
 import com.commonplant.umc.config.exception.BadRequestException;
 import com.commonplant.umc.config.jwt.JwtService;
 import com.commonplant.umc.domain.User;
+import com.commonplant.umc.dto.user.GoogleProfile;
 import com.commonplant.umc.dto.user.KakaoProfile;
 import com.commonplant.umc.dto.user.NaverProfile;
 import com.commonplant.umc.dto.user.UserRequest;
@@ -42,6 +43,8 @@ public class OAuthService{
                 email = kakaoLogin(accessToken); break;
             case "naver":
                 email = naverLogin(accessToken); break;
+            case "google":
+                email = googleLogin(accessToken); break;
             default: throw new BadRequestException(WRONG_PLATFORM);
         }
 
@@ -119,5 +122,26 @@ public class OAuthService{
             log.info("[REJECT]naverMapper error");
         }
         return naverProfile.getNaver_account().getEmail();
+    }
+    public String googleLogin(String accessToken){
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(headers);
+        ResponseEntity<String> response;
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        String redirect_uri="https://www.googleapis.com/oauth2/v1/userinfo";
+
+        GoogleProfile googleProfile = null;
+        try{
+            response=restTemplate.exchange(redirect_uri, HttpMethod.POST, request, String.class);
+            googleProfile = objectMapper.readValue(response.getBody(), GoogleProfile.class);
+        }catch(HttpClientErrorException e){
+            log.info("[REJECT]google login error");
+
+        }catch(JsonProcessingException e){
+            log.info("[REJECT]googleMapper error");
+        }
+        return googleProfile.getGoogle_account().getEmail();
     }
 }

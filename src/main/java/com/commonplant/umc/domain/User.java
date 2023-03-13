@@ -52,4 +52,8 @@ public class User extends BaseTime{
     public void setUserImgUrl(String userImgUrl){
         this.userImgUrl = userImgUrl;
     }
+    public void update(String nickName, String email){
+        this.nickName = nickName;
+        this.email = email;
+    }
 }
