@@ -9,7 +9,10 @@ import com.commonplant.umc.service.UserService;
 import com.commonplant.umc.utils.UuidUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,5 +31,12 @@ public class UserController {
 
        User userProfile = userService.getUser(uuid);
         return ResponseEntity.ok(new JsonResponse(true, 200, "getUserProfile", userProfile));
+    }
+    @PutMapping("/users/myProfile/{user_idx}")
+    public ResponseEntity<JsonResponse> updateUserProfile(@PathVariable Long user_idx, @RequestPart("user") UserRequest.update req){
+        System.out.println("update");
+        User updateuser = userService.updateUser(req);
+
+        return ResponseEntity.ok(new JsonResponse(true, 200, "updateUser", updateuser));
     }
 }

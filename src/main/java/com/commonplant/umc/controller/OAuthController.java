@@ -29,14 +29,12 @@ public class OAuthController{
     private final JwtService jwtService;
     private final UserService userService;
 
-    private static final String CLIENT_ID = "";
-    private static final String REDIRECT_URL = "";
 
     //front : code -> accessToken
     //back : accessToken -> userDetail
     @PostMapping("/users/login/{loginType}")
     public ResponseEntity<JsonResponse> login(@RequestParam("accessToken") String accessToken, @PathVariable String loginType){
-        System.out.println("accessToken" + accessToken);
+        System.out.println("accessToken : " + accessToken);
         String token = oAuthService.oauthLogin(accessToken, loginType);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "login", token));
