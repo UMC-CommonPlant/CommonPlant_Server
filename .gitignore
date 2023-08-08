@@ -5,6 +5,9 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+serviceAccountKey.json
+*.yml
+
 ### STS ###
 .apt_generated
 .classpath
@@ -16,6 +19,8 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
+
+src/main/java/com/commonplant/umc/config/jwt/JwtSecret.java
 
 ### IntelliJ IDEA ###
 .idea
