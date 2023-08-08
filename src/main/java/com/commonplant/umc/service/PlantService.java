@@ -8,6 +8,7 @@ import com.commonplant.umc.domain.Plant;
 import com.commonplant.umc.domain.User;
 import com.commonplant.umc.dto.plant.PlantRequest;
 import com.commonplant.umc.dto.plant.PlantResponse;
+import com.commonplant.umc.repository.MemoRepository;
 import com.commonplant.umc.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -30,6 +31,7 @@ public class PlantService {
     private final PlaceService placeService;
     private final InfoService infoService;
     private final PlantRepository plantRepository;
+    private final MemoRepository memoRepository;
 
 
 
@@ -291,6 +293,26 @@ public class PlantService {
         System.out.println(updateWateredDateTest);
 
         return updateWateredDateTest;
+    }
+
+    @Transactional
+    public Long deletePlant(Long plantIdx, User user) {
+
+        Plant plant = plantRepository.findByPlantIdx(plantIdx);
+
+        // TODO: 식물을 등록한 사람과 삭제하려는 사람이 같은지 비교
+        User writer = plant.getUser();
+
+        if (writer != user) {
+            throw new BadRequestException(ErrorResponseStatus.INVALID_USER_JWT);
+        }
+
+        // TODO: 식물에 작성된 메모를 먼저 삭제하고 식물을 삭제
+        memoRepository.deleteAllByPlantIdx(plantIdx);
+
+        plantRepository.deleteById(plantIdx);
+
+        return plantIdx;
     }
 
     public String randomCode() {

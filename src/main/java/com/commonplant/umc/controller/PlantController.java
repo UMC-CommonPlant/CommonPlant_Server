@@ -106,7 +106,7 @@ public class PlantController {
         System.out.println("=============GET PLANT TEST.NAME===============");
 
         PlantResponse.plantCardRes plant = plantService.getPlantCard(plantIdx, user);
-        MemoResponse.memoListRes memoList = memoService.getMemoList(plant.getPlantIdx());
+        MemoResponse.memoListRes memoList = memoService.getMemoList(plant.getPlantIdx(), user);
         System.out.println(memoList);
 
         return ResponseEntity.ok(new JsonResponse(true,200, "getPlantCard",
@@ -139,5 +139,19 @@ public class PlantController {
         System.out.println(res.getPlantIdx());
 
         return ResponseEntity.ok(new JsonResponse(true,200, "getPlant", res));
+    }
+
+    // 식물 삭제
+    @DeleteMapping("/plant/delete/{plantIdx}")
+    public ResponseEntity deletePlant(@PathVariable Long plantIdx){
+
+        System.out.println("=============DELETE PLANT TEST.NAME==============");
+
+        String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
+
+        Long deletePlantTest = plantService.deletePlant(plantIdx, user);
+
+        return ResponseEntity.ok(new JsonResponse(true, 200, "deletePlant", deletePlantTest));
     }
 }

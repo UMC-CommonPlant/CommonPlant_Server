@@ -64,39 +64,45 @@ public class MemoController {
     public ResponseEntity<JsonResponse> getMemoList(@PathVariable Long plantIdx){
 
         String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
+        System.out.println(user.getEmail());
 
         System.out.println("=============GET MEMO LIST TEST.NAME===============");
 
-        MemoResponse.memoListRes res = memoService.getMemoList(plantIdx);
+        MemoResponse.memoListRes res = memoService.getMemoList(plantIdx, user);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "getMemoList", res));
     }
 
-    // 메모 수정 (PATCH: plant랑 user는 업데이트 되지 않음)
+    // 메모 수정 (PUT: plant는 업데이트 되지 않음)
+    // TODO: @RequestPart to @RequestParam
     @PutMapping("/memo/update/{memoIdx}")
     public ResponseEntity<JsonResponse> updateMemo(@PathVariable Long memoIdx,
-                                                   @RequestPart("memo") MemoRequest.updateMemo req,
+                                                   @RequestParam("content") String content,
                                                    @RequestPart("image") MultipartFile file){
 
-        System.out.println("=============UPDATE MEMO TEST.NAME==============" + req.getContent());
+        System.out.println("=============UPDATE MEMO TEST.NAME==============" + content);
         System.out.println("=============UPDATE MEMO TEST.NAME==============" + file);
 
         String uuid = jwtService.resolveToken();
         User user = userService.getUser(uuid);
 
-        String updateMemoTest = memoService.updateMemo(memoIdx, user, req, file);
+        Long updateMemoTest = memoService.updateMemo(memoIdx, user, content, file);
 
         return ResponseEntity.ok(new JsonResponse(true, 200, "updateMemo", updateMemoTest));
     }
 
-    // 메모 삭제 (선택한 메모를 삭제)
+    // 메모 삭제
     @DeleteMapping("/memo/delete/{memoIdx}")
     public ResponseEntity deleteMemo(@PathVariable Long memoIdx){
 
         System.out.println("=============DELETE MEMO TEST.NAME==============");
 
-        Long deletedMemoIdx = memoService.deleteMemo(memoIdx);
+        String uuid = jwtService.resolveToken();
+        User user = userService.getUser(uuid);
 
-        return ResponseEntity.ok(new JsonResponse(true, 200, "deleteMemo", deletedMemoIdx));
+        Long deleteMemoTest = memoService.deleteMemo(memoIdx, user);
+
+        return ResponseEntity.ok(new JsonResponse(true, 200, "deleteMemo", deleteMemoTest));
     }
 }
